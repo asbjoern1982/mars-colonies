@@ -1,0 +1,33 @@
+{
+  "name": "my-game",
+  "version": "1.0.0",
+  "description": "monsterr game template",
+  "main": "index.js",
+  "scripts": {
+    "build": "parcel build client.js & parcel build admin-client.js & parcel build server.js --target node",
+    "watch-client": "parcel watch client.js --log-level 1",
+    "watch-admin-client": "parcel watch admin-client.js --log-level 1",
+    "watch-server": "parcel watch server.js --target node --log-level 2",
+    "dev": "parallelshell \"npm run watch-client\" \"npm run watch-admin-client\" \"npm run watch-server\" \"nodemon dist/server.js --watch dist/\"",
+    "start": "npm run build && node dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "monsterr": "^0.2.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-html-import-to-string": "0.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "nodemon": "^1.17.3",
+    "parallelshell": "^3.0.2",
+    "parcel-bundler": "^1.7.1"
+  }
+}

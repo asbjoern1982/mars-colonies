@@ -1,0 +1,19 @@
+/*
+  You can define css freely.
+
+  Note that the css here applies not only on the
+  admin but also on clients. You are free to use
+  this feature-not-a-bug as you like, but we suggest
+  prefixing admin-specific css to avoid unwanted
+  behaviour.
+*/
+
+#admin-button-start {
+  background-color: green;
+}
+#admin-button-next {
+  background-color: blue;
+}
+#admin-button-reset {
+  background-color: red;
+}
