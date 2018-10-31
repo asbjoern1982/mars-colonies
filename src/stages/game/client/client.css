@@ -1,17 +1,73 @@
-/*
-  You can define css freely.
+body, html {
+  height: 100%;
+}
+.bg {
+  /* The image used */
+  background-image: url("Mars_Ice_Home_concept.jpg");
 
-  Note that css applies across stages even if 
-  you only import it for one stage.
+  /* Full height */
+  height: 100%;
 
-  Therefore we suggest prefixing stage-specific css
-  with the stage name.
-*/
-
-#stage1-title {
-  font-size: 50px;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-#stage1-button {
-  border: 2px solid red;
+.windowbg {
+  background-color: rgb(50, 50, 50);
+  margin: 20px;
+  padding: 5px;
+}
+
+#map-view {
+  width: 600px;
+  height: 350px;
+}
+#map-img {
+  position: absolute;
+  clip: rect(0px,590px,340px,0px);
+}
+
+#chat-view {
+  width: 600px;
+  height: 300px;
+}
+#chat-log {
+  height: 252px;
+  background-color: rgb(100, 100, 100);
+  color: white;
+}
+#chat-input {
+  background-color: rgb(100, 100, 100);
+  padding-left: 5px;
+  padding-right: 5px;
+  color: white;
+}
+
+#trade-view {
+  width: 600px;
+}
+
+#production-view {
+  width: 600px;
+}
+#production-progress {
+  color: white;
+}
+
+#inventory-view {
+  width: 600px;
+}
+td {
+  text-align: right;
+}
+.inventory-full {
+  color: grey;
+}
+.inventory-bonus {
+  color: lightgreen;
+}
+.inventory-low {
+  color: red;
 }

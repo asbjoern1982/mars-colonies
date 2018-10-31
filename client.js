@@ -1,12 +1,12 @@
 import createClient from 'monsterr'
-import stage1 from './src/stages/game/client/client'
+import game from './src/stages/game/client/client'
 
 const stages = [
-  stage1
+  game
 ]
 
 let options = {
-  canvasBackgroundColor: 'blue',
+  canvasBackgroundColor: 'white',
   htmlContainerHeight: 0 // Hide html
 }
 

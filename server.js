@@ -1,10 +1,16 @@
 import createServer, { Network } from 'monsterr'
-import stage1 from './src/stages/game/server/server'
+import game from './src/stages/game/server/server'
+import {DatabaseHandler} from './src/database/DatabaseHandler'
 
-const stages = [stage1]
+const stages = [game]
 
 let events = {}
-let commands = {}
+let commands = {
+  'reqJSON': (server, clientId) => {
+    let json = DatabaseHandler.exportAsJSON()
+    server.send('resJSON', json).toAdmin()
+  }
+}
 
 const monsterr = createServer({
   network: Network.pairs(8),
@@ -12,8 +18,8 @@ const monsterr = createServer({
   commands,
   stages,
   options: {
-    clientPassword: undefined,  // can specify client password
-    adminPassword: 'sEcr3t'     // and admin password
+    clientPassword: undefined, // can specify client password
+    adminPassword: 'sEcr3t' // and admin password
   }
 })
 
