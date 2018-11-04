@@ -2,8 +2,6 @@
   "materials": [
     {"name": "Palladium", "depletion_rate": 5},
     {"name": "Selenium", "depletion_rate": 5},
-    {"name": "Tungsten", "depletion_rate": 5},
-    {"name": "Chronoton", "depletion_rate": 5}
   ],
   "chat": "free",
   "information": "none",
@@ -11,14 +9,12 @@
     {
       "name": "Oceania Colony",
       "starting_inventory": [
-        {"name": "Palladium", "amount": 100},
-        {"name": "Selenium", "amount": 100},
-        {"name": "Tungsten", "amount": 100},
-        {"name": "Chronoton", "amount": 100}
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000}
       ],
       "specilisations": [{
-        "input": "Selenium",
-        "output": "Tungsten",
+        "input": "Palladium",
+        "output": "Selenium",
         "gain": 1.2,
       	"transform_rate": 15
       }]
@@ -26,44 +22,12 @@
     {
       "name": "Eurasia Colony",
       "starting_inventorys": [
-        {"name": "Palladium", "amount": 100},
-        {"name": "Selenium", "amount": 100},
-        {"name": "Tungsten", "amount": 100},
-        {"name": "Chronoton", "amount": 100}
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000}
       ],
       "specilisations": [{
-        "input": "Tungsten",
-        "output": "Chronoton",
-        "gain": 1.2,
-	      "transform_rate": 15
-      }]
-    },
-    {
-      "name": "Eastasia Colony",
-      "starting_inventory": [
-        {"name": "Palladium", "amount": 100},
-        {"name": "Selenium", "amount": 100},
-        {"name": "Tungsten", "amount": 100},
-        {"name": "Chronoton", "amount": 100}
-      ],
-      "specilisations": [{
-        "input": "Chronoton",
+        "input": "Selenium",
         "output": "Palladium",
-        "gain": 1.2,
-	      "transform_rate": 15
-      }]
-    },
-    {
-      "name": "Moonlandia Colony",
-      "starting_inventory": [
-        {"name": "Palladium", "amount": 100},
-        {"name": "Selenium", "amount": 100},
-        {"name": "Tungsten", "amount": 100},
-        {"name": "Chronoton", "amount": 100}
-      ],
-      "specilisations": [{
-        "input": "Palladium",
-        "output": "Selenium",
         "gain": 1.2,
 	      "transform_rate": 15
       }]

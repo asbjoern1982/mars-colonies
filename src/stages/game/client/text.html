@@ -13,7 +13,7 @@
     <div class="bg">
       <div class="row">
 
-        <div class="col-sm-6">
+        <div class="col-md">
           <div class="windowbg" id="map-view">
             <img src="mars-map.png" alt="mars map" id="map-img">
           </div>
@@ -36,10 +36,10 @@ Eurasia Colony: hey there</textarea>
           </div>
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-md">
           <div class="windowbg" id="trade-view">
             <form id="trade-input">
-              <div class="form-row" id="chat-input-group">
+              <div class="form-row" id="trade-input-group">
                 <div class="w-25">
                   <select class="form-control" id="trade-colony">
                     <option>Oceania Colony</option>
@@ -66,29 +66,24 @@ Eurasia Colony: hey there</textarea>
             </form>
           </div>
 
-            <div class="windowbg" id="production-view">
-              <div class="row">
-                <form id="production-input">
-                  <div class="form-row" id="production-input-group">
-                    <div class="w-50">
-                      <select class="form-control" id="production-material">
-                        <option>Selenium to Tungsten</option>
-                      </select>
-                    </div>
-                    <div class="w-25">
-                      <input type="text" class="form-control" id="production-amount">
-                    </div>
-                    <div class="w-25">
-                      <button type="submit" class="btn btn-default w-100">start</button>
-                    </div>
-                  </div>
-                </form>
+          <div class="windowbg" id="production-view">
+            <form id="production-input">
+              <div class="form-row" id="production-input-group">
+                <div class="w-50">
+                  <select class="form-control" id="trade-material">
+                    <option>Selenium to Palladium</option>
+                  </select>
+                </div>
+                <div class="w-25">
+                  <input type="text" class="form-control" id="trade-amount">
+                </div>
+                <div class="w-25">
+                  <button type="submit" class="btn btn-default w-100">start</button>
+                </div>
               </div>
-
-              <div class="row" id="production-progress">
-                producing... 74%
-              </div>
-            </div>
+            </form>
+            <div id="production-progress">producing... 74%</div>
+          </div>
 
           <div class="windowbg" id="inventory-view">
             <table class="table table-dark">

@@ -20,10 +20,70 @@ export default {
   setup: (client) => {
     // and access html...
     // Here we listen for button clicks.
-    $('#stage1-button').mouseup(e => {
-      e.preventDefault() // Stop button from default behaviour (You almost always want to do this).
-      $('#stage1-title').html($('#stage1-input').val()) // Set title's content to value of input.
+    let canvas = new fabric.Canvas('map-canvas', {
+      selection: false,
+      width: 590,
+      height: 320,
+      backgroundColor: null
     })
+
+    let colonies = []
+    colonies.push(new fabric.Rect({
+      left: 295,
+      top: 150,
+      fill: 'grey',
+      width: 20,
+      height: 20,
+      angle: 45,
+      selectable: false,
+      stroke: 'black',
+      strokeWidth: 1
+    }))
+    colonies.push(new fabric.Rect({
+      left: 375,
+      top: 70,
+      fill: 'blue',
+      width: 20,
+      height: 20,
+      angle: 45,
+      selectable: false,
+      stroke: 'black',
+      strokeWidth: 1
+    }))
+    colonies.push(new fabric.Rect({
+      left: 215,
+      top: 70,
+      fill: 'green',
+      width: 20,
+      height: 20,
+      angle: 45,
+      selectable: false,
+      stroke: 'black',
+      strokeWidth: 1
+    }))
+    colonies.push(new fabric.Rect({
+      left: 375,
+      top: 230,
+      fill: 'yellow',
+      width: 20,
+      height: 20,
+      angle: 45,
+      selectable: false,
+      stroke: 'black',
+      strokeWidth: 1
+    }))
+    colonies.push(new fabric.Rect({
+      left: 215,
+      top: 230,
+      fill: 'red',
+      width: 20,
+      height: 20,
+      angle: 45,
+      selectable: false,
+      stroke: 'black',
+      strokeWidth: 1
+    }))
+    canvas.add(...colonies)
   },
 
   teardown (client) {

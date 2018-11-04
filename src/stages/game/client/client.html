@@ -1,13 +1,107 @@
-<!--
-  You can define html freely here.
-  The html will only be rendered during
-  the stage.
+<div class="bg">
+  <div class="row">
 
-  We suggest that you wrap each stage in a div.
--->
-<div id="stage1">
-  <h1 id="stage1-title">Will live for 30s</h1>
-  <input id="stage1-input" type="datetime"/>
-  <h3>Click the button...</h3>
-  <button id="stage1-button">The Button</button>
+    <div class="col-md">
+      <div class="windowbg" id="map-view">
+        <canvas id="map-canvas">
+      </div>
+
+      <div class="windowbg" id="chat-view">
+        <div>
+          <textarea class="form-control" id="chat-log" disabled>Oceania Colony: hii all
+Eurasia Colony: hey there</textarea>
+        </div>
+        <form id="chat-input">
+          <div class="form-row" id="chat-input-group">
+            <div class="w-75">
+              <input type="text" class="form-control" id="chat-input" placeholder="write a message">
+            </div>
+            <div class="w-25">
+              <button type="submit" class="btn btn-default w-100">send</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-md">
+      <div class="windowbg" id="trade-view">
+        <form id="trade-input">
+          <div class="form-row" id="trade-input-group">
+            <div class="w-25">
+              <select class="form-control" id="trade-colony">
+                <option>Oceania Colony</option>
+                <option>Eurasia Colony</option>
+                <option>Eastasia Colony</option>
+                <option>Moonlandia Colony</option>
+              </select>
+            </div>
+            <div class="w-25">
+              <select class="form-control" id="trade-material">
+                <option>Palladium</option>
+                <option>Selenium</option>
+                <option>Tungsten</option>
+                <option>Chronoton</option>
+              </select>
+            </div>
+            <div class="w-25">
+              <input type="text" class="form-control" id="trade-amount">
+            </div>
+            <div class="w-25">
+              <button type="submit" class="btn btn-default w-100">send</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="windowbg" id="production-view">
+        <form id="production-input">
+          <div class="form-row" id="production-input-group">
+            <div class="w-50">
+              <select class="form-control" id="trade-material">
+                <option>Selenium to Palladium</option>
+              </select>
+            </div>
+            <div class="w-25">
+              <input type="text" class="form-control" id="trade-amount">
+            </div>
+            <div class="w-25">
+              <button type="submit" class="btn btn-default w-100">start</button>
+            </div>
+          </div>
+        </form>
+        <div id="production-progress">producing... 74%</div>
+      </div>
+
+      <div class="windowbg" id="inventory-view">
+        <table class="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">Material</th>
+              <td scope="col">Amount</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Palladium</th>
+              <td class="inventory-full">100</td>
+            </tr>
+            <tr>
+              <th scope="row">Selenium</th>
+              <td>43</td>
+            </tr>
+            <tr>
+              <th scope="row">Tungsten</th>
+              <td class="inventory-low">7</td>
+            </tr>
+            <tr>
+              <th scope="row">Chronoton</th>
+              <td class="inventory-bonus">76</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>

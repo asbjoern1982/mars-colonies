@@ -3,7 +3,7 @@ body, html {
 }
 .bg {
   /* The image used */
-  background-image: url("Mars_Ice_Home_concept.jpg");
+  background-image: url("./img/Mars_Ice_Home_concept.jpg");
 
   /* Full height */
   height: 100%;
@@ -18,19 +18,20 @@ body, html {
   background-color: rgb(50, 50, 50);
   margin: 20px;
   padding: 5px;
+  width: 600px;
 }
 
 #map-view {
-  width: 600px;
-  height: 350px;
+  height: 330px;
 }
-#map-img {
-  position: absolute;
-  clip: rect(0px,590px,340px,0px);
+#map-canvas {
+  background-image: url("./img/mars-map.png");
+  background-clip: content-box;
+  width: 590px;
+  height: 320px;
 }
 
 #chat-view {
-  width: 600px;
   height: 300px;
 }
 #chat-log {
@@ -45,20 +46,25 @@ body, html {
   color: white;
 }
 
-#trade-view {
-  width: 600px;
+#trade-input {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#production-input {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 #production-view {
-  width: 600px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
+
 #production-progress {
   color: white;
 }
 
-#inventory-view {
-  width: 600px;
-}
 td {
   text-align: right;
 }
