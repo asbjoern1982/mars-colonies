@@ -9,7 +9,17 @@ let commands = {
   }
 }
 
-let events = {}
+let events = {
+  'inventory': (client, inventory) => {
+    $('#inventory').find('tbody').empty()
+    inventory.forEach(row => {
+      $('#inventory').find('tbody').append('<tr>')
+      $('#inventory').find('tbody').append('<th scope="row">' + row.name + '</th>')
+      $('#inventory').find('tbody').append('<td>' + row.amount + '</td>')
+      $('#inventory').find('tbody').append('</tr>')
+    })
+  }
+}
 
 export default {
   html,
@@ -19,7 +29,7 @@ export default {
   // Optionally define a setup method that is run before stage begins
   setup: (client) => {
     // and access html...
-    // Here we listen for button clicks.
+    // Here we listen for butabletton clicks.
     let canvas = new fabric.Canvas('map-canvas', {
       selection: false,
       width: 590,
