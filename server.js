@@ -1,11 +1,12 @@
 import createServer, { Network, Events } from 'monsterr'
 import game from './src/stages/game/server/server'
 import {DatabaseHandler} from './src/database/DatabaseHandler'
-// import config from './src/stages/game/config/round1.json'
+import config from './src/stages/game/config/round1.json'
 
 const stages = [game]
-let numberOfPlayers = 2
+let numberOfPlayers = config.players.length
 let connectedPlayers = 0
+console.log('waiting for ' + numberOfPlayers + ' players')
 
 let events = {
   [Events.CLIENT_CONNECTED] (server, clientId) {

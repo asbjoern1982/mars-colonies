@@ -84,6 +84,8 @@ export default {
       strokeWidth: 1
     }))
     canvas.add(...colonies)
+
+    client.send('ready')
   },
 
   teardown (client) {

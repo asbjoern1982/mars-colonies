@@ -8,7 +8,7 @@
   "players": [
     {
       "name": "Oceania Colony",
-      "starting_inventory": [
+      "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000}
       ],
@@ -21,7 +21,7 @@
     },
     {
       "name": "Eurasia Colony",
-      "starting_inventorys": [
+      "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000}
       ],
