@@ -8,68 +8,58 @@
 
       <div class="windowbg" id="chat-view">
         <div>
-          <textarea class="form-control" id="chat-log" disabled>Oceania Colony: hii all
-Eurasia Colony: hey there</textarea>
+          <textarea class="form-control" id="chat-log" disabled></textarea>
         </div>
-        <form id="chat-input">
-          <div class="form-row" id="chat-input-group">
-            <div class="w-75">
-              <input type="text" class="form-control" id="chat-input" placeholder="write a message">
+        <div class="form-row" id="chat-input-group">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="input-label"></span>
             </div>
-            <div class="w-25">
-              <button type="submit" class="btn btn-default w-100">send</button>
+            <input type="text" class="form-control" id="chat-input" placeholder="write a message">
+            <div class="input-group-prepend-append">
+              <button class="btn btn-default" onclick="document.getElementById('chat-input').value = ''" id="chat-button">send</button>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
 
     <div class="col-md">
       <div class="windowbg" id="trade-view">
-        <form id="trade-input">
+        <div id="trade-input">
           <div class="form-row" id="trade-input-group">
             <div class="w-25">
               <select class="form-control" id="trade-colony">
-                <option>Oceania Colony</option>
-                <option>Eurasia Colony</option>
-                <option>Eastasia Colony</option>
-                <option>Moonlandia Colony</option>
               </select>
             </div>
             <div class="w-25">
               <select class="form-control" id="trade-material">
-                <option>Palladium</option>
-                <option>Selenium</option>
-                <option>Tungsten</option>
-                <option>Chronoton</option>
               </select>
             </div>
             <div class="w-25">
               <input type="text" class="form-control" id="trade-amount">
             </div>
             <div class="w-25">
-              <button type="submit" class="btn btn-default w-100">send</button>
+              <button class="btn btn-default w-100" id="trade-button">send</button>
             </div>
           </div>
-        </form>
+        </div>
       </div>
 
       <div class="windowbg" id="production-view">
-        <form id="production-input">
+        <div id="production-input">
           <div class="form-row" id="production-input-group">
             <div class="w-50">
-              <select class="form-control" id="trade-material">
-                <option>Selenium to Palladium</option>
-              </select>
+              <select class="form-control" id="production-material"></select>
             </div>
             <div class="w-25">
-              <input type="text" class="form-control" id="trade-amount">
+              <input type="text" class="form-control" id="production-amount">
             </div>
             <div class="w-25">
-              <button type="submit" class="btn btn-default w-100">start</button>
+              <button class="btn btn-default w-100"onclick="document.getElementById('production-amount').value = ''" id="production-button">start</button>
             </div>
           </div>
-        </form>
+        </div>
         <div id="production-progress">producing... 74%</div>
       </div>
 
@@ -82,22 +72,6 @@ Eurasia Colony: hey there</textarea>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">Palladium</th>
-              <td class="inventory-full">100</td>
-            </tr>
-            <tr>
-              <th scope="row">Selenium</th>
-              <td>43</td>
-            </tr>
-            <tr>
-              <th scope="row">Tungsten</th>
-              <td class="inventory-low">7</td>
-            </tr>
-            <tr>
-              <th scope="row">Chronoton</th>
-              <td class="inventory-bonus">76</td>
-            </tr>
           </tbody>
         </table>
       </div>

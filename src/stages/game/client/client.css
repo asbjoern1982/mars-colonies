@@ -39,11 +39,9 @@ body, html {
   background-color: rgb(100, 100, 100);
   color: white;
 }
-#chat-input {
-  background-color: rgb(100, 100, 100);
+#chat-input-group {
   padding-left: 5px;
   padding-right: 5px;
-  color: white;
 }
 
 #trade-input {

@@ -2,6 +2,9 @@
 import html from './client.html'
 import './client.css'
 
+let materials;
+let localinventory;
+
 let commands = {
   finish (client) {
     client.stageFinished() // <== this is how a client reports finished
@@ -10,14 +13,33 @@ let commands = {
 }
 
 let events = {
+  'chat': (client, message) => {
+    $('#chat-log').append(message + '\n')
+  },
+  'transfer': (client, transfer) => {
+    // TODO show line between the colonies
+  },
   'inventory': (client, inventory) => {
-    $('#inventory').find('tbody').empty()
-    inventory.forEach(row => {
-      $('#inventory').find('tbody').append('<tr>')
-      $('#inventory').find('tbody').append('<th scope="row">' + row.name + '</th>')
-      $('#inventory').find('tbody').append('<td>' + row.amount + '</td>')
-      $('#inventory').find('tbody').append('</tr>')
+    localinventory = inventory
+    updateInventory(inventory)
+  },
+  'setup': (client, data) => {
+    // chat
+    $('#input-label').append(data.colonyName)
+
+    // trade
+    data.otherColonyNames.forEach(name => $('#trade-colony').append('<option>' + name + '</option>'))
+    materials = data.materials
+    materials.forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
+
+    // production
+    data.specilisations.forEach(specilisation => {
+      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain + ')'
+      $('#production-material').append('<option>' + option + '</option>')
     })
+
+    // start gameloop
+    setInterval(gameloop, 1000)
   }
 }
 
@@ -26,10 +48,7 @@ export default {
   commands: commands,
   events: events,
 
-  // Optionally define a setup method that is run before stage begins
   setup: (client) => {
-    // and access html...
-    // Here we listen for butabletton clicks.
     let canvas = new fabric.Canvas('map-canvas', {
       selection: false,
       width: 590,
@@ -95,15 +114,46 @@ export default {
     }))
     canvas.add(...colonies)
 
+    $('#trade-button').mouseup(e => {
+      e.preventDefault()
+      client.send('trade', {
+        colony: $('#trade-colony').val(),
+        material: $('#trade-material').val(),
+        amount: $('#trade-amount').val()
+      })
+    })
+
+    $('#chat-button').mouseup(e => {
+      e.preventDefault()
+      client.send('chat', $('#chat-input').val())
+      $('#chat-input').value = ''
+    })
+
+    $('#production-button').mouseup(e => {
+      e.preventDefault()
+      client.send('produce', {
+        material: $('#production-material').val(),
+        amount: $('#production-amount').val()
+      })
+      // TODO start timer-countdown-thing
+    })
+
     client.send('ready')
   },
 
-  teardown (client) {
-    $('#stage1-button').off() // Remove all event handlers from button
-  },
+  teardown (client) {},
+  options: { htmlContainerHeight: 0.9 }
+}
 
-  // Configure options
-  options: {
-    htmlContainerHeight: 1
-  }
+let gameloop = () => {
+  // update inventory depletion
+  materials.forEach(material => {
+    localinventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
+    updateInventory(localinventory)
+  })
+}
+
+let updateInventory = (inventory) => {
+  $('#inventory').find('tbody').empty()
+  inventory.forEach(row => $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td>' + row.amount + '</td></tr>'))
 }

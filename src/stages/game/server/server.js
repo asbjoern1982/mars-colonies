@@ -10,6 +10,37 @@ export default {
     'some_event': (server, clientId, data) => {
       DatabaseHandler.logEvent(clientId, 'data')
     },
+    'trade': (server, clientId, transfer) => {
+      // remove amount from senders inventory
+      colonies
+        .find(colony => colony.id === clientId)
+        .inventory
+        .find(material => material.name === transfer.material)
+        .amount -= transfer.amount
+
+      // add amount to receivers inventory
+      let amount = colonies
+        .find(colony => colony.name === transfer.colony)
+        .inventory
+        .find(material => material.name === transfer.material)
+        .amount
+        colonies
+        .find(colony => colony.name === transfer.colony)
+        .inventory
+        .find(material => material.name === transfer.material)
+        .amount = Math.floor(amount) + Math.floor(transfer.amount) // it congatinate + as strings
+
+      server.send('trade', {
+        sender: colonies.find(colony => colony.id === clientId).name,
+        receiver: transfer.colony,
+        amount: transfer.amount
+      }).toAll()
+      sendColoniesInventories(server)
+    },
+    'chat': (server, clientId, message) => {
+      let name = colonies.find(colony => colony.id === clientId).name
+      server.send('chat',  name + '>' + message).toAll()
+    },
     'ready': (server, clientId) => {
       colonies.find(colony => colony.id === clientId).ready = true
 
@@ -21,6 +52,18 @@ export default {
       })
       if (allReady) {
         console.log('All clients have reported ready, starting game')
+        colonies.forEach(colony => {
+          let data = {
+            colonyName: colony.name,
+            specilisations: colony.specilisations,
+            otherColonyNames: colonies
+              .filter(col => col.id !== colony.id)
+              .map(col => col.name),
+            materials: config.materials
+          }
+          server.send('setup', data).toClient(colony.id)
+        })
+
         sendColoniesInventories(server)
         setInterval(() => gameloop(server), 1000)
       }
@@ -36,7 +79,6 @@ export default {
       colonies[i].id = networkPlayers[i]
       colonies[i].ready = false
     }
-    console.log(JSON.stringify(colonies))
   },
   teardown: (server) => {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
@@ -47,14 +89,11 @@ export default {
 let tickcount = 0
 let gameloop = (server) => {
   // gameloop
-  console.log(JSON.stringify(colonies))
+  // console.log(JSON.stringify(colonies))
   colonies.forEach(colony => {
     config.materials.forEach(material => {
       colony.inventory.find(colmat => material.name === colmat.name).amount -= material.depletion_rate
     })
-    /* colony.inventory.forEach(material => {
-      material += config.materials.find(mat => mat.name === material.name).depletion_rate
-    }) */
   })
 
   tickcount++
