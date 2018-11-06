@@ -1,7 +1,7 @@
 {
   "materials": [
-    {"name": "Palladium", "depletion_rate": 5},
-    {"name": "Selenium", "depletion_rate": 5},
+    {"name": "Palladium", "depletion_rate": 1},
+    {"name": "Selenium", "depletion_rate": 1},
   ],
   "chat": "free",
   "information": "none",
@@ -15,8 +15,8 @@
       "specilisations": [{
         "input": "Palladium",
         "output": "Selenium",
-        "gain": 1.2,
-      	"transform_rate": 15
+        "gain": 2.0,
+      	"transform_rate": 10
       }]
     },
     {
@@ -28,8 +28,8 @@
       "specilisations": [{
         "input": "Selenium",
         "output": "Palladium",
-        "gain": 1.2,
-	      "transform_rate": 15
+        "gain": 2.0,
+	      "transform_rate": 10
       }]
     }
   ]

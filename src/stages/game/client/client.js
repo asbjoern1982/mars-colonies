@@ -2,8 +2,11 @@
 import html from './client.html'
 import './client.css'
 
-let materials;
-let localinventory;
+let materials
+let localinventory
+let specilisations
+let productionCountDown = 0
+let productionCountTotal = 0
 
 let commands = {
   finish (client) {
@@ -33,9 +36,10 @@ let events = {
     materials.forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
 
     // production
-    data.specilisations.forEach(specilisation => {
-      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain + ')'
-      $('#production-material').append('<option>' + option + '</option>')
+    specilisations = data.specilisations
+    specilisations.forEach(specilisation => {
+      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%)'
+      $('#production-material').append('<option value="' + specilisation.input + '">' + option + '</option>')
     })
 
     // start gameloop
@@ -114,6 +118,7 @@ export default {
     }))
     canvas.add(...colonies)
 
+    // -------------------- TRADE --------------------
     $('#trade-button').mouseup(e => {
       e.preventDefault()
       client.send('trade', {
@@ -123,26 +128,52 @@ export default {
       })
     })
 
+    // -------------------- CHAT --------------------
+    $('#chat-input').keypress((e) => {
+      if (e.which === 13) {
+        client.send('chat', $('#chat-input').val())
+        $('#chat-input').val('')
+      }
+    })
     $('#chat-button').mouseup(e => {
       e.preventDefault()
       client.send('chat', $('#chat-input').val())
-      $('#chat-input').value = ''
+      $('#chat-input').val('')
     })
 
+    // -------------------- PRODUCTION --------------------
     $('#production-button').mouseup(e => {
       e.preventDefault()
+      if (productionCountDown > 0) return
+
       client.send('produce', {
         material: $('#production-material').val(),
         amount: $('#production-amount').val()
       })
-      // TODO start timer-countdown-thing
+      productionCountDown = specilisations.find(specilisation => specilisation.input === $('#production-material').val()).transform_rate
+      productionCountTotal = productionCountDown
+      $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+      productionCountDown--
+      // countdown loop
+      let intervalRef = setInterval(() => {
+        if (productionCountDown <= 0) {
+          $('#production-progress').html('production finished')
+          clearInterval(intervalRef)
+        } else {
+          $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+          productionCountDown--
+        }
+      }, 1000)
     })
 
     client.send('ready')
   },
 
   teardown (client) {},
-  options: { htmlContainerHeight: 0.9 }
+  options: {
+    htmlContainerHeight: 1,
+    hideChat: true
+  }
 }
 
 let gameloop = () => {

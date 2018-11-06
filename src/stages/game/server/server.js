@@ -24,7 +24,7 @@ export default {
         .inventory
         .find(material => material.name === transfer.material)
         .amount
-        colonies
+      colonies
         .find(colony => colony.name === transfer.colony)
         .inventory
         .find(material => material.name === transfer.material)
@@ -39,7 +39,27 @@ export default {
     },
     'chat': (server, clientId, message) => {
       let name = colonies.find(colony => colony.id === clientId).name
-      server.send('chat',  name + '>' + message).toAll()
+      server.send('chat', name + '>' + message).toAll()
+    },
+    'produce': (server, clientId, production) => {
+      let colony = colonies.find(colony => colony.id === clientId)
+      let inputName = production.material
+      let outputName = colony.specilisations.find(specilisation => specilisation.input === inputName).output
+      let gain = colony.specilisations.find(specilisation => specilisation.input === inputName).gain
+      let delay = colony.specilisations.find(specilisation => specilisation.input === inputName).transform_rate
+
+      // substract input materials and inform the colony
+      colony.inventory.find(material => material.name === inputName).amount -= production.amount
+      sendColoniesInventories(server)
+
+      // create a timeout that adds the output to the colony and informs the colony
+      setTimeout(() => {
+        let currentAmount = colony.inventory.find(material => material.name === outputName).amount
+        colony.inventory
+          .find(material => material.name === outputName)
+          .amount = Math.floor(currentAmount) + Math.floor(production.amount * gain) // it congatinate + as strings
+        sendColoniesInventories(server)
+      }, delay * 1000)
     },
     'ready': (server, clientId) => {
       colonies.find(colony => colony.id === clientId).ready = true
@@ -88,8 +108,6 @@ export default {
 
 let tickcount = 0
 let gameloop = (server) => {
-  // gameloop
-  // console.log(JSON.stringify(colonies))
   colonies.forEach(colony => {
     config.materials.forEach(material => {
       colony.inventory.find(colmat => material.name === colmat.name).amount -= material.depletion_rate

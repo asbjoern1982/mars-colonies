@@ -7,7 +7,8 @@ const stages = [
 
 let options = {
   canvasBackgroundColor: 'white',
-  htmlContainerHeight: 0 // Hide html
+  htmlContainerHeight: 0, // Hide html
+  hideChat: true
 }
 
 let events = {}
