@@ -3,10 +3,14 @@ import html from './client.html'
 import './client.css'
 
 let materials
-let localinventory
 let specilisations
+let localinventory
+let otherColonies
 let productionCountDown = 0
 let productionCountTotal = 0
+
+let canvas
+let tooltip
 
 let commands = {
   finish (client) {
@@ -22,25 +26,39 @@ let events = {
   'transfer': (client, transfer) => {
     // TODO show line between the colonies
   },
-  'inventory': (client, inventory) => {
-    localinventory = inventory
-    updateInventory(inventory)
+  'inventories': (client, inventories) => {
+    // set my inventory for the intenvoryView
+    localinventory = inventories.find(colony => colony.id === client.getId()).inventory
+    updateInventory(localinventory)
+    // set other colonies inventory for the map if it is in the payload
+    inventories.filter(colony => colony.id !== client.getId()).forEach(colony => {
+      otherColonies.find(otherColony => otherColony.name === colony.name).inventory = colony.inventory
+    })
   },
   'setup': (client, data) => {
+    materials = data.materials
+    specilisations = data.specilisations
+    otherColonies = []
+    data.otherColonyNames.forEach(name => otherColonies.push({
+      name: name,
+      inventory: []
+    }))
+
     // chat
     $('#input-label').append(data.colonyName)
 
     // trade
     data.otherColonyNames.forEach(name => $('#trade-colony').append('<option>' + name + '</option>'))
-    materials = data.materials
     materials.forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
 
     // production
-    specilisations = data.specilisations
     specilisations.forEach(specilisation => {
       let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%)'
       $('#production-material').append('<option value="' + specilisation.input + '">' + option + '</option>')
     })
+
+    // add nodes to the map
+    setupMap()
 
     // start gameloop
     setInterval(gameloop, 1000)
@@ -53,71 +71,6 @@ export default {
   events: events,
 
   setup: (client) => {
-    let canvas = new fabric.Canvas('map-canvas', {
-      selection: false,
-      width: 590,
-      height: 320,
-      backgroundColor: null
-    })
-
-    let colonies = []
-    colonies.push(new fabric.Rect({
-      left: 295,
-      top: 150,
-      fill: 'grey',
-      width: 20,
-      height: 20,
-      angle: 45,
-      selectable: false,
-      stroke: 'black',
-      strokeWidth: 1
-    }))
-    colonies.push(new fabric.Rect({
-      left: 375,
-      top: 70,
-      fill: 'blue',
-      width: 20,
-      height: 20,
-      angle: 45,
-      selectable: false,
-      stroke: 'black',
-      strokeWidth: 1
-    }))
-    colonies.push(new fabric.Rect({
-      left: 215,
-      top: 70,
-      fill: 'green',
-      width: 20,
-      height: 20,
-      angle: 45,
-      selectable: false,
-      stroke: 'black',
-      strokeWidth: 1
-    }))
-    colonies.push(new fabric.Rect({
-      left: 375,
-      top: 230,
-      fill: 'yellow',
-      width: 20,
-      height: 20,
-      angle: 45,
-      selectable: false,
-      stroke: 'black',
-      strokeWidth: 1
-    }))
-    colonies.push(new fabric.Rect({
-      left: 215,
-      top: 230,
-      fill: 'red',
-      width: 20,
-      height: 20,
-      angle: 45,
-      selectable: false,
-      stroke: 'black',
-      strokeWidth: 1
-    }))
-    canvas.add(...colonies)
-
     // -------------------- TRADE --------------------
     $('#trade-button').mouseup(e => {
       e.preventDefault()
@@ -180,11 +133,112 @@ let gameloop = () => {
   // update inventory depletion
   materials.forEach(material => {
     localinventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
-    updateInventory(localinventory)
   })
+  updateInventory(localinventory)
+
+  otherColonies.forEach(colony => {
+    materials.forEach(material => {
+      colony.inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
+    })
+  })
+  updateTooltip()
 }
 
 let updateInventory = (inventory) => {
   $('#inventory').find('tbody').empty()
   inventory.forEach(row => $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td>' + row.amount + '</td></tr>'))
+}
+
+let updateTooltip = () => {
+  if (tooltip) {
+    let text = tooltip.colony.name + tooltip.colony.inventory.map(row => '\n' + row.name + ': ' + row.amount)
+    let newtooltip = new fabric.Text(text, {
+      left: tooltip.left,
+      top: tooltip.top,
+      width: tooltip.width,
+      height: tooltip.width,
+      fontSize: 12
+    })
+    newtooltip['colony'] = tooltip.colony
+    canvas.remove(tooltip)
+    tooltip = newtooltip
+    canvas.add(tooltip)
+  }
+}
+
+let setupMap = () => {
+  canvas = new fabric.Canvas('map-canvas', {
+    selection: false,
+    width: 590,
+    height: 320,
+    backgroundColor: null
+  })
+  canvas.clear()
+
+  let centerX = 590 / 2
+  let centerY = 320 / 2 - 10
+
+  // the center colony
+  canvas.add(new fabric.Rect({
+    left: centerX,
+    top: centerY,
+    fill: 'grey',
+    width: 20,
+    height: 20,
+    angle: 45,
+    selectable: false,
+    stroke: 'black',
+    strokeWidth: 1
+  }))
+
+  let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat']
+  let angleBetweenColonies = 2 * Math.PI / otherColonies.length
+  for (let i = 0; i < otherColonies.length; i++) {
+    let angle = angleBetweenColonies * i + Math.PI / 3.5
+    let radius = 80
+    let x = Math.sin(angle) * radius + centerX
+    let y = Math.cos(angle) * radius + centerY
+    let rect = new fabric.Rect({
+      left: x,
+      top: y,
+      fill: colors[i],
+      width: 20,
+      height: 20,
+      angle: 45,
+      selectable: false,
+      stroke: 'black',
+      strokeWidth: 1
+    })
+    canvas.add(rect)
+    otherColonies[i]['node'] = rect
+  }
+
+  canvas.on('mouse:over', (e) => {
+    if (e.target) {
+      let colony = otherColonies.find(colony => colony['node'] === e.target)
+      if (colony) {
+        console.log('mouse-over: ' + colony.name + '\ninventory: ' + colony.inventory)
+        let text = colony.name + colony.inventory.map(row => '\n' + row.name + ': ' + row.amount)
+        tooltip = new fabric.Text(text, {
+          left: e.target.left + 20,
+          top: e.target.top + 20,
+          width: 100,
+          height: 100,
+          fontSize: 12
+        })
+        canvas.add(tooltip)
+        tooltip['colony'] = colony
+      }
+    }
+  })
+  canvas.on('mouse:out', (e) => {
+    if (e.target) {
+      let colony = otherColonies.find(colony => colony['node'] === e.target)
+      if (colony) {
+        console.log('mouse-out: ' + colony.name)
+        canvas.remove(tooltip)
+        tooltip = undefined
+      }
+    }
+  })
 }

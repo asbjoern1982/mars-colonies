@@ -4,7 +4,8 @@
     {"name": "Selenium", "depletion_rate": 1},
   ],
   "chat": "free",
-  "information": "none",
+  "information": "inventories",
+  "trade_delay": 0,
   "players": [
     {
       "name": "Oceania Colony",

@@ -12,30 +12,34 @@ export default {
     },
     'trade': (server, clientId, transfer) => {
       // remove amount from senders inventory
-      colonies
+      let senderInventory = colonies
         .find(colony => colony.id === clientId)
         .inventory
         .find(material => material.name === transfer.material)
-        .amount -= transfer.amount
+      // if the colony tries to transfer more than is in their inventory, just send what is in the inventory
+      let transferedAmount = senderInventory.amount - transfer.amount < 0 ? senderInventory.amount : transfer.amount
+      senderInventory.amount -= transferedAmount
 
-      // add amount to receivers inventory
-      let amount = colonies
-        .find(colony => colony.name === transfer.colony)
-        .inventory
-        .find(material => material.name === transfer.material)
-        .amount
-      colonies
-        .find(colony => colony.name === transfer.colony)
-        .inventory
-        .find(material => material.name === transfer.material)
-        .amount = Math.floor(amount) + Math.floor(transfer.amount) // it congatinate + as strings
+      // add amount to receivers inventory when the trade is complete
+      setTimeout(() => {
+        let amount = colonies
+          .find(colony => colony.name === transfer.colony)
+          .inventory
+          .find(material => material.name === transfer.material)
+          .amount
+        colonies
+          .find(colony => colony.name === transfer.colony)
+          .inventory
+          .find(material => material.name === transfer.material)
+          .amount = Math.floor(amount) + Math.floor(transferedAmount) // it congatinate + as strings
 
-      server.send('trade', {
-        sender: colonies.find(colony => colony.id === clientId).name,
-        receiver: transfer.colony,
-        amount: transfer.amount
-      }).toAll()
-      sendColoniesInventories(server)
+        server.send('trade', {
+          sender: colonies.find(colony => colony.id === clientId).name,
+          receiver: transfer.colony,
+          amount: transfer.amount
+        }).toAll()
+        sendColoniesInventories(server)
+      }, config.trade_delay)
     },
     'chat': (server, clientId, message) => {
       let name = colonies.find(colony => colony.id === clientId).name
@@ -121,5 +125,24 @@ let gameloop = (server) => {
 }
 
 let sendColoniesInventories = (server) => {
-  colonies.forEach(colony => server.send('inventory', colony.inventory).toClient(colony.id))
+  if (config.information === 'inventories') {
+    let inventories = []
+    colonies.forEach(colony =>
+      inventories.push({
+        name: colony.name,
+        id: colony.id,
+        inventory: colony.inventory
+      })
+    )
+    server.send('inventories', inventories).toAll()
+  } else if (config.information === 'none') {
+    colonies.forEach(colony => {
+      let inventories = [{
+        name: colony.name,
+        id: colony.id,
+        inventory: colony.inventory
+      }]
+      server.send('inventories', inventories).toClient(colony.id)
+    })
+  }
 }
