@@ -6,6 +6,7 @@ let materials
 let specilisations
 let localinventory
 let otherColonies
+let tradeRoutes
 let productionCountDown = 0
 let productionCountTotal = 0
 
@@ -179,7 +180,7 @@ let setupMap = () => {
   let centerY = 320 / 2 - 10
 
   // the center colony
-  canvas.add(new fabric.Rect({
+  let colonyNode = new fabric.Rect({
     left: centerX,
     top: centerY,
     fill: 'grey',
@@ -189,7 +190,8 @@ let setupMap = () => {
     selectable: false,
     stroke: 'black',
     strokeWidth: 1
-  }))
+  })
+  canvas.add(colonyNode)
 
   let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat']
   let angleBetweenColonies = 2 * Math.PI / otherColonies.length
@@ -240,5 +242,33 @@ let setupMap = () => {
         tooltip = undefined
       }
     }
+  })
+
+  tradeRoutes = []
+  let allColonyNodes = [colonyNode, ...otherColonies.map(colony => colony.node)]
+  allColonyNodes.forEach(startColony => {
+    allColonyNodes.forEach(endColony => {
+      if (startColony !== endColony) {
+        let tradeRoute = new fabric.Path('M 65 0 Q 100, 100, 200, 0', { fill: '', stroke: 'black', strokeWidth: 2, objectCaching: false })
+
+        tradeRoute.startColony = startColony
+        tradeRoute.endColony = endColony
+
+        tradeRoute.path[0][1] = startColony.left
+        tradeRoute.path[0][2] = startColony.top
+
+        tradeRoute.path[1][1] = endColony.left
+        tradeRoute.path[1][2] = endColony.top
+
+        // tradeRoute.path[1][3] = endColony.node.left
+        // tradeRoute.path[1][4] = endColony.node.top
+
+        console.log('(' + startColony.left + ', ' + startColony.top + ') to (' + endColony.left + ', ' + endColony.top + ')')
+
+        tradeRoute.selectable = false
+        canvas.add(tradeRoute)
+        tradeRoutes.push(tradeRoute)
+      }
+    })
   })
 }
