@@ -32,6 +32,32 @@
         "gain": 2.0,
 	      "transform_rate": 10
       }]
+    },
+    {
+      "name": "Eurasia Colony 2",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Eurasia Colony 3",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
     }
   ]
 }

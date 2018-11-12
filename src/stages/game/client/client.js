@@ -2,6 +2,7 @@
 import html from './client.html'
 import './client.css'
 
+let myName
 let materials
 let specilisations
 let localinventory
@@ -24,7 +25,18 @@ let events = {
   'chat': (client, message) => {
     $('#chat-log').append(message + '\n')
   },
-  'transfer': (client, transfer) => {
+  'trade': (client, transfer) => {
+    console.log('trade')
+    console.log(transfer)
+    console.log(tradeRoutes)
+    let sendingColony = otherColonies.find(colony => colony.name === transfer.sender)
+    let sendingColonyName = sendingColony || myName
+    let receivingColony = otherColonies.find(colony => colony.name === transfer.receiver)
+    let receivingColonyName = receivingColony || myName
+    let route = tradeRoutes.find(route => (route.startColony.colonyName === sendingColonyName && route.endColony.colonyName === receivingColonyName) ||
+      (route.startColony.colonyName === receivingColonyName && route.endColony.colonyName === receivingColonyName))
+    route.stroke = 'white'
+    canvas.requestRenderAll()
     // TODO show line between the colonies
   },
   'inventories': (client, inventories) => {
@@ -46,6 +58,7 @@ let events = {
     }))
 
     // chat
+    myName = data.colonyName
     $('#input-label').append(data.colonyName)
 
     // trade
@@ -191,6 +204,7 @@ let setupMap = () => {
     stroke: 'black',
     strokeWidth: 1
   })
+  colonyNode['colonyName'] = myName
   canvas.add(colonyNode)
 
   let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat']
@@ -211,7 +225,9 @@ let setupMap = () => {
       stroke: 'black',
       strokeWidth: 1
     })
+    rect.name =
     canvas.add(rect)
+    rect['colonyName'] = otherColonies[i].name
     otherColonies[i]['node'] = rect
   }
 
@@ -245,25 +261,57 @@ let setupMap = () => {
   })
 
   tradeRoutes = []
-  let allColonyNodes = [colonyNode, ...otherColonies.map(colony => colony.node)]
+  let doneRoutes = []
+  let allColonyNodes = [...otherColonies.map(colony => colony.node)]
+  let yOffset = 15
   allColonyNodes.forEach(startColony => {
+    let startX = startColony.left
+    let startY = startColony.top + yOffset
+    let mainX = colonyNode.left
+    let mainY = colonyNode.top + yOffset
+    let line = [mainX, mainY, startX, startY]
+    let tradeRouteToMain = new fabric.Line(line, { fill: '', stroke: 'black', strokeWidth: 2, objectCaching: false })
+    tradeRouteToMain.startColony = colonyNode
+    tradeRouteToMain.endColony = startColony
+    canvas.add(tradeRouteToMain)
+    tradeRoutes.push(tradeRouteToMain)
+
     allColonyNodes.forEach(endColony => {
-      if (startColony !== endColony) {
-        let tradeRoute = new fabric.Path('M 65 0 Q 100, 100, 200, 0', { fill: '', stroke: 'black', strokeWidth: 2, objectCaching: false })
+      let endX = endColony.left
+      let endY = endColony.top + yOffset
+
+      let isConnected = false
+      tradeRoutes.forEach(route => {
+        if (route.startColony.left === endX &&
+          route.startColony.top === endY &&
+          route.endColony.left === startX &&
+          route.endColony.top === startY) {
+          isConnected = true
+        }
+      })
+
+      if (startColony !== endColony && !isConnected) {
+        let path = 'M ' + startX + ' ' + startY + ' Q 0 ' + endX + ' ' + endY
+        let tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, objectCaching: false })
 
         tradeRoute.startColony = startColony
         tradeRoute.endColony = endColony
+        doneRoutes.push({sX: startX, sY: startY, eX: endX, eY: endY})
 
-        tradeRoute.path[0][1] = startColony.left
-        tradeRoute.path[0][2] = startColony.top
+        tradeRoute.path[0][1] = startX
+        tradeRoute.path[0][2] = startY
 
-        tradeRoute.path[1][1] = endColony.left
-        tradeRoute.path[1][2] = endColony.top
+        let center = {
+          x: Math.min(startX, endX) + Math.abs(startX - endX) / 2,
+          y: Math.min(startY, endY) + Math.abs(startY - endY) / 2
+        }
+        center.x -= center.x < mainX ? 30 : -30
+        center.y -= center.y < mainY ? 30 : -30
+        tradeRoute.path[1][1] = center.x
+        tradeRoute.path[1][2] = center.y
 
-        // tradeRoute.path[1][3] = endColony.node.left
-        // tradeRoute.path[1][4] = endColony.node.top
-
-        console.log('(' + startColony.left + ', ' + startColony.top + ') to (' + endColony.left + ', ' + endColony.top + ')')
+        tradeRoute.path[1][3] = endX
+        tradeRoute.path[1][4] = endY
 
         tradeRoute.selectable = false
         canvas.add(tradeRoute)
@@ -271,4 +319,5 @@ let setupMap = () => {
       }
     })
   })
+  canvas.getObjects().filter(object => object.type === 'rect').forEach(rect => canvas.bringToFront(rect))
 }
