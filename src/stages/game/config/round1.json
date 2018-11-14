@@ -2,6 +2,7 @@
   "materials": [
     {"name": "Palladium", "depletion_rate": 1},
     {"name": "Selenium", "depletion_rate": 1},
+    {"name": "Tungsten", "depletion_rate": 1}
   ],
   "chat": "free",
   "information": "inventories",
@@ -11,7 +12,8 @@
       "name": "Oceania Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000}
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
       ],
       "specilisations": [{
         "input": "Palladium",
@@ -24,36 +26,25 @@
       "name": "Eurasia Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000}
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
       ],
       "specilisations": [{
         "input": "Selenium",
-        "output": "Palladium",
+        "output": "Tungsten",
         "gain": 2.0,
 	      "transform_rate": 10
       }]
     },
     {
-      "name": "Eurasia Colony 2",
+      "name": "Eastasia Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000}
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
       ],
       "specilisations": [{
-        "input": "Selenium",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eurasia Colony 3",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Selenium",
+        "input": "Tungsten",
         "output": "Palladium",
         "gain": 2.0,
 	      "transform_rate": 10

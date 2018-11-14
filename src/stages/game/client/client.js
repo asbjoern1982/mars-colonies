@@ -3,6 +3,7 @@ import html from './client.html'
 import './client.css'
 
 let myName
+let colonyNode
 let materials
 let specilisations
 let localinventory
@@ -30,13 +31,18 @@ let events = {
     console.log(transfer)
     console.log(tradeRoutes)
     let sendingColony = otherColonies.find(colony => colony.name === transfer.sender)
-    let sendingColonyName = sendingColony || myName
+    let sendingColonyNode = sendingColony ? sendingColony.node : colonyNode
+
     let receivingColony = otherColonies.find(colony => colony.name === transfer.receiver)
-    let receivingColonyName = receivingColony || myName
-    let route = tradeRoutes.find(route => (route.startColony.colonyName === sendingColonyName && route.endColony.colonyName === receivingColonyName) ||
-      (route.startColony.colonyName === receivingColonyName && route.endColony.colonyName === receivingColonyName))
+    let receivingColonyNode = receivingColony ? receivingColony.node : colonyNode
+    let route = tradeRoutes.find(route => (route.startColony === sendingColonyNode && route.endColony === receivingColonyNode) ||
+      (route.startColony === receivingColonyNode && route.endColony === sendingColonyNode))
     route.stroke = 'white'
     canvas.requestRenderAll()
+    setTimeout(() => {
+      route.stroke = 'black'
+      canvas.requestRenderAll()
+    }, 1000)
     // TODO show line between the colonies
   },
   'inventories': (client, inventories) => {
@@ -193,7 +199,7 @@ let setupMap = () => {
   let centerY = 320 / 2 - 10
 
   // the center colony
-  let colonyNode = new fabric.Rect({
+  colonyNode = new fabric.Rect({
     left: centerX,
     top: centerY,
     fill: 'grey',
@@ -270,7 +276,7 @@ let setupMap = () => {
     let mainX = colonyNode.left
     let mainY = colonyNode.top + yOffset
     let line = [mainX, mainY, startX, startY]
-    let tradeRouteToMain = new fabric.Line(line, { fill: '', stroke: 'black', strokeWidth: 2, objectCaching: false })
+    let tradeRouteToMain = new fabric.Line(line, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
     tradeRouteToMain.startColony = colonyNode
     tradeRouteToMain.endColony = startColony
     canvas.add(tradeRouteToMain)
@@ -282,17 +288,17 @@ let setupMap = () => {
 
       let isConnected = false
       tradeRoutes.forEach(route => {
-        if (route.startColony.left === endX &&
-          route.startColony.top === endY &&
-          route.endColony.left === startX &&
-          route.endColony.top === startY) {
+        console.log(route.startColony.colonyName + ' === ' + endColony.colonyName)
+        console.log(route.endColony.colonyName + ' === ' + startColony.colonyName)
+        if (route.startColony.colonyName === endColony.colonyName &&
+          route.endColony.colonyName === startColony.colonyName) {
           isConnected = true
         }
       })
 
       if (startColony !== endColony && !isConnected) {
         let path = 'M ' + startX + ' ' + startY + ' Q 0 ' + endX + ' ' + endY
-        let tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, objectCaching: false })
+        let tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
 
         tradeRoute.startColony = startColony
         tradeRoute.endColony = endColony
