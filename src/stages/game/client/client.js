@@ -288,8 +288,6 @@ let setupMap = () => {
 
       let isConnected = false
       tradeRoutes.forEach(route => {
-        console.log(route.startColony.colonyName + ' === ' + endColony.colonyName)
-        console.log(route.endColony.colonyName + ' === ' + startColony.colonyName)
         if (route.startColony.colonyName === endColony.colonyName &&
           route.endColony.colonyName === startColony.colonyName) {
           isConnected = true
@@ -311,10 +309,15 @@ let setupMap = () => {
           x: Math.min(startX, endX) + Math.abs(startX - endX) / 2,
           y: Math.min(startY, endY) + Math.abs(startY - endY) / 2
         }
-        center.x -= center.x < mainX ? 30 : -30
-        center.y -= center.y < mainY ? 30 : -30
-        tradeRoute.path[1][1] = center.x
-        tradeRoute.path[1][2] = center.y
+        // calculate a point to curve to
+        let height = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2)) / 4
+        let vector = {x: startX - center.x, y: startY - center.y}
+        let lengthOfVector = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2))
+        vector = {x: vector.x / lengthOfVector, y: vector.y / lengthOfVector} // normalize
+        vector = (mainY - center.y < 0 && mainX - center.x > 0) ? {x: vector.y * -1, y: vector.x} : {x: vector.y, y: vector.x * -1} // rotate
+        vector = {x: vector.x * height, y: vector.y * height} // magnify
+        tradeRoute.path[1][1] = center.x + vector.x
+        tradeRoute.path[1][2] = center.y + vector.y
 
         tradeRoute.path[1][3] = endX
         tradeRoute.path[1][4] = endY
