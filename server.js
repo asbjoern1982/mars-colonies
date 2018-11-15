@@ -2,6 +2,7 @@ import createServer, { Network, Events } from 'monsterr'
 import game from './src/stages/game/server/server'
 import {DatabaseHandler} from './src/database/DatabaseHandler'
 import config from './src/stages/game/config/round1.json'
+import {spawn} from 'child_process'
 
 const stages = [game]
 let numberOfPlayers = config.players.length
@@ -24,7 +25,7 @@ let commands = {
 }
 
 const monsterr = createServer({
-  network: Network.pairs(8),
+  network: Network.clique(config.players.length),
   events,
   commands,
   stages,
@@ -35,3 +36,8 @@ const monsterr = createServer({
 })
 
 monsterr.run()
+
+for (let i = 0; i < config.players.length - 1; i++) {
+  console.log('spawning bot #' + i)
+  spawn('node', ['./src/bot.js'])
+}

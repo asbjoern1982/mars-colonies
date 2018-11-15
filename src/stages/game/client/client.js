@@ -314,7 +314,12 @@ let setupMap = () => {
         let vector = {x: startX - center.x, y: startY - center.y}
         let lengthOfVector = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2))
         vector = {x: vector.x / lengthOfVector, y: vector.y / lengthOfVector} // normalize
-        vector = (mainY - center.y < 0 && mainX - center.x > 0) ? {x: vector.y * -1, y: vector.x} : {x: vector.y, y: vector.x * -1} // rotate
+
+        let vectorB = {x: center.x - mainX, y: center.y - mainY} // vector from main to centerpoint
+        let direction = Math.atan(vectorB.y / vectorB.x)
+        let curve = (direction > Math.PI / 4 && direction < 3 * Math.PI / 4) && (direction > 5 * Math.PI / 4 && direction < 7 * Math.PI / 4)
+        vector = curve ? {x: vector.y * -1, y: vector.x} : {x: vector.y, y: vector.x * -1} // rotate
+
         vector = {x: vector.x * height, y: vector.y * height} // magnify
         tradeRoute.path[1][1] = center.x + vector.x
         tradeRoute.path[1][2] = center.y + vector.y
