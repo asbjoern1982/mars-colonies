@@ -3,16 +3,23 @@ import game from './src/stages/game/server/server'
 import {DatabaseHandler} from './src/database/DatabaseHandler'
 import config from './src/stages/game/config/round1.json'
 import {spawn} from 'child_process'
-
 const stages = [game]
-let numberOfPlayers = config.players.length
+
+// validate config
+let names = config.players.map(player => player.name)
+let namesSet = [...new Set(names)]
+if (names.length !== namesSet.length) {
+  names = names.map((item, i) => names.includes(item, i + 1) ? item : '').filter(item => item !== '')
+  throw new Error('validation failed, dublicates of names in config-file, dubs: [' + names + ']')
+}
+
 let connectedPlayers = 0
-console.log('waiting for ' + numberOfPlayers + ' players')
+console.log('waiting for ' + config.players.length + ' players')
 
 let events = {
   [Events.CLIENT_CONNECTED] (server, clientId) {
     connectedPlayers++
-    if (connectedPlayers >= numberOfPlayers) {
+    if (connectedPlayers >= config.players.length) {
       server.start()
     }
   }
@@ -37,7 +44,9 @@ const monsterr = createServer({
 
 monsterr.run()
 
-for (let i = 0; i < config.players.length - 1; i++) {
+// spawn bot-threads
+let numberOfBots = config.players.length - 1
+for (let i = 0; i < numberOfBots; i++) {
   console.log('spawning bot #' + i)
   spawn('node', ['./src/bot.js'])
 }

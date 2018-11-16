@@ -76,14 +76,18 @@ export default {
       })
       if (allReady) {
         console.log('All clients have reported ready, starting game')
+        // only send what is needed
+        let simplifiedColonies = []
+        colonies.forEach(otherColony => simplifiedColonies.push({
+          name: otherColony.name,
+          inventory: otherColony.inventory
+        }))
         colonies.forEach(colony => {
           let data = {
-            colonyName: colony.name,
-            specilisations: colony.specilisations,
-            otherColonyNames: colonies
-              .filter(col => col.id !== colony.id)
-              .map(col => col.name),
-            materials: config.materials
+            materials: config.materials,
+            yourName: colony.name,
+            yourSpecilisations: colony.specilisations,
+            colonies: simplifiedColonies
           }
           server.send('setup', data).toClient(colony.id)
         })
@@ -139,7 +143,6 @@ let sendColoniesInventories = (server) => {
     colonies.forEach(colony => {
       let inventories = [{
         name: colony.name,
-        id: colony.id,
         inventory: colony.inventory
       }]
       server.send('inventories', inventories).toClient(colony.id)

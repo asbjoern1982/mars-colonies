@@ -2,15 +2,13 @@
 import html from './client.html'
 import './client.css'
 
-let myName
-let colonyNode
 let materials
-let specilisations
-let localinventory
+let thisColony
 let otherColonies
-let tradeRoutes
 let productionCountDown = 0
 let productionCountTotal = 0
+
+let tradeRoutes
 
 let canvas
 let tooltip
@@ -30,13 +28,11 @@ let events = {
     console.log('trade')
     console.log(transfer)
     console.log(tradeRoutes)
-    let sendingColony = otherColonies.find(colony => colony.name === transfer.sender)
-    let sendingColonyNode = sendingColony ? sendingColony.node : colonyNode
+    let sendingColony = otherColonies.find(colony => colony.name === transfer.sender) || thisColony
 
-    let receivingColony = otherColonies.find(colony => colony.name === transfer.receiver)
-    let receivingColonyNode = receivingColony ? receivingColony.node : colonyNode
-    let route = tradeRoutes.find(route => (route.startColony === sendingColonyNode && route.endColony === receivingColonyNode) ||
-      (route.startColony === receivingColonyNode && route.endColony === sendingColonyNode))
+    let receivingColony = otherColonies.find(colony => colony.name === transfer.receiver) || thisColony
+    let route = tradeRoutes.find(route => (route.startColony === sendingColony && route.endColony === receivingColony) ||
+      (route.startColony === receivingColony && route.endColony === sendingColony))
     route.stroke = 'white'
     canvas.requestRenderAll()
     setTimeout(() => {
@@ -47,32 +43,29 @@ let events = {
   },
   'inventories': (client, inventories) => {
     // set my inventory for the intenvoryView
-    localinventory = inventories.find(colony => colony.id === client.getId()).inventory
-    updateInventory(localinventory)
+    thisColony.inventory = inventories.find(colony => colony.name === thisColony.name).inventory
+    updateInventory()
     // set other colonies inventory for the map if it is in the payload
-    inventories.filter(colony => colony.id !== client.getId()).forEach(colony => {
+    inventories.filter(colony => colony.name !== thisColony.name).forEach(colony => {
       otherColonies.find(otherColony => otherColony.name === colony.name).inventory = colony.inventory
     })
   },
   'setup': (client, data) => {
     materials = data.materials
-    specilisations = data.specilisations
-    otherColonies = []
-    data.otherColonyNames.forEach(name => otherColonies.push({
-      name: name,
-      inventory: []
-    }))
+    thisColony = data.colonies.find(colony => colony.name === data.yourName)
+    if (data.yourSpecilisations) thisColony.specilisations = data.yourSpecilisations
+
+    otherColonies = data.colonies.filter(colony => colony.name !== data.yourName)
 
     // chat
-    myName = data.colonyName
-    $('#input-label').append(data.colonyName)
+    $('#input-label').append(thisColony.name)
 
     // trade
-    data.otherColonyNames.forEach(name => $('#trade-colony').append('<option>' + name + '</option>'))
+    otherColonies.forEach(colony => $('#trade-colony').append('<option>' + colony.name + '</option>'))
     materials.forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
 
     // production
-    specilisations.forEach(specilisation => {
+    thisColony.specilisations.forEach(specilisation => {
       let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%)'
       $('#production-material').append('<option value="' + specilisation.input + '">' + option + '</option>')
     })
@@ -123,7 +116,7 @@ export default {
         material: $('#production-material').val(),
         amount: $('#production-amount').val()
       })
-      productionCountDown = specilisations.find(specilisation => specilisation.input === $('#production-material').val()).transform_rate
+      productionCountDown = thisColony.specilisations.find(specilisation => specilisation.input === $('#production-material').val()).transform_rate
       productionCountTotal = productionCountDown
       $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
       productionCountDown--
@@ -152,38 +145,50 @@ export default {
 let gameloop = () => {
   // update inventory depletion
   materials.forEach(material => {
-    localinventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
-  })
-  updateInventory(localinventory)
-
-  otherColonies.forEach(colony => {
-    materials.forEach(material => {
+    thisColony.inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
+    otherColonies.forEach(colony => {
       colony.inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
     })
   })
+  updateInventory()
   updateTooltip()
 }
 
-let updateInventory = (inventory) => {
+let updateInventory = () => {
   $('#inventory').find('tbody').empty()
-  inventory.forEach(row => $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td>' + row.amount + '</td></tr>'))
+  thisColony.inventory.forEach(row => $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td>' + row.amount + '</td></tr>'))
 }
 
 let updateTooltip = () => {
   if (tooltip) {
-    let text = tooltip.colony.name + tooltip.colony.inventory.map(row => '\n' + row.name + ': ' + row.amount)
-    let newtooltip = new fabric.Text(text, {
-      left: tooltip.left,
-      top: tooltip.top,
-      width: tooltip.width,
-      height: tooltip.width,
-      fontSize: 12
-    })
-    newtooltip['colony'] = tooltip.colony
+    let newtooltip = createTooltip(tooltip.colony, tooltip.left, tooltip.top)
     canvas.remove(tooltip)
     tooltip = newtooltip
     canvas.add(tooltip)
   }
+}
+
+let createTooltip = (colony, left, top) => {
+  let text = colony.name + colony.inventory.map(row => '\n' + row.name + ': ' + row.amount)
+  let tooltipBackground = new fabric.Rect({
+    left: left,
+    top: top,
+    width: 100,
+    height: 100,
+    fill: 'white',
+    stroke: 'black',
+    strokeWidth: 1
+  })
+  let tooltipText = new fabric.Text(text, {
+    left: left + 3,
+    top: top + 3,
+    width: 100,
+    height: 100,
+    fontSize: 12
+  })
+  let newtooltip = new fabric.Group([tooltipBackground, tooltipText])
+  newtooltip.colony = colony
+  return newtooltip
 }
 
 let setupMap = () => {
@@ -199,7 +204,7 @@ let setupMap = () => {
   let centerY = 320 / 2 - 10
 
   // the center colony
-  colonyNode = new fabric.Rect({
+  let centerNode = new fabric.Rect({
     left: centerX,
     top: centerY,
     fill: 'grey',
@@ -210,8 +215,7 @@ let setupMap = () => {
     stroke: 'black',
     strokeWidth: 1
   })
-  colonyNode['colonyName'] = myName
-  canvas.add(colonyNode)
+  canvas.add(centerNode)
 
   let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat']
   let angleBetweenColonies = 2 * Math.PI / otherColonies.length
@@ -231,9 +235,7 @@ let setupMap = () => {
       stroke: 'black',
       strokeWidth: 1
     })
-    rect.name =
     canvas.add(rect)
-    rect['colonyName'] = otherColonies[i].name
     otherColonies[i]['node'] = rect
   }
 
@@ -241,17 +243,8 @@ let setupMap = () => {
     if (e.target) {
       let colony = otherColonies.find(colony => colony['node'] === e.target)
       if (colony) {
-        console.log('mouse-over: ' + colony.name + '\ninventory: ' + colony.inventory)
-        let text = colony.name + colony.inventory.map(row => '\n' + row.name + ': ' + row.amount)
-        tooltip = new fabric.Text(text, {
-          left: e.target.left + 20,
-          top: e.target.top + 20,
-          width: 100,
-          height: 100,
-          fontSize: 12
-        })
+        tooltip = createTooltip(colony, e.target.left + 20, e.target.top + 20)
         canvas.add(tooltip)
-        tooltip['colony'] = colony
       }
     }
   })
@@ -259,7 +252,6 @@ let setupMap = () => {
     if (e.target) {
       let colony = otherColonies.find(colony => colony['node'] === e.target)
       if (colony) {
-        console.log('mouse-out: ' + colony.name)
         canvas.remove(tooltip)
         tooltip = undefined
       }
@@ -268,30 +260,31 @@ let setupMap = () => {
 
   tradeRoutes = []
   let doneRoutes = []
-  let allColonyNodes = [...otherColonies.map(colony => colony.node)]
   let yOffset = 15
-  allColonyNodes.forEach(startColony => {
-    let start = {x: startColony.left, y: startColony.top + yOffset}
-    let main = {x: colonyNode.left, y: colonyNode.top + yOffset}
+  otherColonies.forEach(startColony => {
+    // route to the center
+    let start = {x: startColony.node.left, y: startColony.node.top + yOffset}
+    let main = {x: centerNode.left, y: centerNode.top + yOffset}
     let line = [main.x, main.y, start.x, start.y]
     let tradeRouteToMain = new fabric.Line(line, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
-    tradeRouteToMain.startColony = colonyNode
+    tradeRouteToMain.startColony = thisColony
     tradeRouteToMain.endColony = startColony
     canvas.add(tradeRouteToMain)
     tradeRoutes.push(tradeRouteToMain)
 
-    allColonyNodes.forEach(endColony => {
-      let end = {x: endColony.left, y: endColony.top + yOffset}
+    // route to other colonies
+    otherColonies.forEach(endColony => {
+      let end = {x: endColony.node.left, y: endColony.node.top + yOffset}
 
       let isConnected = false
       tradeRoutes.forEach(route => {
-        if (route.startColony.colonyName === endColony.colonyName &&
-          route.endColony.colonyName === startColony.colonyName) {
+        if (route.startColony.name === endColony.name &&
+          route.endColony.name === startColony.name) {
           isConnected = true
         }
       })
 
-      if (startColony !== endColony && !isConnected) {
+      if (startColony.name !== endColony.name && !isConnected) {
         let path = 'M ' + start.x + ' ' + start.y + ' Q 0 ' + end.x + ' ' + end.y
         let tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
 
@@ -306,9 +299,21 @@ let setupMap = () => {
           x: Math.min(start.x, end.x) + Math.abs(start.x - end.x) / 2,
           y: Math.min(start.y, end.y) + Math.abs(start.y - end.y) / 2
         }
-        let vector = { // vector from centerpoint of circle to centerpoint of line
-          x: center.x - main.x,
-          y: center.y - main.y
+        let vector
+        // if the center is close to main, rotate the vector
+        if (center.x - main.x < 0.01 && center.x - main.x > -0.01 &&
+          center.y - main.y < 0.01 && center.y - main.y > -0.01) {
+          vector = {
+            x: center.x - start.x,
+            y: center.y - start.y
+          }
+          vector = {x: vector.y * -1, y: vector.x}
+        // vector from centerpoint of circle to centerpoint of line
+        } else {
+          vector = {
+            x: center.x - main.x,
+            y: center.y - main.y
+          }
         }
         let len = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2))
         let mult = Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)) / 4
