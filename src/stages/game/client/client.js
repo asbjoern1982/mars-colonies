@@ -271,11 +271,9 @@ let setupMap = () => {
   let allColonyNodes = [...otherColonies.map(colony => colony.node)]
   let yOffset = 15
   allColonyNodes.forEach(startColony => {
-    let startX = startColony.left
-    let startY = startColony.top + yOffset
-    let mainX = colonyNode.left
-    let mainY = colonyNode.top + yOffset
-    let line = [mainX, mainY, startX, startY]
+    let start = {x: startColony.left, y: startColony.top + yOffset}
+    let main = {x: colonyNode.left, y: colonyNode.top + yOffset}
+    let line = [main.x, main.y, start.x, start.y]
     let tradeRouteToMain = new fabric.Line(line, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
     tradeRouteToMain.startColony = colonyNode
     tradeRouteToMain.endColony = startColony
@@ -283,8 +281,7 @@ let setupMap = () => {
     tradeRoutes.push(tradeRouteToMain)
 
     allColonyNodes.forEach(endColony => {
-      let endX = endColony.left
-      let endY = endColony.top + yOffset
+      let end = {x: endColony.left, y: endColony.top + yOffset}
 
       let isConnected = false
       tradeRoutes.forEach(route => {
@@ -295,37 +292,31 @@ let setupMap = () => {
       })
 
       if (startColony !== endColony && !isConnected) {
-        let path = 'M ' + startX + ' ' + startY + ' Q 0 ' + endX + ' ' + endY
+        let path = 'M ' + start.x + ' ' + start.y + ' Q 0 ' + end.x + ' ' + end.y
         let tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
 
         tradeRoute.startColony = startColony
         tradeRoute.endColony = endColony
-        doneRoutes.push({sX: startX, sY: startY, eX: endX, eY: endY})
+        doneRoutes.push({sX: start.x, sY: start.y, eX: end.x, eY: end.y})
 
-        tradeRoute.path[0][1] = startX
-        tradeRoute.path[0][2] = startY
+        tradeRoute.path[0][1] = start.x
+        tradeRoute.path[0][2] = start.y
 
-        let center = {
-          x: Math.min(startX, endX) + Math.abs(startX - endX) / 2,
-          y: Math.min(startY, endY) + Math.abs(startY - endY) / 2
+        let center = { // centerpoint of line
+          x: Math.min(start.x, end.x) + Math.abs(start.x - end.x) / 2,
+          y: Math.min(start.y, end.y) + Math.abs(start.y - end.y) / 2
         }
-        // calculate a point to curve to
-        let height = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2)) / 4
-        let vector = {x: startX - center.x, y: startY - center.y}
-        let lengthOfVector = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2))
-        vector = {x: vector.x / lengthOfVector, y: vector.y / lengthOfVector} // normalize
+        let vector = { // vector from centerpoint of circle to centerpoint of line
+          x: center.x - main.x,
+          y: center.y - main.y
+        }
+        let len = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2))
+        let mult = Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)) / 4
+        tradeRoute.path[1][1] = center.x + vector.x * mult / len // normalize and magnify
+        tradeRoute.path[1][2] = center.y + vector.y * mult / len // normalize and magnify
 
-        let vectorB = {x: center.x - mainX, y: center.y - mainY} // vector from main to centerpoint
-        let direction = Math.atan(vectorB.y / vectorB.x)
-        let curve = (direction > Math.PI / 4 && direction < 3 * Math.PI / 4) && (direction > 5 * Math.PI / 4 && direction < 7 * Math.PI / 4)
-        vector = curve ? {x: vector.y * -1, y: vector.x} : {x: vector.y, y: vector.x * -1} // rotate
-
-        vector = {x: vector.x * height, y: vector.y * height} // magnify
-        tradeRoute.path[1][1] = center.x + vector.x
-        tradeRoute.path[1][2] = center.y + vector.y
-
-        tradeRoute.path[1][3] = endX
-        tradeRoute.path[1][4] = endY
+        tradeRoute.path[1][3] = end.x
+        tradeRoute.path[1][4] = end.y
 
         tradeRoute.selectable = false
         canvas.add(tradeRoute)
