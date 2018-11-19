@@ -78,15 +78,24 @@ export default {
         console.log('All clients have reported ready, starting game')
         // only send what is needed
         let simplifiedColonies = []
-        colonies.forEach(otherColony => simplifiedColonies.push({
-          name: otherColony.name,
-          inventory: otherColony.inventory
-        }))
+        colonies.forEach(otherColony => {
+          let simplifiedColony = {
+            name: otherColony.name
+          }
+          if (config.tooltip.includes('inventories')) {
+            simplifiedColony.inventory = otherColony.inventory
+          }
+          if (config.tooltip.includes('specilisations')) {
+            simplifiedColony.specilisations = otherColony.specilisations
+          }
+          simplifiedColonies.push(simplifiedColony)
+        })
         colonies.forEach(colony => {
           let data = {
             materials: config.materials,
             yourName: colony.name,
             yourSpecilisations: colony.specilisations,
+            yourStartingInventory: colony.inventory,
             colonies: simplifiedColonies
           }
           server.send('setup', data).toClient(colony.id)
@@ -118,7 +127,15 @@ let tickcount = 0
 let gameloop = (server) => {
   colonies.forEach(colony => {
     config.materials.forEach(material => {
-      colony.inventory.find(colmat => material.name === colmat.name).amount -= material.depletion_rate
+      if (!colony.dead) { // if a colony have 0 materials left, it is dead and should not be updated
+        if (colony.inventory.find(colmat => material.name === colmat.name).amount - material.depletion_rate <= 0) {
+          colony.inventory.find(colmat => material.name === colmat.name).amount = 0
+          colony.dead = true
+          server.send('colonyDied', colony.name).toAll()
+        } else {
+          colony.inventory.find(colmat => material.name === colmat.name).amount -= material.depletion_rate
+        }
+      }
     })
   })
 
@@ -129,17 +146,16 @@ let gameloop = (server) => {
 }
 
 let sendColoniesInventories = (server) => {
-  if (config.information === 'inventories') {
+  if (config.tooltip.includes('inventories')) {
     let inventories = []
     colonies.forEach(colony =>
       inventories.push({
         name: colony.name,
-        id: colony.id,
         inventory: colony.inventory
       })
     )
     server.send('inventories', inventories).toAll()
-  } else if (config.information === 'none') {
+  } else {
     colonies.forEach(colony => {
       let inventories = [{
         name: colony.name,

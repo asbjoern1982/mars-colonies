@@ -4,8 +4,10 @@
     {"name": "Selenium", "depletion_rate": 1},
     {"name": "Tungsten", "depletion_rate": 1}
   ],
+  "inventoryBonusLimit": 500,
+  "inventoryCriticalLimit": 100,
   "chat": "free",
-  "information": "inventories",
+  "tooltip": ["inventories", "specilisations"],
   "trade_delay": 0,
   "players": [
     {
@@ -38,118 +40,6 @@
     },
     {
       "name": "Eastasia Colony",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony 2",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony 3",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony 4",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony 5",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony 6",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony 7",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony 8",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony 9",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000},

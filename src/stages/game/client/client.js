@@ -1,6 +1,8 @@
 
 import html from './client.html'
 import './client.css'
+import firstRound from './../config/round1.json'
+let config = firstRound
 
 let materials
 let thisColony
@@ -50,10 +52,27 @@ let events = {
       otherColonies.find(otherColony => otherColony.name === colony.name).inventory = colony.inventory
     })
   },
+  'colonyDied': (client, colonyName) => {
+    if (thisColony.name === colonyName) {
+      thisColony.dead = true
+      $('#trade-colony').prop('disabled', true)
+      $('#trade-material').prop('disabled', true)
+      $('#trade-amount').prop('disabled', true)
+      $('#trade-button').prop('disabled', true)
+      $('#production-material').prop('disabled', true)
+      $('#production-amount').prop('disabled', true)
+      $('#production-button').prop('disabled', true)
+    } else {
+      otherColonies.find(colony => colony.name === colonyName).dead = true
+    }
+    $('#chat-log').append(colonyName + ' have died\n')
+    // TODO visualy indicate to others that this colony have died
+  },
   'setup': (client, data) => {
     materials = data.materials
     thisColony = data.colonies.find(colony => colony.name === data.yourName)
-    if (data.yourSpecilisations) thisColony.specilisations = data.yourSpecilisations
+    thisColony.specilisations = data.yourSpecilisations
+    thisColony.inventory = data.yourStartingInventory
 
     otherColonies = data.colonies.filter(colony => colony.name !== data.yourName)
 
@@ -145,9 +164,9 @@ export default {
 let gameloop = () => {
   // update inventory depletion
   materials.forEach(material => {
-    thisColony.inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
+    if (!thisColony.dead) thisColony.inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
     otherColonies.forEach(colony => {
-      colony.inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
+      if (!colony.dead) colony.inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
     })
   })
   updateInventory()
@@ -156,7 +175,10 @@ let gameloop = () => {
 
 let updateInventory = () => {
   $('#inventory').find('tbody').empty()
-  thisColony.inventory.forEach(row => $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td>' + row.amount + '</td></tr>'))
+  thisColony.inventory.forEach(row => {
+    let amountColor = row.amount > config.inventoryBonusLimit ? 'inventory-bonus' : row.amount < config.inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
+    $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td class="' + amountColor + '">' + row.amount + '</td></tr>')
+  })
 }
 
 let updateTooltip = () => {
@@ -169,22 +191,28 @@ let updateTooltip = () => {
 }
 
 let createTooltip = (colony, left, top) => {
-  let text = colony.name + colony.inventory.map(row => '\n' + row.name + ': ' + row.amount)
+  let height = 16 + (colony.inventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + 3
+  let adjustedTop = top + height + 4 > canvas.height ? canvas.height - height - 4 : top
   let tooltipBackground = new fabric.Rect({
     left: left,
-    top: top,
-    width: 100,
-    height: 100,
-    fill: 'white',
-    stroke: 'black',
+    top: adjustedTop,
+    width: 125,
+    height: height,
+    fill: 'black',
+    stroke: 'grey',
+    opacity: 0.75,
     strokeWidth: 1
   })
+  let text = colony.name +
+    (colony.inventory ? '\nInventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') : '') +
+    (colony.specilisations ? '\nSpecilisations:\n' + colony.specilisations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') : '')
   let tooltipText = new fabric.Text(text, {
     left: left + 3,
-    top: top + 3,
+    top: adjustedTop + 3,
     width: 100,
     height: 100,
-    fontSize: 12
+    fontSize: 12,
+    fill: 'white'
   })
   let newtooltip = new fabric.Group([tooltipBackground, tooltipText])
   newtooltip.colony = colony
