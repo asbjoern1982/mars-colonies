@@ -41,7 +41,6 @@ let events = {
       route.stroke = 'black'
       canvas.requestRenderAll()
     }, 1000)
-    // TODO show line between the colonies
   },
   'inventories': (client, inventories) => {
     // set my inventory for the intenvoryView
@@ -131,7 +130,7 @@ let events = {
     })
 
     // add nodes to the map
-    setupMap()
+    setupMap(client)
 
     // start gameloop
     setInterval(gameloop, 1000)
@@ -247,7 +246,7 @@ let createTooltip = (colony, left, top) => {
   return newtooltip
 }
 
-let setupMap = () => {
+let setupMap = (client) => {
   canvas = new fabric.Canvas('map-canvas', {
     selection: false,
     width: 590,
@@ -301,6 +300,7 @@ let setupMap = () => {
       if (colony) {
         tooltip = createTooltip(colony, e.target.left + 20, e.target.top + 20)
         canvas.add(tooltip)
+        client.send('mouseover-colony', colony.name)
       }
     }
   })

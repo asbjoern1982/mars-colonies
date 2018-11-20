@@ -7,8 +7,9 @@ let colonies = config.players
 export default {
   commands: {},
   events: {
-    'some_event': (server, clientId, data) => {
-      DatabaseHandler.logEvent(clientId, 'data')
+    'mouseover-colony': (server, clientId, target) => {
+      let targetId = colonies.find(colony => colony.name === target).id
+      DatabaseHandler.logMouseOverColony(clientId, targetId)
     },
     'trade': (server, clientId, transfer) => {
       // remove amount from senders inventory

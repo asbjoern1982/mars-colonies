@@ -336,6 +336,78 @@
     {
       "time": 1542733431962,
       "data": "xFnPvWNUb has died"
+    },
+    {
+      "time": 1542735078671,
+      "data": "game started with [KhclOY-iX,q4gP5I6_D,lqTvzGdq-X]"
+    },
+    {
+      "time": 1542735265728,
+      "data": "game started with [SUUztMX4a,nRLv2nB85t,UwKENFf2z]"
+    }
+  ],
+  "logMouseOverColony": [
+    {
+      "id": "UwKENFf2z",
+      "time": 1542735268197,
+      "colony": {
+        "name": "Oceania Colony",
+        "inventory": [
+          {
+            "name": "Palladium",
+            "amount": 996
+          },
+          {
+            "name": "Selenium",
+            "amount": 996
+          },
+          {
+            "name": "Tungsten",
+            "amount": 996
+          }
+        ],
+        "specilisations": [
+          {
+            "input": "Palladium",
+            "output": "Selenium",
+            "gain": 2,
+            "transform_rate": 10
+          }
+        ],
+        "id": "SUUztMX4a",
+        "ready": true
+      }
+    },
+    {
+      "id": "UwKENFf2z",
+      "time": 1542735269920,
+      "colony": {
+        "name": "Eurasia Colony",
+        "inventory": [
+          {
+            "name": "Palladium",
+            "amount": 996
+          },
+          {
+            "name": "Selenium",
+            "amount": 996
+          },
+          {
+            "name": "Tungsten",
+            "amount": 996
+          }
+        ],
+        "specilisations": [
+          {
+            "input": "Selenium",
+            "output": "Tungsten",
+            "gain": 2,
+            "transform_rate": 10
+          }
+        ],
+        "id": "nRLv2nB85t",
+        "ready": true
+      }
     }
   ]
 }

@@ -9,6 +9,7 @@ let createDatabaseHandler = () => {
     production: [],
     trade: [],
     inventory: [],
+    logMouseOverColony: [],
     events: []
   }).write()
 
@@ -51,6 +52,15 @@ let createDatabaseHandler = () => {
     db.get('inventory').push(event).write()
   }
 
+  let logMouseOverColony = (clientId, colony) => {
+    let event = {
+      id: clientId,
+      time: Date.now(),
+      colony: colony
+    }
+    db.get('logMouseOverColony').push(event).write()
+  }
+
   let logEvent = (data) => {
     let event = {
       time: Date.now(),
@@ -69,6 +79,7 @@ let createDatabaseHandler = () => {
     logProduction,
     logTrade,
     logInventory,
+    logMouseOverColony,
     logEvent,
     exportAsJSON
   }
