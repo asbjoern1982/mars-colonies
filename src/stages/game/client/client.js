@@ -1,10 +1,10 @@
 
 import html from './client.html'
 import './client.css'
-import firstRound from './../config/round1.json'
-let config = firstRound
 
 let materials
+let inventoryBonusLimit
+let inventoryCriticalLimit
 let thisColony
 let otherColonies
 let productionCountDown = 0
@@ -73,11 +73,52 @@ let events = {
     thisColony = data.colonies.find(colony => colony.name === data.yourName)
     thisColony.specilisations = data.yourSpecilisations
     thisColony.inventory = data.yourStartingInventory
+    inventoryBonusLimit = data.inventoryBonusLimit
+    inventoryCriticalLimit = data.inventoryCriticalLimit
 
     otherColonies = data.colonies.filter(colony => colony.name !== data.yourName)
 
     // chat
-    $('#input-label').append(thisColony.name)
+    if (Array.isArray(data.chat) && data.chat.length > 0) {
+      $('#chat-input-bar').append('<div class="input-group-prepend">' +
+        '<span class="input-group-text" id="input-label"></span>' +
+        '</div>' +
+        '<select class="form-control" id="chat-input"></select>' +
+        '<div class="input-group-prepend-append">' +
+        '<button class="btn btn-default" id="chat-button">send</button>' +
+        '</div>')
+      data.chat.forEach(sentence => $('#chat-input').append('<option>' + sentence + '</option>'))
+      $('#input-label').append(thisColony.name)
+      $('#chat-button').mouseup(e => {
+        e.preventDefault()
+        client.send('chat', $('#chat-input').val())
+        $('#chat-input').val($('#chat-input option:first').val())
+      })
+    } else if (data.chat === 'free') {
+      $('#chat-input-bar').append('<div class="input-group-prepend">' +
+        '<span class="input-group-text" id="input-label"></span>' +
+        '</div>' +
+        '<input type="text" class="form-control" id="chat-input" placeholder="write a message">' +
+        '<div class="input-group-prepend-append">' +
+        '<button class="btn btn-default" id="chat-button">send</button>' +
+        '</div>')
+      $('#input-label').append(thisColony.name)
+      $('#chat-input').keypress((e) => {
+        if (e.which === 13) {
+          client.send('chat', $('#chat-input').val())
+          $('#chat-input').val('')
+        }
+      })
+      $('#chat-button').mouseup(e => {
+        e.preventDefault()
+        if ($('#chat-input').val() !== '') {
+          client.send('chat', $('#chat-input').val())
+          $('#chat-input').val('')
+        }
+      })
+    } else {
+      $('#chat-log').append('chat disabled')
+    }
 
     // trade
     otherColonies.forEach(colony => $('#trade-colony').append('<option>' + colony.name + '</option>'))
@@ -112,46 +153,6 @@ export default {
         amount: $('#trade-amount').val()
       })
     })
-
-    // -------------------- CHAT --------------------
-    if (Array.isArray(config.chat) && config.chat.length > 0) {
-      $('#chat-input-bar').append('<div class="input-group-prepend">' +
-        '<span class="input-group-text" id="input-label"></span>' +
-        '</div>' +
-        '<select class="form-control" id="chat-input"></select>' +
-        '<div class="input-group-prepend-append">' +
-        '<button class="btn btn-default" id="chat-button">send</button>' +
-        '</div>')
-      config.chat.forEach(sentence => $('#chat-input').append('<option>' + sentence + '</option>'))
-      $('#chat-button').mouseup(e => {
-        e.preventDefault()
-        client.send('chat', $('#chat-input').val())
-        $('#chat-input').val($('#chat-input option:first').val())
-      })
-    } else if (config.chat === 'free') {
-      $('#chat-input-bar').append('<div class="input-group-prepend">' +
-        '<span class="input-group-text" id="input-label"></span>' +
-        '</div>' +
-        '<input type="text" class="form-control" id="chat-input" placeholder="write a message">' +
-        '<div class="input-group-prepend-append">' +
-        '<button class="btn btn-default" id="chat-button">send</button>' +
-        '</div>')
-      $('#chat-input').keypress((e) => {
-        if (e.which === 13) {
-          client.send('chat', $('#chat-input').val())
-          $('#chat-input').val('')
-        }
-      })
-      $('#chat-button').mouseup(e => {
-        e.preventDefault()
-        if ($('#chat-input').val() !== '') {
-          client.send('chat', $('#chat-input').val())
-          $('#chat-input').val('')
-        }
-      })
-    } else {
-      $('#chat-log').append('chat disabled')
-    }
 
     // -------------------- PRODUCTION --------------------
     $('#production-button').mouseup(e => {
@@ -203,7 +204,7 @@ let gameloop = () => {
 let updateInventory = () => {
   $('#inventory').find('tbody').empty()
   thisColony.inventory.forEach(row => {
-    let amountColor = row.amount > config.inventoryBonusLimit ? 'inventory-bonus' : row.amount < config.inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
+    let amountColor = row.amount > inventoryBonusLimit ? 'inventory-bonus' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
     $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td class="' + amountColor + '">' + row.amount + '</td></tr>')
   })
 }

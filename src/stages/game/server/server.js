@@ -93,6 +93,9 @@ export default {
         colonies.forEach(colony => {
           let data = {
             materials: config.materials,
+            chat: config.chat,
+            inventoryBonusLimit: config.inventoryBonusLimit,
+            inventoryCriticalLimit: config.inventoryCriticalLimit,
             yourName: colony.name,
             yourSpecilisations: colony.specilisations,
             yourStartingInventory: colony.inventory,
