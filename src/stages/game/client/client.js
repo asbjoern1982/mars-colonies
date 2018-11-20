@@ -114,17 +114,44 @@ export default {
     })
 
     // -------------------- CHAT --------------------
-    $('#chat-input').keypress((e) => {
-      if (e.which === 13) {
+    if (Array.isArray(config.chat) && config.chat.length > 0) {
+      $('#chat-input-bar').append('<div class="input-group-prepend">' +
+        '<span class="input-group-text" id="input-label"></span>' +
+        '</div>' +
+        '<select class="form-control" id="chat-input"></select>' +
+        '<div class="input-group-prepend-append">' +
+        '<button class="btn btn-default" id="chat-button">send</button>' +
+        '</div>')
+      config.chat.forEach(sentence => $('#chat-input').append('<option>' + sentence + '</option>'))
+      $('#chat-button').mouseup(e => {
+        e.preventDefault()
         client.send('chat', $('#chat-input').val())
-        $('#chat-input').val('')
-      }
-    })
-    $('#chat-button').mouseup(e => {
-      e.preventDefault()
-      client.send('chat', $('#chat-input').val())
-      $('#chat-input').val('')
-    })
+        $('#chat-input').val($('#chat-input option:first').val())
+      })
+    } else if (config.chat === 'free') {
+      $('#chat-input-bar').append('<div class="input-group-prepend">' +
+        '<span class="input-group-text" id="input-label"></span>' +
+        '</div>' +
+        '<input type="text" class="form-control" id="chat-input" placeholder="write a message">' +
+        '<div class="input-group-prepend-append">' +
+        '<button class="btn btn-default" id="chat-button">send</button>' +
+        '</div>')
+      $('#chat-input').keypress((e) => {
+        if (e.which === 13) {
+          client.send('chat', $('#chat-input').val())
+          $('#chat-input').val('')
+        }
+      })
+      $('#chat-button').mouseup(e => {
+        e.preventDefault()
+        if ($('#chat-input').val() !== '') {
+          client.send('chat', $('#chat-input').val())
+          $('#chat-input').val('')
+        }
+      })
+    } else {
+      $('#chat-log').append('chat disabled')
+    }
 
     // -------------------- PRODUCTION --------------------
     $('#production-button').mouseup(e => {
