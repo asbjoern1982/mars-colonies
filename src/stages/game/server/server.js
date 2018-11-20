@@ -12,13 +12,20 @@ export default {
     },
     'trade': (server, clientId, transfer) => {
       // remove amount from senders inventory
-      let senderInventory = colonies
-        .find(colony => colony.id === clientId)
+      let sendingColony = colonies.find(colony => colony.id === clientId)
+      let senderInventory = sendingColony
         .inventory
         .find(material => material.name === transfer.material)
       // if the colony tries to transfer more than is in their inventory, just send what is in the inventory
       let transferedAmount = senderInventory.amount - transfer.amount < 0 ? senderInventory.amount : transfer.amount
-      senderInventory.amount -= transferedAmount
+      if (senderInventory.amount - transfer.amount < 0) {
+        killColony(server, sendingColony, transfer.material)
+      } else {
+        senderInventory.amount -= transferedAmount
+      }
+
+      let receiverId = colonies.find(colony => colony.name === transfer.colony).id
+      DatabaseHandler.logTrade(clientId, receiverId, transfer.material, transferedAmount)
 
       // add amount to receivers inventory when the trade is complete
       setTimeout(() => {
@@ -44,6 +51,7 @@ export default {
     'chat': (server, clientId, message) => {
       let name = colonies.find(colony => colony.id === clientId).name
       server.send('chat', name + '>' + message).toAll()
+      DatabaseHandler.logChat(clientId, message)
     },
     'produce': (server, clientId, production) => {
       let colony = colonies.find(colony => colony.id === clientId)
@@ -55,6 +63,8 @@ export default {
       // substract input materials and inform the colony
       colony.inventory.find(material => material.name === inputName).amount -= production.amount
       sendColoniesInventories(server)
+
+      DatabaseHandler.logProduction(clientId, inputName, production.amount)
 
       // create a timeout that adds the output to the colony and informs the colony
       setTimeout(() => {
@@ -106,6 +116,7 @@ export default {
 
         sendColoniesInventories(server)
         setInterval(() => gameloop(server), 1000)
+        DatabaseHandler.logEvent('game started with [' + colonies.map(colony => colony.id).join(',') + ']')
       }
     }
   },
@@ -132,9 +143,7 @@ let gameloop = (server) => {
     config.materials.forEach(material => {
       if (!colony.dead) { // if a colony have 0 materials left, it is dead and should not be updated
         if (colony.inventory.find(colmat => material.name === colmat.name).amount - material.depletion_rate <= 0) {
-          colony.inventory.find(colmat => material.name === colmat.name).amount = 0
-          colony.dead = true
-          server.send('colonyDied', colony.name).toAll()
+          killColony(server, colony, material)
         } else {
           colony.inventory.find(colmat => material.name === colmat.name).amount -= material.depletion_rate
         }
@@ -145,7 +154,24 @@ let gameloop = (server) => {
   tickcount++
   if (tickcount % 100 === 0) { // every 100th second, set the clients inventory, it might have drifted
     sendColoniesInventories(server)
+    colonies.forEach(colony => {
+      let inventory = []
+      colony.inventory.map(row => inventory.push(
+        {
+          name: row.name,
+          amount: row.amount
+        }
+      ))
+      DatabaseHandler.logInventory(colony.id, inventory)
+    })
   }
+}
+
+let killColony = (server, colony, materialName) => {
+  colony.dead = true
+  colony.inventory.find(row => materialName === row.name).amount = 0
+  server.send('colonyDied', colony.name).toAll()
+  DatabaseHandler.logEvent(colony.id + ' has died')
 }
 
 let sendColoniesInventories = (server) => {

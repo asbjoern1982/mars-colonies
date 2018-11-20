@@ -1,3 +1,341 @@
 {
-  "events": []
+  "chat": [
+    {
+      "id": "nVC1dvvq_",
+      "time": 1542731746518,
+      "message": "Please send Selenium"
+    },
+    {
+      "id": "nVC1dvvq_",
+      "time": 1542731748564,
+      "message": "I can not"
+    }
+  ],
+  "production": [
+    {
+      "id": "ptLJnmM4H",
+      "time": 1542732098246,
+      "material": "Tungsten",
+      "amount": "500"
+    }
+  ],
+  "trade": [
+    {
+      "id": "hzaN2o6FY",
+      "time": 1542732397439,
+      "receiver": "jZXZ4Pb8b0",
+      "material": "Palladium",
+      "amount": "500"
+    },
+    {
+      "id": "hzaN2o6FY",
+      "time": 1542732399540,
+      "receiver": "tAEKbU3d3",
+      "material": "Palladium",
+      "amount": 494
+    },
+    {
+      "id": "Dgq8H6uzB",
+      "time": 1542732791163,
+      "receiver": "57IZ_moqfw",
+      "material": "Palladium",
+      "amount": 500
+    },
+    {
+      "id": "fe_JY7E2p",
+      "time": 1542732953041,
+      "receiver": "TUB1vYNkT",
+      "material": "Palladium",
+      "amount": 156
+    },
+    {
+      "id": "xFnPvWNUb",
+      "time": 1542733431963,
+      "receiver": "ALcgIa9xGj",
+      "material": "Palladium",
+      "amount": 990
+    }
+  ],
+  "inventory": [
+    {
+      "id": "57IZ_moqfw",
+      "time": 1542732885646,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 1400
+        },
+        {
+          "name": "Selenium",
+          "amount": 900
+        },
+        {
+          "name": "Tungsten",
+          "amount": 900
+        }
+      ]
+    },
+    {
+      "id": "gL0Ca3Kze",
+      "time": 1542732885648,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 900
+        },
+        {
+          "name": "Selenium",
+          "amount": 900
+        },
+        {
+          "name": "Tungsten",
+          "amount": 900
+        }
+      ]
+    },
+    {
+      "id": "Dgq8H6uzB",
+      "time": 1542732885648,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 400
+        },
+        {
+          "name": "Selenium",
+          "amount": 900
+        },
+        {
+          "name": "Tungsten",
+          "amount": 900
+        }
+      ]
+    },
+    {
+      "id": "fe_JY7E2p",
+      "time": 1542733045413,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 744
+        },
+        {
+          "name": "Selenium",
+          "amount": 900
+        },
+        {
+          "name": "Tungsten",
+          "amount": 900
+        }
+      ]
+    },
+    {
+      "id": "TUB1vYNkT",
+      "time": 1542733045417,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 1056
+        },
+        {
+          "name": "Selenium",
+          "amount": 900
+        },
+        {
+          "name": "Tungsten",
+          "amount": 900
+        }
+      ]
+    },
+    {
+      "id": "Aae_UcqjJz",
+      "time": 1542733045420,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 900
+        },
+        {
+          "name": "Selenium",
+          "amount": 900
+        },
+        {
+          "name": "Tungsten",
+          "amount": 900
+        }
+      ]
+    },
+    {
+      "id": "fe_JY7E2p",
+      "time": 1542733145509,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 644
+        },
+        {
+          "name": "Selenium",
+          "amount": 800
+        },
+        {
+          "name": "Tungsten",
+          "amount": 800
+        }
+      ]
+    },
+    {
+      "id": "TUB1vYNkT",
+      "time": 1542733145510,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 956
+        },
+        {
+          "name": "Selenium",
+          "amount": 800
+        },
+        {
+          "name": "Tungsten",
+          "amount": 800
+        }
+      ]
+    },
+    {
+      "id": "Aae_UcqjJz",
+      "time": 1542733145513,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 800
+        },
+        {
+          "name": "Selenium",
+          "amount": 800
+        },
+        {
+          "name": "Tungsten",
+          "amount": 800
+        }
+      ]
+    },
+    {
+      "id": "fe_JY7E2p",
+      "time": 1542733245627,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 544
+        },
+        {
+          "name": "Selenium",
+          "amount": 700
+        },
+        {
+          "name": "Tungsten",
+          "amount": 700
+        }
+      ]
+    },
+    {
+      "id": "TUB1vYNkT",
+      "time": 1542733245636,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 856
+        },
+        {
+          "name": "Selenium",
+          "amount": 700
+        },
+        {
+          "name": "Tungsten",
+          "amount": 700
+        }
+      ]
+    },
+    {
+      "id": "Aae_UcqjJz",
+      "time": 1542733245637,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 700
+        },
+        {
+          "name": "Selenium",
+          "amount": 700
+        },
+        {
+          "name": "Tungsten",
+          "amount": 700
+        }
+      ]
+    },
+    {
+      "id": "fe_JY7E2p",
+      "time": 1542733345758,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 444
+        },
+        {
+          "name": "Selenium",
+          "amount": 600
+        },
+        {
+          "name": "Tungsten",
+          "amount": 600
+        }
+      ]
+    },
+    {
+      "id": "TUB1vYNkT",
+      "time": 1542733345759,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 756
+        },
+        {
+          "name": "Selenium",
+          "amount": 600
+        },
+        {
+          "name": "Tungsten",
+          "amount": 600
+        }
+      ]
+    },
+    {
+      "id": "Aae_UcqjJz",
+      "time": 1542733345760,
+      "inventory": [
+        {
+          "name": "Palladium",
+          "amount": 600
+        },
+        {
+          "name": "Selenium",
+          "amount": 600
+        },
+        {
+          "name": "Tungsten",
+          "amount": 600
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "time": 1542733421771,
+      "data": "game started with [xFnPvWNUb,ALcgIa9xGj,KR1fuSagP]"
+    },
+    {
+      "time": 1542733431962,
+      "data": "xFnPvWNUb has died"
+    }
+  ]
 }
