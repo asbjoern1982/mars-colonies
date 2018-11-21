@@ -14,12 +14,12 @@ if (names.length !== namesSet.length) {
 }
 
 let connectedPlayers = 0
-console.log('waiting for ' + config.players.length + ' players')
+console.log('waiting for ' + config.numberOfGames * config.players.length + ' players')
 
 let events = {
   [Events.CLIENT_CONNECTED] (server, clientId) {
     connectedPlayers++
-    if (connectedPlayers >= config.players.length) {
+    if (connectedPlayers >= config.players.length * config.numberOfGames) {
       server.start()
     }
   }
@@ -32,7 +32,7 @@ let commands = {
 }
 
 const monsterr = createServer({
-  network: Network.clique(config.players.length),
+  network: Network.clique(config.numberOfGames * config.players.length),
   events,
   commands,
   stages,
@@ -45,7 +45,7 @@ const monsterr = createServer({
 monsterr.run()
 
 // spawn bot-threads
-let numberOfBots = config.players.length - 1
+let numberOfBots = config.numberOfGames * config.players.length - 1
 for (let i = 0; i < numberOfBots; i++) {
   console.log('spawning bot #' + i)
   spawn('node', ['./src/bot.js'])

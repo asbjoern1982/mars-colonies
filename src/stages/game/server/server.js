@@ -2,7 +2,7 @@ import {DatabaseHandler} from '../../../database/DatabaseHandler'
 import firstRound from './../config/round1.json'
 
 let config = firstRound
-let colonies = config.players
+let colonies = []
 
 export default {
   commands: {},
@@ -45,13 +45,13 @@ export default {
           sender: colonies.find(colony => colony.id === clientId).name,
           receiver: transfer.colony,
           amount: transfer.amount
-        }).toAll()
+        }).toClients(colonies.filter(colony => colony.game === sendingColony.game).map(colony => colony.id))
         sendColoniesInventories(server)
       }, config.trade_delay)
     },
     'chat': (server, clientId, message) => {
-      let name = colonies.find(colony => colony.id === clientId).name
-      server.send('chat', name + '>' + message).toAll()
+      let colony = colonies.find(colony => colony.id === clientId)
+      server.send('chat', colony.name + '>' + message).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
       DatabaseHandler.logChat(clientId, message)
     },
     'produce': (server, clientId, production) => {
@@ -77,31 +77,32 @@ export default {
       }, delay * 1000)
     },
     'ready': (server, clientId) => {
-      colonies.find(colony => colony.id === clientId).ready = true
+      let reportingColony = colonies.find(colony => colony.id === clientId)
+      reportingColony.ready = true
 
       let allReady = true
-      colonies.forEach(colony => {
+      colonies.filter(col => col.game === reportingColony.game).forEach(colony => {
         if (!colony.ready) {
           allReady = false
         }
       })
       if (allReady) {
-        console.log('All clients have reported ready, starting game')
+        console.log('All clients have reported ready, starting game: ' + reportingColony.game)
         // only send what is needed
         let simplifiedColonies = []
-        colonies.forEach(otherColony => {
+        colonies.filter(colony => colony.game === reportingColony.game).forEach(colony => {
           let simplifiedColony = {
-            name: otherColony.name
+            name: colony.name
           }
           if (config.tooltip.includes('inventories')) {
-            simplifiedColony.inventory = otherColony.inventory
+            simplifiedColony.inventory = colony.inventory
           }
           if (config.tooltip.includes('specilisations')) {
-            simplifiedColony.specilisations = otherColony.specilisations
+            simplifiedColony.specilisations = colony.specilisations
           }
           simplifiedColonies.push(simplifiedColony)
         })
-        colonies.forEach(colony => {
+        colonies.filter(colony => colony.game === reportingColony.game).forEach(colony => {
           let data = {
             materials: config.materials,
             chat: config.chat,
@@ -115,21 +116,26 @@ export default {
           server.send('setup', data).toClient(colony.id)
         })
 
-        sendColoniesInventories(server)
+        // sendColoniesInventories(server)
         setInterval(() => gameloop(server), 1000)
-        DatabaseHandler.logEvent('game started with [' + colonies.map(colony => colony.id).join(',') + ']')
+        DatabaseHandler.logEvent('game ' + reportingColony.game + ' started with [' + colonies.filter(colony => colony.game === reportingColony.game).map(colony => colony.id).join(',') + ']')
       }
     }
   },
   setup: (server) => {
     console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
 
-    let networkPlayers = server.getPlayers().map((a) => ({sort: Math.random(), value: a}))
+    let networkPlayers = server.getPlayers()
+      .map((a) => ({sort: Math.random(), value: a}))
       .sort((a, b) => a.sort - b.sort)
       .map((a) => a.value)
+
     for (let i = 0; i < networkPlayers.length; i++) {
-      colonies[i].id = networkPlayers[i]
-      colonies[i].ready = false
+      let colony = JSON.parse(JSON.stringify(config.players[i % config.players.length]))
+      colony.id = networkPlayers[i]
+      colony.ready = false
+      colony.game = Math.floor(i / config.players.length)
+      colonies.push(colony)
     }
   },
   teardown: (server) => {
@@ -171,20 +177,22 @@ let gameloop = (server) => {
 let killColony = (server, colony, materialName) => {
   colony.dead = true
   colony.inventory.find(row => materialName === row.name).amount = 0
-  server.send('colonyDied', colony.name).toAll()
+  server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
   DatabaseHandler.logEvent(colony.id + ' has died')
 }
 
 let sendColoniesInventories = (server) => {
   if (config.tooltip.includes('inventories')) {
-    let inventories = []
-    colonies.forEach(colony =>
-      inventories.push({
-        name: colony.name,
-        inventory: colony.inventory
-      })
-    )
-    server.send('inventories', inventories).toAll()
+    for (let i = 0; i < config.numberOfGames; i++) {
+      let inventories = []
+      colonies.filter(colony => colony.game === i).forEach(colony =>
+        inventories.push({
+          name: colony.name,
+          inventory: colony.inventory
+        })
+      )
+      server.send('inventories', inventories).toClients(colonies.filter(colony => colony.game === i).map(colony => colony.id))
+    }
   } else {
     colonies.forEach(colony => {
       let inventories = [{
