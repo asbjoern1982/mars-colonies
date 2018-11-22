@@ -2,8 +2,9 @@ const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 
 let createDatabaseHandler = () => {
-  const adapter = new FileSync('./src/database/db.json')
-  const db = low(adapter)
+  let filename = './src/database/logs/' + Date.now() + '.json'
+  let adapter = new FileSync(filename)
+  let db = low(adapter)
   db.defaults({
     chat: [],
     production: [],
@@ -70,8 +71,21 @@ let createDatabaseHandler = () => {
   }
 
   let exportAsJSON = () => {
-    let surveys = db.get('events').value()
-    return surveys
+    // generate output-json
+    let output = {
+      chats: db.get('chat').value(),
+      productions: db.get('production').value(),
+      trades: db.get('trade').value(),
+      inventories: db.get('inventory').value(),
+      events: db.get('events').value()
+    }
+
+    // create new logfile
+    filename = './src/database/logs/' + Date.now() + '.json'
+    adapter = new FileSync(filename)
+    db = low(adapter)
+
+    return output
   }
 
   return {

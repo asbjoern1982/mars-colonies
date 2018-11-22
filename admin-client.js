@@ -11,7 +11,20 @@ let options = {
   html
 }
 
-let events = {}
+let events = {
+  'resJSON': (admin, json) => {
+    let fileName = 'mars-colonies_' + Date.now() + '.json'
+    let data = JSON.stringify(json)
+    let url = window.URL.createObjectURL(new Blob([data], {type: 'text/json'}))
+    var a = document.createElement('a')
+    document.body.appendChild(a)
+    a.style = 'display: none'
+    a.href = url
+    a.download = fileName
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+}
 let commands = {}
 
 const admin = createClient({
@@ -33,4 +46,8 @@ $('#admin-button-next').mouseup(e => {
 $('#admin-button-reset').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('reset')
+})
+$('#admin-button-download').mouseup(e => {
+  e.preventDefault()
+  admin.sendCommand('reqJSON')
 })

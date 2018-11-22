@@ -1,0 +1,17 @@
+{
+  "chat": [],
+  "production": [],
+  "trade": [],
+  "inventory": [],
+  "logMouseOverColony": [],
+  "events": [
+    {
+      "time": 1542905096829,
+      "data": "game 1 started with [LTTO1BqKa,HlGPIyvhH,uFAy4IVLOK]"
+    },
+    {
+      "time": 1542905096981,
+      "data": "game 0 started with [egcPrdwXJ,eHeGErFZ1n,Fb_5H3c93F]"
+    }
+  ]
+}

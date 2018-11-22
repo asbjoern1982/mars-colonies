@@ -1,7 +1,18 @@
 import {DatabaseHandler} from '../../../database/DatabaseHandler'
-import firstRound from './../config/round1.json'
+import configfile from './../config/config.json'
 
-let config = firstRound
+// let roundfile = require('./../config/round1.json')
+let rounds = configfile.rounds.map(file => require('./../src/stages/game/config/' + file + '.json'))
+console.log('rounds: ' + JSON.stringify(rounds))
+/* {
+  console.log(configfile.rounds[i])
+  let filepath = './../config/' + 'round1' + '.json'
+  fs.readFile(filepath, (err, data) => {
+    if (err) console.log(err)
+    rounds.push(JSON.parse(data))
+  })
+} */
+let config = rounds[0]
 let colonies = []
 
 export default {
@@ -150,7 +161,7 @@ let gameloop = (server) => {
     config.materials.forEach(material => {
       if (!colony.dead) { // if a colony have 0 materials left, it is dead and should not be updated
         if (colony.inventory.find(colmat => material.name === colmat.name).amount - material.depletion_rate <= 0) {
-          killColony(server, colony, material)
+          killColony(server, colony, material.name)
         } else {
           colony.inventory.find(colmat => material.name === colmat.name).amount -= material.depletion_rate
         }
