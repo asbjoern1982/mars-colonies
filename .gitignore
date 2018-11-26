@@ -1,4 +1,4 @@
 node_modules/
 dist/
 .cache/
-src/database/logs/
+src/database/logs/*
