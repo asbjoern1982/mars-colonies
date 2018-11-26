@@ -12,8 +12,11 @@ console.log('rounds: ' + JSON.stringify(rounds))
     rounds.push(JSON.parse(data))
   })
 } */
+// in the first game, use first round
 let config = rounds[0]
+let numberOfGames = Math.floor(configfile.participants / config.players.length) // ignores leftover participants
 let colonies = []
+let gameloopRef
 
 export default {
   commands: {},
@@ -98,7 +101,7 @@ export default {
         }
       })
       if (allReady) {
-        console.log('All clients have reported ready, starting game: ' + reportingColony.game)
+        console.log('All clients have reported ready in game ' + reportingColony.game)
         // only send what is needed
         let simplifiedColonies = []
         colonies.filter(colony => colony.game === reportingColony.game).forEach(colony => {
@@ -126,10 +129,11 @@ export default {
           }
           server.send('setup', data).toClient(colony.id)
         })
-
-        // sendColoniesInventories(server)
-        setInterval(() => gameloop(server), 1000)
-        DatabaseHandler.logEvent('game ' + reportingColony.game + ' started with [' + colonies.filter(colony => colony.game === reportingColony.game).map(colony => colony.id).join(',') + ']')
+      }
+      // start the game if all participants are ready
+      if (colonies.every(colony => colony.ready)) {
+        gameloopRef = setInterval(() => gameloop(server), 1000)
+        DatabaseHandler.logEvent('gameloop started')
       }
     }
   },
@@ -157,6 +161,14 @@ export default {
 
 let tickcount = 0
 let gameloop = (server) => {
+  // check if the game is over
+  if (tickcount >= config.roundLengthInSeconds) {
+    console.log('game over')
+    clearInterval(gameloopRef)
+    server.send('gameover').toAll()
+    return
+  }
+  // update all colonies inventory
   colonies.forEach(colony => {
     config.materials.forEach(material => {
       if (!colony.dead) { // if a colony have 0 materials left, it is dead and should not be updated
@@ -194,7 +206,7 @@ let killColony = (server, colony, materialName) => {
 
 let sendColoniesInventories = (server) => {
   if (config.tooltip.includes('inventories')) {
-    for (let i = 0; i < config.numberOfGames; i++) {
+    for (let i = 0; i < numberOfGames; i++) {
       let inventories = []
       colonies.filter(colony => colony.game === i).forEach(colony =>
         inventories.push({

@@ -1,0 +1,13 @@
+{
+  "chat": [],
+  "production": [],
+  "trade": [],
+  "inventory": [],
+  "logMouseOverColony": [],
+  "events": [
+    {
+      "time": 1543247132531,
+      "data": "gameloop started"
+    }
+  ]
+}

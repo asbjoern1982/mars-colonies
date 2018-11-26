@@ -9,6 +9,7 @@ let thisColony
 let otherColonies
 let productionCountDown = 0
 let productionCountTotal = 0
+let gameloopRef
 
 let tradeRoutes
 
@@ -25,6 +26,10 @@ let commands = {
 let events = {
   'chat': (client, message) => {
     $('#chat-log').append(message + '\n')
+  },
+  'gameover': (client) => {
+    $('#chat-log').append('gameover\n')
+    clearInterval(gameloopRef)
   },
   'trade': (client, transfer) => {
     console.log('trade')
@@ -133,7 +138,7 @@ let events = {
     setupMap(client)
 
     // start gameloop
-    setInterval(gameloop, 1000)
+    gameloopRef = setInterval(gameloop, 1000)
   }
 }
 
