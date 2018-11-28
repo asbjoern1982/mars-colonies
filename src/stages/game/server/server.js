@@ -163,9 +163,16 @@ let tickcount = 0
 let gameloop = (server) => {
   // check if the game is over
   if (tickcount >= config.roundLengthInSeconds) {
-    console.log('game over')
     clearInterval(gameloopRef)
-    server.send('gameover').toAll()
+    // simple calculation of points, 10 points for being alive and 2 points for every material over 50%
+    let status = colonies.map(colony => {
+      if (colony.dead) return colony.name + '\t0 points'
+      let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
+      return colony.name + '\t' + points + ' points'
+    })
+    console.log('game over\n' + status.join('\n'))
+    server.send('gameover', status.join('\n')).toAll()
+    DatabaseHandler.logEvent('game over [' + status.join() + ']')
     return
   }
   // update all colonies inventory

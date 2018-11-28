@@ -27,8 +27,8 @@ let events = {
   'chat': (client, message) => {
     $('#chat-log').append(message + '\n')
   },
-  'gameover': (client) => {
-    $('#chat-log').append('gameover\n')
+  'gameover': (client, status) => {
+    $('#chat-log').append('game over\n' + status)
     clearInterval(gameloopRef)
   },
   'trade': (client, transfer) => {

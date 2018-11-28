@@ -4,7 +4,7 @@
     {"name": "Selenium", "depletion_rate": 1},
     {"name": "Tungsten", "depletion_rate": 1}
   ],
-  "roundLengthInSeconds":  1200,
+  "roundLengthInSeconds":  600,
   "inventoryBonusLimit": 500,
   "inventoryCriticalLimit": 100,
   "chat": ["Please send Palladium", "Please send Selenium", "Please send Tungsten", "I will", "I can not"],
