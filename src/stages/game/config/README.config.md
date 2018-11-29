@@ -1,4 +1,4 @@
-"participants": a number of expected participants in the game, it should be diviable by the number of "players"
+"participants": a number of expected participants in the round, used to know when a round can start and how many concurrent games that can run, it should be diviable by the number of "players"
 "materials": a list of materials and their depletion_rate in this game
 "roundLengthInSeconds": the length of a game, 1200 would be 20 minutes
 
@@ -9,3 +9,6 @@
 "trade_delay": if their should be a delay when trading materials to other colonies
 
 "players": a list of colonies, their name, starting inventory and specilisations
+ - name: is the name of a colony, should be unique for a game
+ - inventory: should have every material in "materials" and the amount this colony is starting out with
+ - specilisations: a list of specilisations, the ability to transform one material into an other with a gain
