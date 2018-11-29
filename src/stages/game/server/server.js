@@ -1,20 +1,7 @@
 import {DatabaseHandler} from '../../../database/DatabaseHandler'
-import configfile from './../config/config.json'
+import config from './../config/config.json'
 
-// let roundfile = require('./../config/round1.json')
-let rounds = configfile.rounds.map(file => require('./../src/stages/game/config/' + file + '.json'))
-console.log('rounds: ' + JSON.stringify(rounds))
-/* {
-  console.log(configfile.rounds[i])
-  let filepath = './../config/' + 'round1' + '.json'
-  fs.readFile(filepath, (err, data) => {
-    if (err) console.log(err)
-    rounds.push(JSON.parse(data))
-  })
-} */
-// in the first game, use first round
-let config = rounds[0]
-let numberOfGames = Math.floor(configfile.participants / config.players.length) // ignores leftover participants
+let numberOfGames = Math.floor(config.participants / config.players.length) // ignores leftover participants
 let colonies = []
 let gameloopRef
 

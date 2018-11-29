@@ -29,6 +29,7 @@ let events = {
   },
   'gameover': (client, status) => {
     $('#chat-log').append('game over\n' + status)
+    disableEverything()
     clearInterval(gameloopRef)
   },
   'trade': (client, transfer) => {
@@ -58,14 +59,7 @@ let events = {
   },
   'colonyDied': (client, colonyName) => {
     if (thisColony.name === colonyName) {
-      thisColony.dead = true
-      $('#trade-colony').prop('disabled', true)
-      $('#trade-material').prop('disabled', true)
-      $('#trade-amount').prop('disabled', true)
-      $('#trade-button').prop('disabled', true)
-      $('#production-material').prop('disabled', true)
-      $('#production-amount').prop('disabled', true)
-      $('#production-button').prop('disabled', true)
+      disableEverything()
     } else {
       otherColonies.find(colony => colony.name === colonyName).dead = true
     }
@@ -391,4 +385,15 @@ let setupMap = (client) => {
     })
   })
   canvas.getObjects().filter(object => object.type === 'rect').forEach(rect => canvas.bringToFront(rect))
+}
+
+let disableEverything = () => {
+  thisColony.dead = true
+  $('#trade-colony').prop('disabled', true)
+  $('#trade-material').prop('disabled', true)
+  $('#trade-amount').prop('disabled', true)
+  $('#trade-button').prop('disabled', true)
+  $('#production-material').prop('disabled', true)
+  $('#production-amount').prop('disabled', true)
+  $('#production-button').prop('disabled', true)
 }
