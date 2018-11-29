@@ -80,12 +80,20 @@ let createDatabaseHandler = () => {
       events: db.get('events').value()
     }
 
-    // create new logfile
-    filename = './src/database/logs/' + Date.now() + '.json'
-    adapter = new FileSync(filename)
-    db = low(adapter)
-
     return output
+  }
+
+  let exportAsCSV = () => {
+    let data = exportAsJSON()
+    let files = {}
+    Object.keys(data).forEach(logName => {
+      let log = data[logName]
+      if (log.length > 0) {
+        files[logName] = Object.keys(log[0]).join() + '\n' +
+          log.map(logEntry => Object.values(logEntry).join()).join('\n')
+      }
+    })
+    return files
   }
 
   return {
@@ -95,7 +103,8 @@ let createDatabaseHandler = () => {
     logInventory,
     logMouseOverColony,
     logEvent,
-    exportAsJSON
+    exportAsJSON,
+    exportAsCSV
   }
 }
 

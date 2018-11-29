@@ -28,6 +28,11 @@ let commands = {
   'reqJSON': (server, clientId) => {
     let json = DatabaseHandler.exportAsJSON()
     server.send('resJSON', json).toAdmin()
+  },
+  'reqCSV': (server, clientId) => {
+    let csv = DatabaseHandler.exportAsCSV()
+    console.log(csv)
+    server.send('resCSV', csv).toAdmin()
   }
 }
 

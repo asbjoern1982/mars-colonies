@@ -23,6 +23,22 @@ let events = {
     a.download = fileName
     a.click()
     window.URL.revokeObjectURL(url)
+  },
+  'resCSV': (admin, csv) => {
+    let keys = Object.keys(csv)
+    let fileending = Date.now() + '.csv'
+    keys.forEach(key => {
+      let data = csv[key] + '\n'
+      let fileName = 'mars-colonies_' + key + '_' + fileending
+      let url = window.URL.createObjectURL(new Blob([data], {type: 'text/csv'}))
+      var a = document.createElement('a')
+      document.body.appendChild(a)
+      a.style = 'display: none'
+      a.href = url
+      a.download = fileName
+      a.click()
+      window.URL.revokeObjectURL(url)
+    })
   }
 }
 let commands = {}
@@ -34,20 +50,12 @@ const admin = createClient({
   // no need to add stages to admin
 })
 
-// Button event handlers (if you need more you should probably put them in a separate file and import it here)
-$('#admin-button-start').mouseup(e => {
-  e.preventDefault()
-  admin.sendCommand('start')
-})
-$('#admin-button-next').mouseup(e => {
-  e.preventDefault()
-  admin.sendCommand('next')
-})
-$('#admin-button-reset').mouseup(e => {
-  e.preventDefault()
-  admin.sendCommand('reset')
-})
-$('#admin-button-download').mouseup(e => {
+$('#buttonDownloadJSON').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('reqJSON')
+})
+
+$('#buttonDownloadCSV').mouseup(e => {
+  e.preventDefault()
+  admin.sendCommand('reqCSV')
 })
