@@ -1,6 +1,7 @@
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 
+// Singleton for handling database connection
 let createDatabaseHandler = () => {
   let filename = './src/database/logs/' + Date.now() + '.json'
   let adapter = new FileSync(filename)
@@ -14,6 +15,7 @@ let createDatabaseHandler = () => {
     events: []
   }).write()
 
+  // log a chatmessage with who sent it and the message
   let logChat = (clientId, message) => {
     let event = {
       id: clientId,
@@ -23,6 +25,7 @@ let createDatabaseHandler = () => {
     db.get('chat').push(event).write()
   }
 
+  // log that a specilisation has been used
   let logProduction = (clientId, material, amount) => {
     let event = {
       id: clientId,
@@ -33,6 +36,7 @@ let createDatabaseHandler = () => {
     db.get('production').push(event).write()
   }
 
+  // log a transfer of materials
   let logTrade = (clientId, receiver, material, amount) => {
     let event = {
       id: clientId,
@@ -44,6 +48,7 @@ let createDatabaseHandler = () => {
     db.get('trade').push(event).write()
   }
 
+  // at a certain interval the inventory of a client is logged for redundant storage
   let logInventory = (clientId, inventory) => {
     let event = {
       id: clientId,
@@ -53,6 +58,7 @@ let createDatabaseHandler = () => {
     db.get('inventory').push(event).write()
   }
 
+  // log that a client has moved their mouse over an other colony on the map
   let logMouseOverColony = (clientId, colony) => {
     let event = {
       id: clientId,
@@ -62,6 +68,7 @@ let createDatabaseHandler = () => {
     db.get('logMouseOverColony').push(event).write()
   }
 
+  // log any other events, typically a serverevent
   let logEvent = (data) => {
     let event = {
       time: Date.now(),
@@ -70,6 +77,7 @@ let createDatabaseHandler = () => {
     db.get('events').push(event).write()
   }
 
+  // export the log for the admin client
   let exportAsJSON = () => {
     // generate output-json
     let output = {
@@ -83,6 +91,7 @@ let createDatabaseHandler = () => {
     return output
   }
 
+  // convert the log to a number of CSV-strings and export them
   let exportAsCSV = () => {
     let data = exportAsJSON()
     let files = {}

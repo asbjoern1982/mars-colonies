@@ -8,7 +8,7 @@
 "tooltip": an array with what information should be visible in the tooltip when a participant hovers the mouse over an other colony on the map, can either be empty, "inventories" and/or "specilisations"
 "trade_delay": if their should be a delay when trading materials to other colonies
 
-"players": a list of colonies, their name, starting inventory and specilisations
+"players": a list of colonies, their name, starting inventory and specilisations, if there are more than 15 colonies, then more colors should be added to the client.js
  - name: is the name of a colony, should be unique for a game
  - inventory: should have every material in "materials" and the amount this colony is starting out with
  - specilisations: a list of specilisations, the ability to transform one material into an other with a gain, the inputmaterial has to be unique

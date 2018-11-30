@@ -28,16 +28,17 @@ let events = {
     $('#chat-log').append(message + '\n')
   },
   'gameover': (client, status) => {
+    // when the game is over, ei time is up, the client receives a 'gameover'
+    // The 'status' contains what points each colony earned
     $('#chat-log').append('game over\n' + status)
     disableEverything()
     clearInterval(gameloopRef)
   },
   'trade': (client, transfer) => {
-    console.log('trade')
-    console.log(transfer)
-    console.log(tradeRoutes)
+    // when a trade has happened, the route between sender and receiver is
+    // found and flashed white for a second as a visual cue to the participant
+    // that a trade has happened
     let sendingColony = otherColonies.find(colony => colony.name === transfer.sender) || thisColony
-
     let receivingColony = otherColonies.find(colony => colony.name === transfer.receiver) || thisColony
     let route = tradeRoutes.find(route => (route.startColony === sendingColony && route.endColony === receivingColony) ||
       (route.startColony === receivingColony && route.endColony === sendingColony))
@@ -49,6 +50,7 @@ let events = {
     }, 1000)
   },
   'inventories': (client, inventories) => {
+    // an update from the server to syncronize its inventory with the clients
     // set my inventory for the intenvoryView
     thisColony.inventory = inventories.find(colony => colony.name === thisColony.name).inventory
     updateInventory()
@@ -58,15 +60,17 @@ let events = {
     })
   },
   'colonyDied': (client, colonyName) => {
+    // when a colony runs out of a material, it dies
     if (thisColony.name === colonyName) {
       disableEverything()
     } else {
       otherColonies.find(colony => colony.name === colonyName).dead = true
     }
     $('#chat-log').append(colonyName + ' have died\n')
-    // TODO visualy indicate to others that this colony have died
   },
   'setup': (client, data) => {
+    // when all clients in a game has reported ready and a new game is started,
+    // a setup message is sent with the initial data
     materials = data.materials
     thisColony = data.colonies.find(colony => colony.name === data.yourName)
     thisColony.specilisations = data.yourSpecilisations
@@ -131,7 +135,7 @@ let events = {
     // add nodes to the map
     setupMap(client)
 
-    // start gameloop
+    // start client-side gameloop
     gameloopRef = setInterval(gameloop, 1000)
   }
 }
@@ -177,6 +181,7 @@ export default {
       }, 1000)
     })
 
+    // when the client is ready to start the game, tell the server
     client.send('ready')
   },
 
@@ -271,17 +276,19 @@ let setupMap = (client) => {
   })
   canvas.add(centerNode)
 
-  let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat']
+  // the surrounding colonies
+  let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat', 'Grey']
   let angleBetweenColonies = 2 * Math.PI / otherColonies.length
   for (let i = 0; i < otherColonies.length; i++) {
     let angle = angleBetweenColonies * i + Math.PI / 3.5
     let radius = 80
     let x = Math.sin(angle) * radius + centerX
     let y = Math.cos(angle) * radius + centerY
+    let colorIndex = i < colors.length ? i : colors.length - 1
     let rect = new fabric.Rect({
       left: x,
       top: y,
-      fill: colors[i],
+      fill: colors[colorIndex],
       width: 20,
       height: 20,
       angle: 45,
@@ -339,6 +346,9 @@ let setupMap = (client) => {
         }
       })
 
+      // the connection between other colonies should not be straight, as it
+      // would go through this colonies node in the center, so a curved
+      // line is used
       if (startColony.name !== endColony.name && !isConnected) {
         let path = 'M ' + start.x + ' ' + start.y + ' Q 0 ' + end.x + ' ' + end.y
         let tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
@@ -387,6 +397,8 @@ let setupMap = (client) => {
   canvas.getObjects().filter(object => object.type === 'rect').forEach(rect => canvas.bringToFront(rect))
 }
 
+// when this colony is dead or the game is over, disable all buttons and
+// inputfields
 let disableEverything = () => {
   thisColony.dead = true
   $('#trade-colony').prop('disabled', true)
