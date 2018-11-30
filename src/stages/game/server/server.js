@@ -1,3 +1,4 @@
+import {Events} from 'monsterr'
 import {DatabaseHandler} from '../../../database/DatabaseHandler'
 import config from './../config/config.json'
 
@@ -122,6 +123,41 @@ export default {
         gameloopRef = setInterval(() => gameloop(server), 1000)
         DatabaseHandler.logEvent('gameloop started')
       }
+    },
+    [Events.CLIENT_RECONNECTED]: (server, clientId) => {
+      // when a client reconnects, wait for about 1 second to let it rebuild
+      // the page and then send it the correct stage and data
+      setTimeout(() => {
+        let stageNo = server.getCurrentStage().number
+        server.send(Events.START_STAGE, stageNo).toClient(clientId)
+
+        let reconnectinColony = colonies.find(colony => colony.id === clientId)
+        let simplifiedColonies = []
+        colonies.filter(colony => colony.game === reconnectinColony.game).forEach(colony => {
+          let simplifiedColony = {
+            name: colony.name
+          }
+          if (config.tooltip.includes('inventories')) {
+            simplifiedColony.inventory = colony.inventory
+          }
+          if (config.tooltip.includes('specilisations')) {
+            simplifiedColony.specilisations = colony.specilisations
+          }
+          simplifiedColonies.push(simplifiedColony)
+        })
+
+        let data = {
+          materials: config.materials,
+          chat: config.chat,
+          inventoryBonusLimit: config.inventoryBonusLimit,
+          inventoryCriticalLimit: config.inventoryCriticalLimit,
+          yourName: reconnectinColony.name,
+          yourSpecilisations: reconnectinColony.specilisations,
+          yourStartingInventory: reconnectinColony.inventory,
+          colonies: simplifiedColonies
+        }
+        server.send('setup', data).toClient(clientId)
+      }, 1000)
     }
   },
   setup: (server) => {

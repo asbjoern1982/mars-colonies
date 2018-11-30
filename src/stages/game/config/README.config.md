@@ -11,4 +11,4 @@
 "players": a list of colonies, their name, starting inventory and specilisations
  - name: is the name of a colony, should be unique for a game
  - inventory: should have every material in "materials" and the amount this colony is starting out with
- - specilisations: a list of specilisations, the ability to transform one material into an other with a gain
+ - specilisations: a list of specilisations, the ability to transform one material into an other with a gain, the inputmaterial has to be unique

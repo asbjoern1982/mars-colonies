@@ -50,6 +50,16 @@ const admin = createClient({
   // no need to add stages to admin
 })
 
+$('#buttonStart').mouseup(e => {
+  e.preventDefault()
+  admin.sendCommand('start')
+})
+
+$('#buttonNext').mouseup(e => {
+  e.preventDefault()
+  admin.sendCommand('next')
+})
+
 $('#buttonDownloadJSON').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('reqJSON')

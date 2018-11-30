@@ -7,3 +7,6 @@
   prefixing admin-specific css to avoid unwanted
   behaviour.
 */
+.container {
+  padding-top: 5px;
+}
