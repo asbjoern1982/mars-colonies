@@ -1,9 +1,14 @@
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
+const fs = require('fs')
 
 // Singleton for handling database connection
 let createDatabaseHandler = () => {
-  let filename = './src/database/logs/' + Date.now() + '.json'
+  // if the logs-directory does not exist, create it
+  let directory = './src/database/logs/'
+  if (!fs.existsSync(directory)) fs.mkdirSync(directory)
+
+  let filename = directory + Date.now() + '.json'
   let adapter = new FileSync(filename)
   let db = low(adapter)
   db.defaults({
