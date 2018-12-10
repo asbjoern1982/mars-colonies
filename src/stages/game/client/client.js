@@ -149,36 +149,40 @@ export default {
     // -------------------- TRADE --------------------
     $('#trade-button').mouseup(e => {
       e.preventDefault()
-      client.send('trade', {
-        colony: $('#trade-colony').val(),
-        material: $('#trade-material').val(),
-        amount: $('#trade-amount').val()
-      })
+      let amount = $('#trade-amount').val()
+      // ignore anything that isn't a positive number
+      if (amount > 0) {
+        client.send('trade', {
+          colony: $('#trade-colony').val(),
+          material: $('#trade-material').val(),
+          amount: amount
+        })
+      }
     })
 
     // -------------------- PRODUCTION --------------------
     $('#production-button').mouseup(e => {
       e.preventDefault()
-      if (productionCountDown > 0) return
-
-      client.send('produce', {
-        material: $('#production-material').val(),
-        amount: $('#production-amount').val()
-      })
-      productionCountDown = thisColony.specilisations.find(specilisation => specilisation.input === $('#production-material').val()).transform_rate
-      productionCountTotal = productionCountDown
-      $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-      productionCountDown--
-      // countdown loop
-      let intervalRef = setInterval(() => {
-        if (productionCountDown <= 0) {
-          $('#production-progress').html('production finished')
-          clearInterval(intervalRef)
-        } else {
-          $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-          productionCountDown--
-        }
-      }, 1000)
+      if (productionCountDown === 0 && $('#production-amount').val() > 0) {
+        client.send('produce', {
+          material: $('#production-material').val(),
+          amount: $('#production-amount').val()
+        })
+        productionCountDown = thisColony.specilisations.find(specilisation => specilisation.input === $('#production-material').val()).transform_rate
+        productionCountTotal = productionCountDown
+        $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+        productionCountDown--
+        // countdown loop
+        let intervalRef = setInterval(() => {
+          if (productionCountDown <= 0) {
+            $('#production-progress').html('production finished')
+            clearInterval(intervalRef)
+          } else {
+            $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+            productionCountDown--
+          }
+        }, 1000)
+      }
     })
 
     // when the client is ready to start the game, tell the server
