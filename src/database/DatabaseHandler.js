@@ -8,6 +8,7 @@ let createDatabaseHandler = () => {
   let directory = './src/database/logs/'
   if (!fs.existsSync(directory)) fs.mkdirSync(directory)
 
+  // create a new file with a uniqe name as not to overwrite old logs
   let filename = directory + Date.now() + '.json'
   let adapter = new FileSync(filename)
   let db = low(adapter)

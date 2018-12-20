@@ -9,6 +9,7 @@ let connectedPlayers = 0
 console.log('waiting for ' + config.participants + ' players')
 
 let events = {
+  // when all client have connected, push the server into the first stage
   [Events.CLIENT_CONNECTED] (server, clientId) {
     connectedPlayers++
     if (connectedPlayers >= config.participants) {
@@ -16,6 +17,7 @@ let events = {
     }
   }
 }
+// handle commands from the admin client
 let commands = {
   'reqJSON': (server, clientId) => {
     let json = DatabaseHandler.exportAsJSON()
@@ -41,8 +43,8 @@ const monsterr = createServer({
 
 monsterr.run()
 
-// spawn bot-threads
-let numberOfBots = config.participants - 1
+// spawn bot-threads, use "config.participants - 1" for debuging with only 1 client
+let numberOfBots = 0 // config.participants - 1
 for (let i = 0; i < numberOfBots; i++) {
   console.log('spawning bot #' + i)
   spawn('node', ['./src/bot.js'])

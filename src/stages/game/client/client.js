@@ -1,4 +1,3 @@
-
 import html from './client.html'
 import './client.css'
 
@@ -208,6 +207,7 @@ let gameloop = () => {
   updateTooltip()
 }
 
+// update this colonies inventory
 let updateInventory = () => {
   $('#inventory').find('tbody').empty()
   thisColony.inventory.forEach(row => {
@@ -216,6 +216,7 @@ let updateInventory = () => {
   })
 }
 
+// if there is a tooltip showing, it should be updated, this is done by removing the old and creating a new one
 let updateTooltip = () => {
   if (tooltip) {
     let newtooltip = createTooltip(tooltip.colony, tooltip.left, tooltip.top)
@@ -225,6 +226,7 @@ let updateTooltip = () => {
   }
 }
 
+// create and return a tooltip with the appropiate information
 let createTooltip = (colony, left, top) => {
   let height = 16 + (colony.inventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + 3
   let adjustedTop = top + height + 4 > canvas.height ? canvas.height - height - 4 : top
@@ -238,6 +240,7 @@ let createTooltip = (colony, left, top) => {
     opacity: 0.75,
     strokeWidth: 1
   })
+  // only display information if it is pressen on the colony
   let text = colony.name +
     (colony.inventory ? '\nInventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') : '') +
     (colony.specilisations ? '\nSpecilisations:\n' + colony.specilisations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') : '')
@@ -254,6 +257,7 @@ let createTooltip = (colony, left, top) => {
   return newtooltip
 }
 
+// setting up the map
 let setupMap = (client) => {
   canvas = new fabric.Canvas('map-canvas', {
     selection: false,
@@ -281,6 +285,7 @@ let setupMap = (client) => {
   canvas.add(centerNode)
 
   // the surrounding colonies
+  // as the game is not designed for more than 6 to 10 players, this is enough, any more nodes than these will be Grey
   let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat', 'Grey']
   let angleBetweenColonies = 2 * Math.PI / otherColonies.length
   for (let i = 0; i < otherColonies.length; i++) {
@@ -304,6 +309,7 @@ let setupMap = (client) => {
     otherColonies[i]['node'] = rect
   }
 
+  // on mouse over a colony that is not our own, a tooltip is shown with information
   canvas.on('mouse:over', (e) => {
     if (e.target) {
       let colony = otherColonies.find(colony => colony['node'] === e.target)
@@ -314,6 +320,7 @@ let setupMap = (client) => {
       }
     }
   })
+  // the tooltip is cleared when the mouse is not hovering over the colony anymore
   canvas.on('mouse:out', (e) => {
     if (e.target) {
       let colony = otherColonies.find(colony => colony['node'] === e.target)
@@ -324,6 +331,7 @@ let setupMap = (client) => {
     }
   })
 
+  // creating trade routes for displaying visual cues when a transfer of material has happened
   tradeRoutes = []
   let doneRoutes = []
   let yOffset = 15

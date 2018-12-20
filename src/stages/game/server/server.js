@@ -83,7 +83,7 @@ export default {
       reportingColony.ready = true
 
       let allReady = true
-      colonies.filter(col => col.game === reportingColony.game).forEach(colony => {
+      colonies.forEach(colony => {
         if (!colony.ready) {
           allReady = false
         }
@@ -92,7 +92,7 @@ export default {
         console.log('All clients have reported ready in game ' + reportingColony.game)
         // only send what is needed
         let simplifiedColonies = []
-        colonies.filter(colony => colony.game === reportingColony.game).forEach(colony => {
+        colonies.forEach(colony => {
           let simplifiedColony = {
             name: colony.name
           }
@@ -104,7 +104,7 @@ export default {
           }
           simplifiedColonies.push(simplifiedColony)
         })
-        colonies.filter(colony => colony.game === reportingColony.game).forEach(colony => {
+        colonies.forEach(colony => {
           let data = {
             materials: config.materials,
             chat: config.chat,
@@ -118,6 +118,7 @@ export default {
           server.send('setup', data).toClient(colony.id)
         })
       }
+
       // start the game if all participants are ready
       if (colonies.every(colony => colony.ready)) {
         gameloopRef = setInterval(() => gameloop(server), 1000)
@@ -163,11 +164,13 @@ export default {
   setup: (server) => {
     console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
 
+    // randomize the order of the players
     let networkPlayers = server.getPlayers()
       .map((a) => ({sort: Math.random(), value: a}))
       .sort((a, b) => a.sort - b.sort)
       .map((a) => a.value)
 
+    // create a colony to each player
     for (let i = 0; i < networkPlayers.length; i++) {
       let colony = JSON.parse(JSON.stringify(config.players[i % config.players.length]))
       colony.id = networkPlayers[i]
@@ -212,7 +215,8 @@ let gameloop = (server) => {
   })
 
   tickcount++
-  if (tickcount % 100 === 0) { // every 100th second, set the clients inventory, it might have drifted
+  // every 100th second, set the clients inventory, it might have drifted
+  if (tickcount % 100 === 0) {
     sendColoniesInventories(server)
     colonies.forEach(colony => {
       let inventory = []
@@ -227,6 +231,7 @@ let gameloop = (server) => {
   }
 }
 
+// kill a given colony
 let killColony = (server, colony, materialName) => {
   colony.dead = true
   colony.inventory.find(row => materialName === row.name).amount = 0
@@ -234,7 +239,9 @@ let killColony = (server, colony, materialName) => {
   DatabaseHandler.logEvent(colony.id + ' has died')
 }
 
+// send inventory to all colonies
 let sendColoniesInventories = (server) => {
+  // depending on how the stage is configured, it should or should not send the other colonies inventory
   if (config.tooltip.includes('inventories')) {
     for (let i = 0; i < numberOfGames; i++) {
       let inventories = []

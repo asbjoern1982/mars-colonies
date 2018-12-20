@@ -76,6 +76,8 @@ td {
 .inventory-low {
   color: red;
 }
+
+/* for creating the blinking text effect it is animated */
 .inventory-critial {
   color: red;
   animation: blinker 1s linear infinite;

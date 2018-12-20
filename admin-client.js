@@ -1,4 +1,4 @@
-/* globals $ */
+/* very basic admin client, the only addition to this class is the two download buttons */
 import createClient from 'monsterr'
 
 import html from './src/admin/admin-client.html'
@@ -13,6 +13,7 @@ let options = {
 
 let events = {
   'resJSON': (admin, json) => {
+    // to download the data to a file, a Blob is used
     let fileName = 'mars-colonies_' + Date.now() + '.json'
     let data = JSON.stringify(json)
     let url = window.URL.createObjectURL(new Blob([data], {type: 'text/json'}))
@@ -47,7 +48,6 @@ const admin = createClient({
   events,
   commands,
   options
-  // no need to add stages to admin
 })
 
 $('#buttonStart').mouseup(e => {
