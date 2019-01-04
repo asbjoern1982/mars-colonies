@@ -1,0 +1,10 @@
+.jumbotron {
+    background-image: url(../img/survey-back.png);
+    background-size: cover;
+}
+.row {
+    font-size: 15px;
+}
+#pre-survey-title {
+  text-align: center;
+}

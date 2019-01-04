@@ -49,34 +49,6 @@
         "gain": 2.0,
 	      "transform_rate": 10
       }]
-    },
-    {
-      "name": "Eastasia Colony",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Eastasia Colony",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
     }
   ]
 }
