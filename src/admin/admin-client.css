@@ -7,13 +7,6 @@
   prefixing admin-specific css to avoid unwanted
   behaviour.
 */
-
-#admin-button-start {
-  background-color: green;
-}
-#admin-button-next {
-  background-color: blue;
-}
-#admin-button-reset {
-  background-color: red;
+.container {
+  padding-top: 5px;
 }

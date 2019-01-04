@@ -1,31 +1,37 @@
 import createServer, { Network, Events } from 'monsterr'
 import game from './src/stages/game/server/server'
 import {DatabaseHandler} from './src/database/DatabaseHandler'
-import config from './src/stages/game/config/round1.json'
+import config from './src/stages/game/config/config.json'
 import {spawn} from 'child_process'
-
 const stages = [game]
-let numberOfPlayers = config.players.length
+
 let connectedPlayers = 0
-console.log('waiting for ' + numberOfPlayers + ' players')
+console.log('waiting for ' + config.participants + ' players')
 
 let events = {
+  // when all client have connected, push the server into the first stage
   [Events.CLIENT_CONNECTED] (server, clientId) {
     connectedPlayers++
-    if (connectedPlayers >= numberOfPlayers) {
+    if (connectedPlayers >= config.participants) {
       server.start()
     }
   }
 }
+// handle commands from the admin client
 let commands = {
   'reqJSON': (server, clientId) => {
     let json = DatabaseHandler.exportAsJSON()
     server.send('resJSON', json).toAdmin()
+  },
+  'reqCSV': (server, clientId) => {
+    let csv = DatabaseHandler.exportAsCSV()
+    console.log(csv)
+    server.send('resCSV', csv).toAdmin()
   }
 }
 
 const monsterr = createServer({
-  network: Network.clique(config.players.length),
+  network: Network.clique(config.participants),
   events,
   commands,
   stages,
@@ -37,7 +43,9 @@ const monsterr = createServer({
 
 monsterr.run()
 
-for (let i = 0; i < config.players.length - 1; i++) {
+// spawn bot-threads, use "config.participants - 1" for debuging with only 1 client
+let numberOfBots = 0 // config.participants - 1
+for (let i = 0; i < numberOfBots; i++) {
   console.log('spawning bot #' + i)
   spawn('node', ['./src/bot.js'])
 }

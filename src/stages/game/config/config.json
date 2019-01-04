@@ -1,11 +1,15 @@
 {
+  "participants": 3,
   "materials": [
     {"name": "Palladium", "depletion_rate": 1},
     {"name": "Selenium", "depletion_rate": 1},
     {"name": "Tungsten", "depletion_rate": 1}
   ],
-  "chat": "free",
-  "information": "inventories",
+  "roundLengthInSeconds":  600,
+  "inventoryBonusLimit": 500,
+  "inventoryCriticalLimit": 100,
+  "chat": ["Please send Palladium", "Please send Selenium", "Please send Tungsten", "I will", "I can not"],
+  "tooltip": ["inventories", "specilisations"],
   "trade_delay": 0,
   "players": [
     {

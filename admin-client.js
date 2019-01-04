@@ -1,4 +1,4 @@
-/* globals $ */
+/* very basic admin client, the only addition to this class is the two download buttons */
 import createClient from 'monsterr'
 
 import html from './src/admin/admin-client.html'
@@ -11,26 +11,61 @@ let options = {
   html
 }
 
-let events = {}
+let events = {
+  'resJSON': (admin, json) => {
+    // to download the data to a file, a Blob is used
+    let fileName = 'mars-colonies_' + Date.now() + '.json'
+    let data = JSON.stringify(json)
+    let url = window.URL.createObjectURL(new Blob([data], {type: 'text/json'}))
+    var a = document.createElement('a')
+    document.body.appendChild(a)
+    a.style = 'display: none'
+    a.href = url
+    a.download = fileName
+    a.click()
+    window.URL.revokeObjectURL(url)
+  },
+  'resCSV': (admin, csv) => {
+    let keys = Object.keys(csv)
+    let fileending = Date.now() + '.csv'
+    keys.forEach(key => {
+      let data = csv[key] + '\n'
+      let fileName = 'mars-colonies_' + key + '_' + fileending
+      let url = window.URL.createObjectURL(new Blob([data], {type: 'text/csv'}))
+      var a = document.createElement('a')
+      document.body.appendChild(a)
+      a.style = 'display: none'
+      a.href = url
+      a.download = fileName
+      a.click()
+      window.URL.revokeObjectURL(url)
+    })
+  }
+}
 let commands = {}
 
 const admin = createClient({
   events,
   commands,
   options
-  // no need to add stages to admin
 })
 
-// Button event handlers (if you need more you should probably put them in a separate file and import it here)
-$('#admin-button-start').mouseup(e => {
+$('#buttonStart').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('start')
 })
-$('#admin-button-next').mouseup(e => {
+
+$('#buttonNext').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('next')
 })
-$('#admin-button-reset').mouseup(e => {
+
+$('#buttonDownloadJSON').mouseup(e => {
   e.preventDefault()
-  admin.sendCommand('reset')
+  admin.sendCommand('reqJSON')
+})
+
+$('#buttonDownloadCSV').mouseup(e => {
+  e.preventDefault()
+  admin.sendCommand('reqCSV')
 })
