@@ -126,10 +126,11 @@ let events = {
     materials.forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
 
     // production
-    thisColony.specilisations.forEach(specilisation => {
-      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%)'
-      $('#production-material').append('<option value="' + specilisation.input + '">' + option + '</option>')
-    })
+    for (let i = 0; i < thisColony.specilisations.length; i++) {
+      let specilisation = thisColony.specilisations[i]
+      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%, ' + specilisation.transform_rate + ')'
+      $('#production-material').append('<option value="' + i + '">' + option + '</option>')
+    }
 
     // add nodes to the map
     setupMap(client)
@@ -164,10 +165,10 @@ export default {
       e.preventDefault()
       if (productionCountDown === 0 && $('#production-amount').val() > 0) {
         client.send('produce', {
-          material: $('#production-material').val(),
+          index: $('#production-material').val(),
           amount: $('#production-amount').val()
         })
-        productionCountDown = thisColony.specilisations.find(specilisation => specilisation.input === $('#production-material').val()).transform_rate
+        productionCountDown = thisColony.specilisations[$('#production-material').val()].transform_rate
         productionCountTotal = productionCountDown
         $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
         productionCountDown--

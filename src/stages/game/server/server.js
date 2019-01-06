@@ -58,16 +58,17 @@ export default {
     },
     'produce': (server, clientId, production) => {
       let colony = colonies.find(colony => colony.id === clientId)
-      let inputName = production.material
-      let outputName = colony.specilisations.find(specilisation => specilisation.input === inputName).output
-      let gain = colony.specilisations.find(specilisation => specilisation.input === inputName).gain
-      let delay = colony.specilisations.find(specilisation => specilisation.input === inputName).transform_rate
+      let specilisation = colony.specilisations[production.index]
+      let inputName = specilisation.input
+      let outputName = specilisation.output
+      let gain = specilisation.gain
+      let delay = specilisation.transform_rate
 
       // substract input materials and inform the colony
       colony.inventory.find(material => material.name === inputName).amount -= production.amount
       sendColoniesInventories(server)
 
-      Logger.logProduction(server, clientId, inputName, production.amount)
+      Logger.logProduction(server, clientId, production.index, production.amount)
 
       // create a timeout that adds the output to the colony and informs the colony
       setTimeout(() => {
@@ -163,6 +164,7 @@ export default {
   },
   setup: (server) => {
     console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
+    Logger.logEvent(server, 'starting game stage (' + server.getCurrentStage().number + ')')
 
     // randomize the order of the players
     let networkPlayers = server.getPlayers()

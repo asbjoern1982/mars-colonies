@@ -6,8 +6,8 @@ let createLogger = () => {
     DatabaseHandler.saveChat(clientId, message)
   }
 
-  let logProduction = (server, clientId, material, amount) => {
-    DatabaseHandler.saveProduction(clientId, material, amount)
+  let logProduction = (server, clientId, index, amount) => {
+    DatabaseHandler.saveProduction(clientId, index, amount)
   }
 
   let logTrade = (server, clientId, receiver, material, amount) => {

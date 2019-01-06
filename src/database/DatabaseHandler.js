@@ -33,11 +33,11 @@ let createDatabaseHandler = () => {
   }
 
   // log that a specilisation has been used
-  let saveProduction = (clientId, material, amount) => {
+  let saveProduction = (clientId, index, amount) => {
     let event = {
       id: clientId,
       time: Date.now(),
-      material: material,
+      index: index,
       amount: Math.floor(amount)
     }
     db.get('production').push(event).write()
