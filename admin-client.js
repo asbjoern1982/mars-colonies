@@ -1,6 +1,7 @@
 /* very basic admin client, the only addition to this class is the two download buttons */
 import createClient from 'monsterr'
-
+import {LatencyModule} from './src/modules/LatencyModule'
+import {NetworkModule} from './src/modules/NetworkModule'
 import html from './src/admin/admin-client.html'
 import './src/admin/admin-client.css'
 
@@ -44,11 +45,17 @@ let events = {
 }
 let commands = {}
 
+LatencyModule.addAdminClientEvents(events)
+NetworkModule.addAdminClientEvents(events)
+
 const admin = createClient({
   events,
   commands,
   options
 })
+
+LatencyModule.setupClient(admin)
+NetworkModule.setupClient(admin)
 
 $('#buttonStart').mouseup(e => {
   e.preventDefault()

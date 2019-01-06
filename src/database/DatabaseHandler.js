@@ -18,7 +18,8 @@ let createDatabaseHandler = () => {
     trade: [],
     inventory: [],
     logMouseOverColony: [],
-    events: []
+    events: [],
+    surveys: []
   }).write()
 
   // log a chatmessage with who sent it and the message
@@ -83,15 +84,46 @@ let createDatabaseHandler = () => {
     db.get('events').push(event).write()
   }
 
+  // save a survey
+  let saveSurvey = (clientId, data) => {
+    let survey = {
+      id: clientId,
+      time: Date.now(),
+      survey: data
+    }
+    db.get('surveys').push(survey).write()
+  }
+
   // export the log for the admin client
   let exportAsJSON = () => {
+    let surveys = db.get('surveys').value()
+    // get a list of headers (questions)
+    let headers = [...new Set([].concat(...surveys.map(survey => Object.keys(survey.survey))))].sort()
+
+    // for each survey, add id, time and questions, if it is not present,
+    // it just adds ',' so the columns are presisent and multiple answers are
+    // put into quotes
+    surveyCSV = 'clientId,time,' + headers.join() + '\n' +
+      surveys.map(survey =>
+        survey['id'] + ',' +
+        survey['time'] + ',' +
+        headers.map((header) =>
+          survey.survey[header]
+            ? (Array.isArray(survey.survey[header])
+              ? '"' + survey.survey[header].join() + '"'
+              : survey.survey[header])
+            : ''
+        ).join()
+      ).join('\n')
+
     // generate output-json
     let output = {
       chats: db.get('chat').value(),
       productions: db.get('production').value(),
       trades: db.get('trade').value(),
       inventories: db.get('inventory').value(),
-      events: db.get('events').value()
+      events: db.get('events').value(),
+      surveys: surveyCSV
     }
 
     return output
@@ -118,6 +150,7 @@ let createDatabaseHandler = () => {
     logInventory,
     logMouseOverColony,
     logEvent,
+    saveSurvey,
     exportAsJSON,
     exportAsCSV
   }
