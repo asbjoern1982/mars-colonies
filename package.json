@@ -15,8 +15,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "^2.7.3",
     "lowdb": "^1.0.0",
-    "monsterr": "^0.2.3"
+    "monsterr": "^0.2.3",
+    "vis": "^4.21.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

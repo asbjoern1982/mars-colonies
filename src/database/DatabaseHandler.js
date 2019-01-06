@@ -23,7 +23,7 @@ let createDatabaseHandler = () => {
   }).write()
 
   // log a chatmessage with who sent it and the message
-  let logChat = (clientId, message) => {
+  let saveChat = (clientId, message) => {
     let event = {
       id: clientId,
       time: Date.now(),
@@ -33,7 +33,7 @@ let createDatabaseHandler = () => {
   }
 
   // log that a specilisation has been used
-  let logProduction = (clientId, material, amount) => {
+  let saveProduction = (clientId, material, amount) => {
     let event = {
       id: clientId,
       time: Date.now(),
@@ -44,7 +44,7 @@ let createDatabaseHandler = () => {
   }
 
   // log a transfer of materials
-  let logTrade = (clientId, receiver, material, amount) => {
+  let saveTrade = (clientId, receiver, material, amount) => {
     let event = {
       id: clientId,
       time: Date.now(),
@@ -56,7 +56,7 @@ let createDatabaseHandler = () => {
   }
 
   // at a certain interval the inventory of a client is logged for redundant storage
-  let logInventory = (clientId, inventory) => {
+  let saveInventory = (clientId, inventory) => {
     let event = {
       id: clientId,
       time: Date.now(),
@@ -66,7 +66,7 @@ let createDatabaseHandler = () => {
   }
 
   // log that a client has moved their mouse over an other colony on the map
-  let logMouseOverColony = (clientId, colony) => {
+  let saveMouseOverColony = (clientId, colony) => {
     let event = {
       id: clientId,
       time: Date.now(),
@@ -76,7 +76,7 @@ let createDatabaseHandler = () => {
   }
 
   // log any other events, typically a serverevent
-  let logEvent = (data) => {
+  let saveEvent = (data) => {
     let event = {
       time: Date.now(),
       data: data
@@ -95,27 +95,7 @@ let createDatabaseHandler = () => {
   }
 
   // export the log for the admin client
-  let exportAsJSON = () => {
-    let surveys = db.get('surveys').value()
-    // get a list of headers (questions)
-    let headers = [...new Set([].concat(...surveys.map(survey => Object.keys(survey.survey))))].sort()
-
-    // for each survey, add id, time and questions, if it is not present,
-    // it just adds ',' so the columns are presisent and multiple answers are
-    // put into quotes
-    surveyCSV = 'clientId,time,' + headers.join() + '\n' +
-      surveys.map(survey =>
-        survey['id'] + ',' +
-        survey['time'] + ',' +
-        headers.map((header) =>
-          survey.survey[header]
-            ? (Array.isArray(survey.survey[header])
-              ? '"' + survey.survey[header].join() + '"'
-              : survey.survey[header])
-            : ''
-        ).join()
-      ).join('\n')
-
+  let getData = () => {
     // generate output-json
     let output = {
       chats: db.get('chat').value(),
@@ -123,36 +103,21 @@ let createDatabaseHandler = () => {
       trades: db.get('trade').value(),
       inventories: db.get('inventory').value(),
       events: db.get('events').value(),
-      surveys: surveyCSV
+      surveys: db.get('surveys').value()
     }
 
     return output
   }
 
-  // convert the log to a number of CSV-strings and export them
-  let exportAsCSV = () => {
-    let data = exportAsJSON()
-    let files = {}
-    Object.keys(data).forEach(logName => {
-      let log = data[logName]
-      if (log.length > 0) {
-        files[logName] = Object.keys(log[0]).join() + '\n' +
-          log.map(logEntry => Object.values(logEntry).join()).join('\n')
-      }
-    })
-    return files
-  }
-
   return {
-    logChat,
-    logProduction,
-    logTrade,
-    logInventory,
-    logMouseOverColony,
-    logEvent,
+    saveChat,
+    saveProduction,
+    saveTrade,
+    saveInventory,
+    saveMouseOverColony,
+    saveEvent,
     saveSurvey,
-    exportAsJSON,
-    exportAsCSV
+    getData
   }
 }
 

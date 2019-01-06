@@ -8,7 +8,7 @@
   "roundLengthInSeconds":  600,
   "inventoryBonusLimit": 500,
   "inventoryCriticalLimit": 100,
-  "chat": ["Please send Palladium", "Please send Selenium", "Please send Tungsten", "I will", "I can not"],
+  "chat": "free",
   "tooltip": ["inventories", "specilisations"],
   "trade_delay": 0,
   "players": [

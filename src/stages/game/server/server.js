@@ -1,5 +1,5 @@
 import {Events} from 'monsterr'
-import {DatabaseHandler} from '../../../database/DatabaseHandler'
+import {Logger} from '../../../database/logger'
 import config from './../config/config.json'
 
 let numberOfGames = Math.floor(config.participants / config.players.length) // ignores leftover participants
@@ -11,7 +11,7 @@ export default {
   events: {
     'mouseover-colony': (server, clientId, target) => {
       let targetId = colonies.find(colony => colony.name === target).id
-      DatabaseHandler.logMouseOverColony(clientId, targetId)
+      Logger.logMouseOverColony(server, clientId, targetId)
     },
     'trade': (server, clientId, transfer) => {
       // remove amount from senders inventory
@@ -28,7 +28,7 @@ export default {
       }
 
       let receiverId = colonies.find(colony => colony.name === transfer.colony).id
-      DatabaseHandler.logTrade(clientId, receiverId, transfer.material, transferedAmount)
+      Logger.logTrade(server, clientId, receiverId, transfer.material, transferedAmount)
 
       // add amount to receivers inventory when the trade is complete
       setTimeout(() => {
@@ -54,7 +54,7 @@ export default {
     'chat': (server, clientId, message) => {
       let colony = colonies.find(colony => colony.id === clientId)
       server.send('chat', colony.name + '>' + message).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
-      DatabaseHandler.logChat(clientId, message)
+      Logger.logChat(server, clientId, message)
     },
     'produce': (server, clientId, production) => {
       let colony = colonies.find(colony => colony.id === clientId)
@@ -67,7 +67,7 @@ export default {
       colony.inventory.find(material => material.name === inputName).amount -= production.amount
       sendColoniesInventories(server)
 
-      DatabaseHandler.logProduction(clientId, inputName, production.amount)
+      Logger.logProduction(server, clientId, inputName, production.amount)
 
       // create a timeout that adds the output to the colony and informs the colony
       setTimeout(() => {
@@ -122,7 +122,7 @@ export default {
       // start the game if all participants are ready
       if (colonies.every(colony => colony.ready)) {
         gameloopRef = setInterval(() => gameloop(server), 1000)
-        DatabaseHandler.logEvent('gameloop started')
+        Logger.logEvent(server, 'gameloop started')
       }
     },
     [Events.CLIENT_RECONNECTED]: (server, clientId) => {
@@ -198,7 +198,7 @@ let gameloop = (server) => {
     })
     console.log('game over\n' + status.join('\n'))
     server.send('gameover', status.join('\n')).toAll()
-    DatabaseHandler.logEvent('game over [' + status.join() + ']')
+    Logger.logEvent(server, 'game over [' + status.join() + ']')
     return
   }
   // update all colonies inventory
@@ -226,7 +226,7 @@ let gameloop = (server) => {
           amount: row.amount
         }
       ))
-      DatabaseHandler.logInventory(colony.id, inventory)
+      Logger.logInventory(server, colony.id, inventory)
     })
   }
 }
@@ -236,7 +236,7 @@ let killColony = (server, colony, materialName) => {
   colony.dead = true
   colony.inventory.find(row => materialName === row.name).amount = 0
   server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
-  DatabaseHandler.logEvent(colony.id + ' has died')
+  Logger.logEvent(server, colony.id + ' has died')
 }
 
 // send inventory to all colonies

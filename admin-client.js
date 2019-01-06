@@ -41,6 +41,9 @@ let events = {
       a.click()
       window.URL.revokeObjectURL(url)
     })
+  },
+  'logged': (admin, data) => {
+    admin.getChat().append(data)
   }
 }
 let commands = {}

@@ -1,12 +1,14 @@
 import createServer, { Network, Events } from 'monsterr'
 import game from './src/stages/game/server/server'
-import presurvey from './src/stages/presurvey/server/server'
-import {DatabaseHandler} from './src/database/DatabaseHandler'
+import {Logger} from './src/database/logger'
 import config from './src/stages/game/config/config.json'
 import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
 import {spawn} from 'child_process'
-const stages = [presurvey, game]
+
+const stages = [
+  game
+]
 
 let connectedPlayers = 0
 console.log('waiting for ' + config.participants + ' players')
@@ -16,6 +18,8 @@ let events = {
   [Events.CLIENT_CONNECTED] (server, clientId) {
     connectedPlayers++
     if (connectedPlayers >= config.participants) {
+      console.log('everyone connected, starting first stage')
+      Logger.logEvent(server, 'everyone connected, starting first stage')
       server.start()
     }
   }
@@ -23,11 +27,11 @@ let events = {
 // handle commands from the admin client
 let commands = {
   'reqJSON': (server, clientId) => {
-    let json = DatabaseHandler.exportAsJSON()
+    let json = Logger.exportAsJSON()
     server.send('resJSON', json).toAdmin()
   },
   'reqCSV': (server, clientId) => {
-    let csv = DatabaseHandler.exportAsCSV()
+    let csv = Logger.exportAsCSV()
     console.log(csv)
     server.send('resCSV', csv).toAdmin()
   }
