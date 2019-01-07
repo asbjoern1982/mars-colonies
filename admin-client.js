@@ -7,7 +7,7 @@ import './src/admin/admin-client.css'
 
 let options = {
   canvasBackgroundColor: 'red',
-  htmlContainerHeight: 0.5,
+  htmlContainerHeight: 1,
   // HTML is included in options for admin
   html
 }

@@ -1,4 +1,5 @@
 import createServer, { Network, Events } from 'monsterr'
+import presurvey from './src/stages/presurvey/server/server'
 import game from './src/stages/game/server/server'
 import {Logger} from './src/database/logger'
 import config from './src/stages/game/config/config.json'
@@ -7,6 +8,7 @@ import {NetworkModule} from './src/modules/NetworkModule'
 import {spawn} from 'child_process'
 
 const stages = [
+  presurvey,
   game
 ]
 
@@ -56,7 +58,7 @@ const monsterr = createServer({
 monsterr.run()
 
 // spawn bot-threads, use "config.participants - 1" for debuging with only 1 client
-let numberOfBots = config.participants - 1
+let numberOfBots = 0 // config.participants - 1
 for (let i = 0; i < numberOfBots; i++) {
   console.log('spawning bot #' + i)
   spawn('node', ['./src/bot.js'])

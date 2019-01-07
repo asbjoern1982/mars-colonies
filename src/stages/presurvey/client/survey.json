@@ -1,0 +1,87 @@
+{
+ "title": "Pre Survey",
+ "showProgressBar": "top",
+ "pages": [
+  {
+   "name": "First Page",
+   "elements": [
+    {
+     "type": "dropdown",
+     "name": "question1",
+     "title": "What is your gender?",
+     "choices": [
+      {
+       "value": "item1",
+       "text": "female"
+      },
+      {
+       "value": "item2",
+       "text": "male"
+      },
+      {
+       "value": "item3",
+       "text": "other"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "name": "question2",
+     "title": "What is your age",
+     "inputType": "number"
+    }
+   ]
+  },
+  {
+   "name": "Second Page",
+   "elements": [
+    {
+     "type": "radiogroup",
+     "name": "question3",
+     "title": "Are you vegan?",
+     "choices": [
+      {
+       "value": "item1",
+       "text": "yes"
+      },
+      {
+       "value": "item2",
+       "text": "no"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "name": "question4",
+     "visible": false,
+     "visibleIf": "{question4} = \"item2\"",
+     "title": "Why are you not vegan?"
+    }
+   ]
+  },
+  {
+   "name": "Third Page",
+   "elements": [
+    {
+     "type": "checkbox",
+     "name": "question5",
+     "title": "Whats your favorite food (select multiple)?:",
+     "choices": [
+       {
+         "value": "item1",
+         "text": "fried rice"
+       },
+       {
+         "value": "item2",
+         "text": "oranges"
+       },
+       {
+         "value": "item3",
+         "text": "Coca Cola"
+       }
+     ]
+    }
+   ]
+  }
+ ]
+}
