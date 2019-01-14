@@ -24,7 +24,9 @@ let commands = {
 
 let events = {
   'chat': (client, message) => {
-    $('#chat-log').append(message + '\n')
+    let chatLog = $('#chat-log')
+    chatLog.append(message + '\n')
+    chatLog.scrollTop(chatLog[0].scrollHeight)
   },
   'gameover': (client, status) => {
     // when the game is over, ei time is up, the client receives a 'gameover'
