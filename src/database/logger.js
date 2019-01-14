@@ -15,7 +15,8 @@ let createLogger = () => {
   }
 
   let logInventory = (server, clientId, inventory) => {
-    DatabaseHandler.saveInventory(clientId, inventory)
+    let inventorylist = inventory.map(row => row.amount)
+    DatabaseHandler.saveInventory(clientId, inventorylist)
   }
 
   let logMouseOverColony = (server, clientId, colony) => {

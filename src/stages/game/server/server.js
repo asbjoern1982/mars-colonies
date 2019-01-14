@@ -221,14 +221,7 @@ let gameloop = (server) => {
   if (tickcount % 100 === 0) {
     sendColoniesInventories(server)
     colonies.forEach(colony => {
-      let inventory = []
-      colony.inventory.map(row => inventory.push(
-        {
-          name: row.name,
-          amount: row.amount
-        }
-      ))
-      Logger.logInventory(server, colony.id, inventory)
+      Logger.logInventory(server, colony.id, colony.inventory)
     })
   }
 }
