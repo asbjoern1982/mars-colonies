@@ -57,7 +57,7 @@ const monsterr = createServer({
 
 monsterr.run()
 
-if (process.argv.includes('debug')) {
+if (process.argv.includes('bots')) {
   // spawn bot-threads, use "config.participants - 1" for debuging with only 1 client
   let numberOfBots = config.participants - 1
   for (let i = 0; i < numberOfBots; i++) {
