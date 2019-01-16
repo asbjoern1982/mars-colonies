@@ -7,6 +7,7 @@ import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
 import {spawn} from 'child_process'
 
+// const stages = process.argv.includes('nosurvey') ? [game] : [
 const stages = [
   presurvey,
   game
@@ -41,7 +42,7 @@ let commands = {
 
 LatencyModule.addServerCommands(commands)
 
-let network = Network.clique(config.participants)
+let network = Network.groups(config.participants, config.players.length)
 NetworkModule.addServerCommands(commands, network)
 
 const monsterr = createServer({
