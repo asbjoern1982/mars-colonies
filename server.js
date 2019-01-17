@@ -1,5 +1,5 @@
 import createServer, { Network, Events } from 'monsterr'
-import presurvey from './src/stages/presurvey/server/server'
+// import presurvey from './src/stages/presurvey/server/server'
 import game from './src/stages/game/server/server'
 import {Logger} from './src/database/logger'
 import config from './src/stages/game/config/config.json'
@@ -7,9 +7,8 @@ import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
 import {spawn} from 'child_process'
 
-// const stages = process.argv.includes('nosurvey') ? [game] : [
 const stages = [
-  presurvey,
+  // presurvey,
   game
 ]
 

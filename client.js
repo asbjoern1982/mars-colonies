@@ -1,9 +1,9 @@
 import createClient from 'monsterr'
-import presurvey from './src/stages/presurvey/client/client'
+// import presurvey from './src/stages/presurvey/client/client'
 import game from './src/stages/game/client/client'
 
 const stages = [
-  presurvey,
+  // presurvey,
   game
 ]
 
