@@ -1,6 +1,5 @@
 import html from './client.html'
 import './client.css'
-import {CPUModule} from './../../../modules/CPUModule'
 
 let materials
 let inventoryBonusLimit
@@ -149,7 +148,6 @@ export default {
   events: events,
 
   setup: (client) => {
-    CPUModule.setupClient(client)
     // -------------------- TRADE --------------------
     $('#trade-button').mouseup(e => {
       e.preventDefault()

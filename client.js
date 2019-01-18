@@ -1,6 +1,7 @@
 import createClient from 'monsterr'
 // import presurvey from './src/stages/presurvey/client/client'
 import game from './src/stages/game/client/client'
+import {CPUModule} from './src/modules/CPUModule'
 
 const stages = [
   // presurvey,
@@ -16,9 +17,12 @@ let options = {
 let events = {}
 let commands = {}
 
-createClient({
+let client = createClient({
   events,
   commands,
   options,
   stages
 })
+
+console.log(client)
+CPUModule.setupClient(client)
