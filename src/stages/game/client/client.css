@@ -3,7 +3,7 @@ body, html {
 }
 .bg {
   /* The image used */
-  background-image: url("./img/Mars_Ice_Home_concept.jpg");
+  background-image: url("./../../../../assets/Mars_Ice_Home_concept.jpg");
 
   /* Full height */
   height: 100%;
@@ -25,7 +25,7 @@ body, html {
   height: 330px;
 }
 #map-canvas {
-  background-image: url("./img/mars-map.png");
+  background-image: url("./../../../../assets/mars-map.png");
   background-clip: content-box;
   width: 590px;
   height: 320px;

@@ -2,6 +2,7 @@
 import createClient from 'monsterr'
 import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
+import {CPUModule} from './src/modules/CPUModule'
 import html from './src/admin/admin-client.html'
 import './src/admin/admin-client.css'
 
@@ -50,6 +51,7 @@ let commands = {}
 
 LatencyModule.addAdminClientEvents(events)
 NetworkModule.addAdminClientEvents(events)
+CPUModule.addAdminClientEvents(events)
 
 const admin = createClient({
   events,
@@ -59,6 +61,7 @@ const admin = createClient({
 
 LatencyModule.setupClient(admin)
 NetworkModule.setupClient(admin)
+CPUModule.setupAdminClient(admin)
 
 $('#buttonStart').mouseup(e => {
   e.preventDefault()

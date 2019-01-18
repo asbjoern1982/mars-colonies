@@ -5,6 +5,7 @@ import {Logger} from './src/database/logger'
 import config from './src/stages/game/config/config.json'
 import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
+import {CPUModule} from './src/modules/CPUModule'
 import {spawn} from 'child_process'
 
 const stages = [
@@ -12,14 +13,10 @@ const stages = [
   game
 ]
 
-let connectedPlayers = 0
-console.log('waiting for ' + config.participants + ' players')
-
 let events = {
   // when all client have connected, push the server into the first stage
   [Events.CLIENT_CONNECTED] (server, clientId) {
-    connectedPlayers++
-    if (connectedPlayers >= config.participants) {
+    if (server.getPlayers().length >= config.participants) {
       console.log('everyone connected, starting first stage')
       Logger.logEvent(server, 'everyone connected, starting first stage')
       server.start()
@@ -40,9 +37,9 @@ let commands = {
 }
 
 LatencyModule.addServerCommands(commands)
-
 let network = Network.groups(config.participants, config.players.length)
 NetworkModule.addServerCommands(commands, network)
+CPUModule.addServerEvents(events)
 
 const monsterr = createServer({
   network: network,
@@ -56,6 +53,7 @@ const monsterr = createServer({
 })
 
 monsterr.run()
+console.log('waiting for ' + config.participants + ' players')
 
 if (process.argv.includes('bots')) {
   // spawn bot-threads, use "config.participants - 1" for debuging with only 1 client
