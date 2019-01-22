@@ -1,4 +1,5 @@
 import {Model} from './model'
+// import confirm from 'jquery-confirm'
 
 let createView = () => {
   let inventoryBonusLimit
@@ -20,17 +21,42 @@ let createView = () => {
     inventoryBonusLimit = data.inventoryBonusLimit
     inventoryCriticalLimit = data.inventoryCriticalLimit
 
+    let jqueryConfirmCssLink = document.querySelector("link[rel*='jquery-confirm.min.css']") || document.createElement('link')
+    jqueryConfirmCssLink.rel = 'stylesheet'
+    jqueryConfirmCssLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css'
+    document.getElementsByTagName('head')[0].appendChild(jqueryConfirmCssLink)
+
+    // https://www.sitepoint.com/dynamically-load-jquery-library-javascript/
+    let script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.async = true
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js'
+    document.getElementsByTagName('head')[0].appendChild(script)
+
     // -------------------- TRADE --------------------
     $('#trade-button').mouseup(e => {
       e.preventDefault()
       let amount = $('#trade-amount').val()
       // ignore anything that isn't a positive number
       if (amount > 0) {
-        client.send('trade', {
-          colony: $('#trade-colony').val(),
-          material: $('#trade-material').val(),
-          amount: amount
-        })
+        let sendTrade = () => {
+          client.send('trade', {
+            colony: $('#trade-colony').val(),
+            material: $('#trade-material').val(),
+            amount: amount
+          })
+        }
+        if (Model.getColony().inventory.find(material => material.name === $('#trade-material').val()).amount - amount < inventoryCriticalLimit) {
+          $.confirm({
+            title: 'Your inventory will be lower than the critical limit, continue?',
+            buttons: {
+              confirm: () => { sendTrade() },
+              cancel: () => {}
+            }
+          })
+        } else {
+          sendTrade()
+        }
       }
     })
     Model.getOtherColonies().forEach(colony => $('#trade-colony').append('<option>' + colony.name + '</option>'))
