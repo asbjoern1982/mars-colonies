@@ -17,7 +17,7 @@ let events = {
     View.addChatMessage(message)
   },
   'gameover': (client, status) => {
-    Model.thisColony().dead = true
+    Model.getColony().dead = true
     View.gameover(status)
     clearInterval(gameloopRef)
   },
@@ -27,28 +27,24 @@ let events = {
   'inventories': (client, inventories) => {
     // an update from the server to syncronize its inventory with the clients
     // set my inventory for the intenvoryView
-    Model.thisColony().inventory = inventories.find(colony => colony.name === Model.thisColony().name).inventory
+    Model.getColony().inventory = inventories.find(colony => colony.name === Model.getColony().name).inventory
     View.updateInventory()
     // set other colonies inventory for the map if it is in the payload
-    inventories.filter(colony => colony.name !== Model.thisColony().name).forEach(colony => {
-      Model.otherColonies().find(otherColony => otherColony.name === colony.name).inventory = colony.inventory
+    inventories.filter(colony => colony.name !== Model.getColony().name).forEach(colony => {
+      Model.getOtherColonies().find(otherColony => otherColony.name === colony.name).inventory = colony.inventory
     })
   },
   'colonyDied': (client, colonyName) => {
-    if (Model.thisColony().name === colonyName) {
-      Model.thisColony().dead = true
+    if (Model.getColony().name === colonyName) {
+      Model.getColony().dead = true
     } else {
-      Model.otherColonies().find(colony => colony.name === colonyName).dead = true
+      Model.getOtherColonies().find(colony => colony.name === colonyName).dead = true
     }
     View.killColony(colonyName)
   },
   'setup': (client, data) => {
-    View.setupClient(client)
     Model.setup(data)
-    View.setupEvent(client, data)
-
-    // add nodes to the map
-    View.setupMap(client)
+    View.setup(client, data)
 
     // start client-side gameloop
     gameloopRef = setInterval(gameloop, 1000)
@@ -59,9 +55,7 @@ export default {
   html,
   commands: commands,
   events: events,
-
   setup: (client) => {
-
     // when the client is ready to start the game, tell the server
     client.send('ready')
   },
@@ -74,9 +68,9 @@ export default {
 
 let gameloop = () => {
   // update inventory depletion
-  Model.materials().forEach(material => {
-    if (!Model.thisColony().dead) Model.thisColony().inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
-    Model.otherColonies().forEach(colony => {
+  Model.getMaterials().forEach(material => {
+    if (!Model.getColony().dead) Model.getColony().inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
+    Model.getOtherColonies().forEach(colony => {
       if (!colony.dead) colony.inventory.find(inventoryMaterial => material.name === inventoryMaterial.name).amount -= material.depletion_rate
     })
   })

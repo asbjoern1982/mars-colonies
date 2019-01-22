@@ -1,25 +1,25 @@
 let createModel = () => {
-  let myMaterials
-  let myThisColony
-  let myOtherColonies
+  let materials
+  let colony
+  let otherColonies
 
   let setup = (data) => {
-    myMaterials = data.materials
-    myThisColony = data.colonies.find(colony => colony.name === data.yourName)
-    myThisColony.specilisations = data.yourSpecilisations
-    myThisColony.inventory = data.yourStartingInventory
-    myOtherColonies = data.colonies.filter(colony => colony.name !== data.yourName)
+    materials = data.materials
+    colony = data.colonies.find(colony => colony.name === data.yourName)
+    colony.specilisations = data.yourSpecilisations
+    colony.inventory = data.yourStartingInventory
+    otherColonies = data.colonies.filter(colony => colony.name !== data.yourName)
   }
 
-  let thisColony = () => myThisColony
-  let materials = () => myMaterials
-  let otherColonies = () => myOtherColonies
+  let getMaterials = () => materials
+  let getColony = () => colony
+  let getOtherColonies = () => otherColonies
 
   return {
     setup,
-    materials,
-    thisColony,
-    otherColonies
+    getMaterials,
+    getColony,
+    getOtherColonies
   }
 }
 

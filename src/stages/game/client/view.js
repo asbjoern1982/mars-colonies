@@ -11,11 +11,62 @@ let createView = () => {
   let tooltip
   let canvas
 
-  let setupEvent = (client, data) => {
+  let setup = (client, data) => {
+    setupInterface(client, data)
+    setupMap(client)
+  }
+
+  let setupInterface = (client, data) => {
     inventoryBonusLimit = data.inventoryBonusLimit
     inventoryCriticalLimit = data.inventoryCriticalLimit
 
-    // chat
+    // -------------------- TRADE --------------------
+    $('#trade-button').mouseup(e => {
+      e.preventDefault()
+      let amount = $('#trade-amount').val()
+      // ignore anything that isn't a positive number
+      if (amount > 0) {
+        client.send('trade', {
+          colony: $('#trade-colony').val(),
+          material: $('#trade-material').val(),
+          amount: amount
+        })
+      }
+    })
+    Model.getOtherColonies().forEach(colony => $('#trade-colony').append('<option>' + colony.name + '</option>'))
+    Model.getMaterials().forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
+
+    // -------------------- PRODUCTION --------------------
+    $('#production-button').mouseup(e => {
+      e.preventDefault()
+      if (productionCountDown === 0 && $('#production-amount').val() > 0) {
+        client.send('produce', {
+          index: $('#production-material').val(),
+          amount: $('#production-amount').val()
+        })
+        productionCountDown = Model.getColony().specilisations[$('#production-material').val()].transform_rate
+        productionCountTotal = productionCountDown
+        $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+        productionCountDown--
+        // countdown loop
+        let intervalRef = setInterval(() => {
+          if (productionCountDown <= 0) {
+            $('#production-progress').html('production finished')
+            clearInterval(intervalRef)
+          } else {
+            $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+            productionCountDown--
+          }
+        }, 1000)
+      }
+    })
+    for (let i = 0; i < Model.getColony().specilisations.length; i++) {
+      let specilisation = Model.getColony().specilisations[i]
+      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%, ' + specilisation.transform_rate + ')'
+      $('#production-material').append('<option value="' + i + '">' + option + '</option>')
+    }
+
+    // -------------------- CHAT --------------------
     if (Array.isArray(data.chat) && data.chat.length > 0) {
       $('#chat-input-bar').append('<div class="input-group-prepend">' +
         '<span class="input-group-text" id="input-label"></span>' +
@@ -25,7 +76,7 @@ let createView = () => {
         '<button class="btn btn-default" id="chat-button">send</button>' +
         '</div>')
       data.chat.forEach(sentence => $('#chat-input').append('<option>' + sentence + '</option>'))
-      $('#input-label').append(Model.thisColony().name)
+      $('#input-label').append(Model.getColony().name)
       $('#chat-button').mouseup(e => {
         e.preventDefault()
         client.send('chat', $('#chat-input').val())
@@ -39,7 +90,7 @@ let createView = () => {
         '<div class="input-group-prepend-append">' +
         '<button class="btn btn-default" id="chat-button">send</button>' +
         '</div>')
-      $('#input-label').append(Model.thisColony().name)
+      $('#input-label').append(Model.getColony().name)
       $('#chat-input').keypress((e) => {
         if (e.which === 13) {
           client.send('chat', $('#chat-input').val())
@@ -56,58 +107,6 @@ let createView = () => {
     } else {
       $('#chat-log').append('chat disabled')
     }
-
-    // trade
-    Model.otherColonies().forEach(colony => $('#trade-colony').append('<option>' + colony.name + '</option>'))
-    Model.materials().forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
-
-    // production
-    for (let i = 0; i < Model.thisColony().specilisations.length; i++) {
-      let specilisation = Model.thisColony().specilisations[i]
-      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%, ' + specilisation.transform_rate + ')'
-      $('#production-material').append('<option value="' + i + '">' + option + '</option>')
-    }
-  }
-
-  let setupClient = (client) => {
-    // -------------------- TRADE --------------------
-    $('#trade-button').mouseup(e => {
-      e.preventDefault()
-      let amount = $('#trade-amount').val()
-      // ignore anything that isn't a positive number
-      if (amount > 0) {
-        client.send('trade', {
-          colony: $('#trade-colony').val(),
-          material: $('#trade-material').val(),
-          amount: amount
-        })
-      }
-    })
-
-    // -------------------- PRODUCTION --------------------
-    $('#production-button').mouseup(e => {
-      e.preventDefault()
-      if (productionCountDown === 0 && $('#production-amount').val() > 0) {
-        client.send('produce', {
-          index: $('#production-material').val(),
-          amount: $('#production-amount').val()
-        })
-        productionCountDown = Model.thisColony().specilisations[$('#production-material').val()].transform_rate
-        productionCountTotal = productionCountDown
-        $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-        productionCountDown--
-        // countdown loop
-        let intervalRef = setInterval(() => {
-          if (productionCountDown <= 0) {
-            $('#production-progress').html('production finished')
-            clearInterval(intervalRef)
-          } else {
-            $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-            productionCountDown--
-          }
-        }, 1000)
-      }
-    })
   }
 
   // setting up the map
@@ -140,8 +139,8 @@ let createView = () => {
     // the surrounding colonies
     // as the game is not designed for more than 6 to 10 players, this is enough, any more nodes than these will be Grey
     let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat', 'Grey']
-    let angleBetweenColonies = 2 * Math.PI / Model.otherColonies().length
-    for (let i = 0; i < Model.otherColonies().length; i++) {
+    let angleBetweenColonies = 2 * Math.PI / Model.getOtherColonies().length
+    for (let i = 0; i < Model.getOtherColonies().length; i++) {
       let angle = angleBetweenColonies * i + Math.PI / 3.5
       let radius = 80
       let x = Math.sin(angle) * radius + centerX
@@ -159,13 +158,13 @@ let createView = () => {
         strokeWidth: 1
       })
       canvas.add(rect)
-      Model.otherColonies()[i]['node'] = rect
+      Model.getOtherColonies()[i]['node'] = rect
     }
 
     // on mouse over a colony that is not our own, a tooltip is shown with information
     canvas.on('mouse:over', (e) => {
       if (e.target) {
-        let colony = Model.otherColonies().find(colony => colony['node'] === e.target)
+        let colony = Model.getOtherColonies().find(colony => colony['node'] === e.target)
         if (colony) {
           tooltip = createTooltip(colony, e.target.left + 20, e.target.top + 20)
           canvas.add(tooltip)
@@ -176,7 +175,7 @@ let createView = () => {
     // the tooltip is cleared when the mouse is not hovering over the colony anymore
     canvas.on('mouse:out', (e) => {
       if (e.target) {
-        let colony = Model.otherColonies().find(colony => colony['node'] === e.target)
+        let colony = Model.getOtherColonies().find(colony => colony['node'] === e.target)
         if (colony) {
           canvas.remove(tooltip)
           tooltip = undefined
@@ -188,19 +187,19 @@ let createView = () => {
     tradeRoutes = []
     let doneRoutes = []
     let yOffset = 15
-    Model.otherColonies().forEach(startColony => {
+    Model.getOtherColonies().forEach(startColony => {
       // route to the center
       let start = {x: startColony.node.left, y: startColony.node.top + yOffset}
       let main = {x: centerNode.left, y: centerNode.top + yOffset}
       let line = [main.x, main.y, start.x, start.y]
       let tradeRouteToMain = new fabric.Line(line, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
-      tradeRouteToMain.startColony = Model.thisColony()
+      tradeRouteToMain.startColony = Model.getColony()
       tradeRouteToMain.endColony = startColony
       canvas.add(tradeRouteToMain)
       tradeRoutes.push(tradeRouteToMain)
 
       // route to other colonies
-      Model.otherColonies().forEach(endColony => {
+      Model.getOtherColonies().forEach(endColony => {
         let end = {x: endColony.node.left, y: endColony.node.top + yOffset}
 
         let isConnected = false
@@ -265,7 +264,7 @@ let createView = () => {
   // update this colonies inventory
   let updateInventory = () => {
     $('#inventory').find('tbody').empty()
-    Model.thisColony().inventory.forEach(row => {
+    Model.getColony().inventory.forEach(row => {
       let amountColor = row.amount > inventoryBonusLimit ? 'inventory-bonus' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
       $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td class="' + amountColor + '">' + row.amount + '</td></tr>')
     })
@@ -316,8 +315,8 @@ let createView = () => {
     // when a trade has happened, the route between sender and receiver is
     // found and flashed white for a second as a visual cue to the participant
     // that a trade has happened
-    let sendingColony = Model.otherColonies().find(colony => colony.name === transfer.sender) || Model.thisColony()
-    let receivingColony = Model.otherColonies().find(colony => colony.name === transfer.receiver) || Model.thisColony()
+    let sendingColony = Model.getOtherColonies().find(colony => colony.name === transfer.sender) || Model.getColony()
+    let receivingColony = Model.getOtherColonies().find(colony => colony.name === transfer.receiver) || Model.getColony()
     let route = tradeRoutes.find(route => (route.startColony === sendingColony && route.endColony === receivingColony) ||
       (route.startColony === receivingColony && route.endColony === sendingColony))
     route.stroke = 'white'
@@ -343,7 +342,7 @@ let createView = () => {
 
   let killColony = (colonyName) => {
     // when a colony runs out of a material, it dies
-    if (Model.thisColony().name === colonyName) {
+    if (Model.getColony().name === colonyName) {
       disableEverything()
     }
     addChatMessage(colonyName + ' have died')
@@ -362,9 +361,7 @@ let createView = () => {
   }
 
   return {
-    setupEvent,
-    setupClient,
-    setupMap,
+    setup,
     updateInventory,
     updateTooltip,
     createTooltip,
