@@ -39,23 +39,24 @@ let createView = () => {
       let amount = $('#trade-amount').val()
       // ignore anything that isn't a positive number
       if (amount > 0) {
-        let sendTrade = () => {
+        let sendTransfer = () => {
           client.send('trade', {
             colony: $('#trade-colony').val(),
             material: $('#trade-material').val(),
             amount: amount
           })
         }
+        // confirm if it would bring the participant below the critical limit
         if (Model.getColony().inventory.find(material => material.name === $('#trade-material').val()).amount - amount < inventoryCriticalLimit) {
           $.confirm({
             title: 'Your inventory will be lower than the critical limit, continue?',
             buttons: {
-              confirm: () => { sendTrade() },
+              confirm: () => { sendTransfer() },
               cancel: () => {}
             }
           })
         } else {
-          sendTrade()
+          sendTransfer()
         }
       }
     })
@@ -66,24 +67,44 @@ let createView = () => {
     $('#production-button').mouseup(e => {
       e.preventDefault()
       if (productionCountDown === 0 && $('#production-amount').val() > 0) {
-        client.send('produce', {
-          index: $('#production-material').val(),
-          amount: $('#production-amount').val()
-        })
-        productionCountDown = Model.getColony().specilisations[$('#production-material').val()].transform_rate
-        productionCountTotal = productionCountDown
-        $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-        productionCountDown--
-        // countdown loop
-        let intervalRef = setInterval(() => {
-          if (productionCountDown <= 0) {
-            $('#production-progress').html('production finished')
-            clearInterval(intervalRef)
-          } else {
-            $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-            productionCountDown--
-          }
-        }, 1000)
+        let index = $('#production-material').val()
+        let amount = $('#production-amount').val()
+        
+        let startProduction = () => {
+          client.send('produce', {
+            index: index,
+            amount: amount
+          })
+          productionCountDown = Model.getColony().specilisations[index].transform_rate
+          productionCountTotal = productionCountDown
+          $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+          productionCountDown--
+          // countdown loop
+          let intervalRef = setInterval(() => {
+            if (productionCountDown <= 0) {
+              $('#production-progress').html('production finished')
+              clearInterval(intervalRef)
+            } else {
+              $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+              productionCountDown--
+            }
+          }, 1000)
+        }
+
+        console.log(Model.getColony().inventory.find(material => material.name === Model.getColony().specilisations[index].input).amount)
+        console.log(amount)
+
+        if (Model.getColony().inventory.find(material => material.name === Model.getColony().specilisations[index].input).amount - amount < inventoryCriticalLimit) {
+          $.confirm({
+            title: 'Your inventory will be lower than the critical limit, continue?',
+            buttons: {
+              confirm: () => { startProduction() },
+              cancel: () => {}
+            }
+          })
+        } else {
+          startProduction()
+        }
       }
     })
     for (let i = 0; i < Model.getColony().specilisations.length; i++) {
