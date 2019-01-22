@@ -45,6 +45,9 @@ let events = {
   },
   'logged': (admin, data) => {
     admin.getChat().append(data)
+  },
+  'eventsSoFar': (admin, events) => {
+    events.forEach(event => admin.getChat().append(event))
   }
 }
 let commands = {}
@@ -82,3 +85,5 @@ $('#buttonDownloadCSV').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('reqCSV')
 })
+
+admin.sendCommand('sendEventsSoFar')

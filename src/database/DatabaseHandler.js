@@ -94,6 +94,8 @@ let createDatabaseHandler = () => {
     db.get('surveys').push(survey).write()
   }
 
+  let getEvents = () => db.get('events').value()
+
   // export the log for the admin client
   let getData = () => {
     // generate output-json
@@ -117,6 +119,7 @@ let createDatabaseHandler = () => {
     saveMouseOverColony,
     saveEvent,
     saveSurvey,
+    getEvents,
     getData
   }
 }

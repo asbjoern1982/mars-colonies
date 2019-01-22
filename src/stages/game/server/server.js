@@ -7,7 +7,11 @@ let colonies = []
 let gameloopRef
 
 export default {
-  commands: {},
+  commands: {
+    'sendEventsSoFar': (server) => {
+      server.send('eventsSoFar', Logger.getEvents().map(event => event.data)).toAdmin()
+    }
+  },
   events: {
     'mouseover-colony': (server, clientId, target) => {
       let targetId = colonies.find(colony => colony.name === target).id

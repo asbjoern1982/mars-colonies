@@ -72,6 +72,8 @@ let createLogger = () => {
     return files
   }
 
+  let getEvents = () => DatabaseHandler.getEvents()
+
   return {
     logChat,
     logProduction,
@@ -81,7 +83,8 @@ let createLogger = () => {
     logEvent,
     logSurvey,
     exportAsJSON,
-    exportAsCSV
+    exportAsCSV,
+    getEvents
   }
 }
 
