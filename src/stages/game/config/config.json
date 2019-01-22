@@ -1,4 +1,5 @@
 {
+  "skipSurveys": true,
   "participants": 3,
   "materials": [
     {"name": "Palladium", "depletion_rate": 1},

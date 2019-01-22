@@ -69,7 +69,7 @@ let createView = () => {
       if (productionCountDown === 0 && $('#production-amount').val() > 0) {
         let index = $('#production-material').val()
         let amount = $('#production-amount').val()
-        
+
         let startProduction = () => {
           client.send('produce', {
             index: index,

@@ -1,5 +1,5 @@
 import createServer, { Network, Events } from 'monsterr'
-// import presurvey from './src/stages/presurvey/server/server'
+import presurvey from './src/stages/presurvey/server/server'
 import game from './src/stages/game/server/server'
 import {Logger} from './src/database/logger'
 import config from './src/stages/game/config/config.json'
@@ -8,8 +8,8 @@ import {NetworkModule} from './src/modules/NetworkModule'
 import {CPUModule} from './src/modules/CPUModule'
 import {spawn} from 'child_process'
 
-const stages = [
-  // presurvey,
+const stages = config.skipSurveys ? [game] : [
+  presurvey,
   game
 ]
 
