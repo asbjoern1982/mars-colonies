@@ -1,8 +1,9 @@
 import Chart from 'chart.js'
 
 let createCPUModule = () => {
+  const delay = 500 // ms
   let bufferCPUModule = []
-  let colors = [
+  const colors = [
     'rgb(100, 255, 255)',
     'rgb(255, 255, 100)',
     'rgb(255, 100, 255)',
@@ -15,7 +16,7 @@ let createCPUModule = () => {
     'rgb(255, 0, 255)'
   ]
   let chart
-  let msgName = 'CPUModuleUpdate'
+  const msgName = 'CPUModuleUpdate'
 
   let addHTML = (admin) => {
     // inject the html in the page
@@ -66,9 +67,9 @@ let createCPUModule = () => {
       let beginning = Date.now()
       setTimeout(() => {
         let now = Date.now()
-        let dif = now - beginning - 250
+        let dif = now - beginning - delay
         client.send(msgName, dif)
-      }, 250)
+      }, delay)
     }, 5000)
   }
 
@@ -104,7 +105,7 @@ let createCPUModule = () => {
   }
 
   let addServerEvents = (events) => {
-    events[msgName] = (server, clientId, dif) => { // TODO should be payload?
+    events[msgName] = (server, clientId, dif) => {
       server.send(msgName, {clientId: clientId, dif: dif}).toAdmin()
       server.log({clientId: clientId, dif: dif}, 'cpu')
     }

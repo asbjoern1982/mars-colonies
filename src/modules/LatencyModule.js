@@ -104,8 +104,11 @@ let createLatencyModule = () => {
 
   let addServerCommands = (commands) => {
     commands[msgName] = (server) => {
-      server.send(msgName, server.getLatencies()).toAdmin()
-      server.log(server.getLatencies(), 'latency')
+      let latencies = server.getLatencies()
+      server.send(msgName, latencies).toAdmin()
+      Object.keys(latencies).forEach(key => {
+        server.log(key + ':' + latencies[key].getLatest(), 'latency')
+      })
     }
   }
 
