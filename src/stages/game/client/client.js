@@ -56,6 +56,12 @@ export default {
   commands: commands,
   events: events,
   setup: (client) => {
+    let link = document.querySelector("link[rel*='icon']") || document.createElement('link')
+    link.type = 'image/x-icon'
+    link.rel = 'shortcut icon'
+    link.href = './../../../assets/favicon.ico'
+    document.getElementsByTagName('head')[0].appendChild(link)
+
     // when the client is ready to start the game, tell the server
     client.send('ready')
   },
