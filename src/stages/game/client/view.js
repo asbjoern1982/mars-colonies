@@ -194,13 +194,10 @@ let createView = () => {
       let radius = 80
       let x = Math.sin(angle) * radius + centerX
       let y = Math.cos(angle) * radius + centerY
-      let rect = new fabric.Circle({
+      let node = new fabric.Circle({
         left: x,
         top: y,
         fill: 'rgb(100,100,100)',
-        // width: 20,
-        // height: 20,
-        // angle: 45,
         radius: 10,
         originX: 'center',
         originY: 'center',
@@ -208,9 +205,25 @@ let createView = () => {
         stroke: 'black',
         strokeWidth: 1
       })
-      canvas.add(rect)
       let colony = Model.getOtherColonies()[i]
-      colony['node'] = rect
+      colony['node'] = node
+
+      let aAngle = Math.PI * 2 * Math.random()
+      let aX = Math.sin(aAngle) * 10 + x
+      let aY = Math.cos(aAngle) * 10 + y
+      let anode = new fabric.Circle({
+        left: aX,
+        top: aY,
+        fill: 'rgb(100,100,100)',
+        radius: 5,
+        originX: 'center',
+        originY: 'center',
+        selectable: false,
+        stroke: 'black',
+        strokeWidth: 1
+      })
+      canvas.add(anode)
+      canvas.add(node)
 
       let xOffset = (x - centerX) / 6
       let yOffset = (y - centerY) / 6
