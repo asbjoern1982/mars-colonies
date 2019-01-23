@@ -137,6 +137,7 @@ export default {
         let stageNo = server.getCurrentStage().number
         server.send(Events.START_STAGE, stageNo).toClient(clientId)
 
+        /*
         let reconnectinColony = colonies.find(colony => colony.id === clientId)
         let simplifiedColonies = []
         colonies.filter(colony => colony.game === reconnectinColony.game).forEach(colony => {
@@ -163,6 +164,7 @@ export default {
           colonies: simplifiedColonies
         }
         server.send('setup', data).toClient(clientId)
+        */
       }, 1000)
     }
   },
