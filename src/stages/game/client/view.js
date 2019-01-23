@@ -167,16 +167,19 @@ let createView = () => {
     canvas.clear()
 
     let centerX = 590 / 2
-    let centerY = 320 / 2 - 10
+    let centerY = 320 / 2
 
     // the center colony
-    let centerNode = new fabric.Rect({
+    let centerNode = new fabric.Circle({
       left: centerX,
       top: centerY,
       fill: 'grey',
-      width: 20,
-      height: 20,
-      angle: 45,
+      // width: 20,
+      // height: 20,
+      // angle: 45,
+      radius: 10,
+      originX: 'center',
+      originY: 'center',
       selectable: false,
       stroke: 'black',
       strokeWidth: 1
@@ -185,27 +188,45 @@ let createView = () => {
 
     // the surrounding colonies
     // as the game is not designed for more than 6 to 10 players, this is enough, any more nodes than these will be Grey
-    let colors = ['Green', 'Red', 'Blue', 'Pink', 'Yellow', 'Indigo', 'Violet', 'Orange', 'Cyan', 'LightGreen', 'CadetBlue', 'Brown', 'Lime', 'Wheat', 'Grey']
     let angleBetweenColonies = 2 * Math.PI / Model.getOtherColonies().length
     for (let i = 0; i < Model.getOtherColonies().length; i++) {
       let angle = angleBetweenColonies * i + Math.PI / 3.5
       let radius = 80
       let x = Math.sin(angle) * radius + centerX
       let y = Math.cos(angle) * radius + centerY
-      let colorIndex = i < colors.length ? i : colors.length - 1
-      let rect = new fabric.Rect({
+      let rect = new fabric.Circle({
         left: x,
         top: y,
-        fill: colors[colorIndex],
-        width: 20,
-        height: 20,
-        angle: 45,
+        fill: 'rgb(100,100,100)',
+        // width: 20,
+        // height: 20,
+        // angle: 45,
+        radius: 10,
+        originX: 'center',
+        originY: 'center',
         selectable: false,
         stroke: 'black',
         strokeWidth: 1
       })
       canvas.add(rect)
-      Model.getOtherColonies()[i]['node'] = rect
+      let colony = Model.getOtherColonies()[i]
+      colony['node'] = rect
+
+      let xOffset = (x - centerX) / 6
+      let yOffset = (y - centerY) / 6
+
+      let name = new fabric.Text(colony.name, {
+        left: x + xOffset,
+        top: y + yOffset,
+        originX: xOffset >= 0 ? 'left' : 'right',
+        originY: yOffset >= 0 ? 'top' : 'bottom',
+        fontSize: 16,
+        shadow: 'rgba(0,0,0,0.3) 0px 0px 5px',
+        // fontWeight: 'bold',
+        selectable: false,
+        fill: 'white'
+      })
+      canvas.add(name)
     }
 
     // on mouse over a colony that is not our own, a tooltip is shown with information
@@ -233,7 +254,7 @@ let createView = () => {
     // creating trade routes for displaying visual cues when a transfer of material has happened
     tradeRoutes = []
     let doneRoutes = []
-    let yOffset = 15
+    let yOffset = 0
     Model.getOtherColonies().forEach(startColony => {
       // route to the center
       let start = {x: startColony.node.left, y: startColony.node.top + yOffset}
@@ -305,7 +326,7 @@ let createView = () => {
         }
       })
     })
-    canvas.getObjects().filter(object => object.type === 'rect').forEach(rect => canvas.bringToFront(rect))
+    canvas.getObjects().filter(object => object.type === 'circle').forEach(circle => canvas.bringToFront(circle))
   }
 
   // update this colonies inventory
@@ -329,7 +350,7 @@ let createView = () => {
 
   // create and return a tooltip with the appropiate information
   let createTooltip = (colony, left, top) => {
-    let height = 16 + (colony.inventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + 3
+    let height = (colony.inventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + 3
     let adjustedTop = top + height + 4 > canvas.height ? canvas.height - height - 4 : top
     let tooltipBackground = new fabric.Rect({
       left: left,
@@ -342,8 +363,8 @@ let createView = () => {
       strokeWidth: 1
     })
     // only display information if it is pressen on the colony
-    let text = colony.name +
-      (colony.inventory ? '\nInventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') : '') +
+    let text = // colony.name +
+      (colony.inventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') : '') +
       (colony.specilisations ? '\nSpecilisations:\n' + colony.specilisations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') : '')
     let tooltipText = new fabric.Text(text, {
       left: left + 3,
