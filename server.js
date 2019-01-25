@@ -61,10 +61,12 @@ monsterr.run()
 console.log('waiting for ' + config.participants + ' players')
 
 if (process.argv.includes('bots')) {
+  let spawninfo = ['./src/bot.js']
+  if (process.argv.includes('serv')) spawninfo.push('serv')
   // spawn bot-threads, use "config.participants - 1" for debuging with only 1 client
   let numberOfBots = config.participants - 1
   for (let i = 0; i < numberOfBots; i++) {
     console.log('spawning bot #' + i)
-    spawn('node', ['./src/bot.js'])
+    spawn('node', spawninfo)
   }
 }

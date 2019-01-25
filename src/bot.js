@@ -1,5 +1,6 @@
 const io = require('socket.io-client')
-const socket = io('http://localhost:3000/clients').connect()
+const port = process.argv.includes('serv') ? 8080 : 3000
+const socket = io('http://localhost:' + port + '/clients').connect()
 
 socket.on('connect', () => console.log('connected'))
 socket.on('disconnect', () => {
