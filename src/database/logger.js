@@ -65,7 +65,11 @@ let createLogger = () => {
       let log = data[logName]
       if (log.length > 0) {
         files[logName] = Object.keys(log[0]).join() + '\n' +
-          log.map(logEntry => Object.values(logEntry).join()).join('\n')
+          log.map(logEntry =>
+            Object.values(logEntry)
+              .map(val => val.includes && val.includes(',') ? '"' + val + '"' : val) // surround with " if a comma is present, ei in chat
+              .join()
+          ).join('\n')
       }
     })
     files['surveys'] = surveyCSV
