@@ -87,45 +87,13 @@ export default {
       let reportingColony = colonies.find(colony => colony.id === clientId)
       reportingColony.ready = true
 
-      let allReady = true
-      colonies.forEach(colony => {
-        if (!colony.ready) {
-          allReady = false
-        }
-      })
-      if (allReady) {
-        console.log('All clients have reported ready in game ' + reportingColony.game)
-        // only send what is needed
-        let simplifiedColonies = []
-        colonies.forEach(colony => {
-          let simplifiedColony = {
-            name: colony.name
-          }
-          if (config.tooltip.includes('inventories')) {
-            simplifiedColony.inventory = colony.inventory
-          }
-          if (config.tooltip.includes('specilisations')) {
-            simplifiedColony.specilisations = colony.specilisations
-          }
-          simplifiedColonies.push(simplifiedColony)
-        })
-        colonies.forEach(colony => {
-          let data = {
-            materials: config.materials,
-            chat: config.chat,
-            inventoryBonusLimit: config.inventoryBonusLimit,
-            inventoryCriticalLimit: config.inventoryCriticalLimit,
-            yourName: colony.name,
-            yourSpecilisations: colony.specilisations,
-            yourStartingInventory: colony.inventory,
-            colonies: simplifiedColonies
-          }
-          server.send('setup', data).toClient(colony.id)
-        })
-      }
+      // if the game is running, the player is reconnecting and just needs the data
+      if (gameloopRef) {
+        sendSetupData(server, reportingColony)
+        // else, if all participants are ready, start the game
+      } else if (colonies.every(colony => colony.ready)) {
+        colonies.forEach(colony => sendSetupData(server, colony))
 
-      // start the game if all participants are ready
-      if (colonies.every(colony => colony.ready)) {
         gameloopRef = setInterval(() => gameloop(server), 1000)
         Logger.logEvent(server, 'gameloop started')
       }
@@ -191,6 +159,35 @@ export default {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
   },
   options: {}
+}
+
+let sendSetupData = (server, colony) => {
+  // only send what is needed
+  let simplifiedColonies = []
+  colonies.forEach(colony => {
+    let simplifiedColony = {
+      name: colony.name
+    }
+    if (config.tooltip.includes('inventories')) {
+      simplifiedColony.inventory = colony.inventory
+    }
+    if (config.tooltip.includes('specilisations')) {
+      simplifiedColony.specilisations = colony.specilisations
+    }
+    simplifiedColonies.push(simplifiedColony)
+  })
+
+  let data = {
+    materials: config.materials,
+    chat: config.chat,
+    inventoryBonusLimit: config.inventoryBonusLimit,
+    inventoryCriticalLimit: config.inventoryCriticalLimit,
+    yourName: colony.name,
+    yourSpecilisations: colony.specilisations,
+    yourStartingInventory: colony.inventory,
+    colonies: simplifiedColonies
+  }
+  server.send('setup', data).toClient(colony.id)
 }
 
 let tickcount = 0
