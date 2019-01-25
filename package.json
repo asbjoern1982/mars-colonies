@@ -10,7 +10,8 @@
     "watch-server": "parcel watch server.js --target node --log-level 2",
     "dev": "parallelshell \"npm run watch-client\" \"npm run watch-admin-client\" \"npm run watch-server\" \"nodemon dist/server.js --watch dist/\"",
     "start": "npm run build && node dist/server.js",
-    "bots": "npm run build && node dist/server.js bots"
+    "bots": "npm run build && node dist/server.js bots",
+    "server": "npm run build && node dist/server.js serv"
   },
   "keywords": [],
   "author": "",

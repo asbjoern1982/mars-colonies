@@ -41,15 +41,20 @@ let network = Network.groups(config.participants, config.players.length)
 NetworkModule.addServerCommands(commands, network)
 CPUModule.addServerEvents(events)
 
+let options = {
+  clientPassword: undefined, // can specify client password
+  adminPassword: 'sEcr3t' // and admin password
+}
+if (process.argv.includes('serv')) {
+  options.port = 8080
+}
+
 const monsterr = createServer({
   network: network,
   events,
   commands,
   stages,
-  options: {
-    clientPassword: undefined, // can specify client password
-    adminPassword: 'sEcr3t' // and admin password
-  }
+  options: options
 })
 
 monsterr.run()
