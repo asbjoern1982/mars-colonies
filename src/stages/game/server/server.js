@@ -105,35 +105,6 @@ export default {
       setTimeout(() => {
         let stageNo = server.getCurrentStage().number
         server.send(Events.START_STAGE, stageNo).toClient(clientId)
-
-        /*
-        let reconnectinColony = colonies.find(colony => colony.id === clientId)
-        let simplifiedColonies = []
-        colonies.filter(colony => colony.game === reconnectinColony.game).forEach(colony => {
-          let simplifiedColony = {
-            name: colony.name
-          }
-          if (config.tooltip.includes('inventories')) {
-            simplifiedColony.inventory = colony.inventory
-          }
-          if (config.tooltip.includes('specilisations')) {
-            simplifiedColony.specilisations = colony.specilisations
-          }
-          simplifiedColonies.push(simplifiedColony)
-        })
-
-        let data = {
-          materials: config.materials,
-          chat: config.chat,
-          inventoryBonusLimit: config.inventoryBonusLimit,
-          inventoryCriticalLimit: config.inventoryCriticalLimit,
-          yourName: reconnectinColony.name,
-          yourSpecilisations: reconnectinColony.specilisations,
-          yourStartingInventory: reconnectinColony.inventory,
-          colonies: simplifiedColonies
-        }
-        server.send('setup', data).toClient(clientId)
-        */
       }, 1000)
     }
   },
