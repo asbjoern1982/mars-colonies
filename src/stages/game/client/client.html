@@ -1,24 +1,30 @@
 <div class="bg">
+  <div class="row"><h1 class="mars-title">Controle Panel for: Colony Name 6</h1></div>
+
   <div class="row">
 
-    <div class="col-md">
-      <div class="windowbg" id="map-view">
-        <canvas id="map-canvas">
+    <div class="col-lg-6">
+      <div class="col-md-12 windowbg" id="map-view">
+        <div class="title">Map</div>
+        <div id="map-container">
+          <canvas id="map-canvas">
+        </div>
       </div>
 
-      <div class="windowbg" id="chat-view">
+      <div class="col-md-12 windowbg" id="chat-view">
+        <div class="title">Chat</div>
         <div>
           <textarea class="form-control" id="chat-log" disabled></textarea>
         </div>
         <div class="form-row" id="chat-input-group">
-          <div class="input-group" id="chat-input-bar">
-          </div>
+          <div class="input-group" id="chat-input-bar"></div>
         </div>
       </div>
     </div>
 
-    <div class="col-md">
-      <div class="windowbg" id="trade-view">
+    <div class="col-lg-6">
+      <div class="col-md-12 windowbg" id="trade-view">
+        <div class="title">Trade</div>
         <div id="trade-input">
           <div class="form-row" id="trade-input-group">
             <div class="w-25">
@@ -39,7 +45,8 @@
         </div>
       </div>
 
-      <div class="windowbg" id="production-view">
+      <div class="col-md-12 windowbg" id="production-view">
+        <div class="title">Production</div>
         <div id="production-input">
           <div class="form-row" id="production-input-group">
             <div class="w-50">
@@ -56,7 +63,8 @@
         <div id="production-progress">no production</div>
       </div>
 
-      <div class="windowbg" id="inventory-view">
+      <div class="col-md-12 windowbg" id="inventory-view">
+        <div class="title">Inventory</div>
         <table class="table table-dark" id="inventory">
           <thead>
             <tr>

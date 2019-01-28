@@ -160,14 +160,14 @@ let createView = () => {
   let setupMap = (client) => {
     canvas = new fabric.Canvas('map-canvas', {
       selection: false,
-      width: 590,
-      height: 320,
+      width: $('#map-canvas').width(),
+      height: $('#map-canvas').height(),
       backgroundColor: null
     })
     canvas.clear()
 
-    let centerX = 590 / 2
-    let centerY = 320 / 2
+    let centerX = canvas.width / 2
+    let centerY = canvas.height / 2
 
     // the center colony
     let centerNode = new fabric.Circle({
