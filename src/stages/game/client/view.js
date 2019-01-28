@@ -173,9 +173,6 @@ let createView = () => {
       left: centerX,
       top: centerY,
       fill: 'grey',
-      // width: 20,
-      // height: 20,
-      // angle: 45,
       radius: 10,
       originX: 'center',
       originY: 'center',
@@ -184,6 +181,7 @@ let createView = () => {
       strokeWidth: 1
     })
     canvas.add(centerNode)
+    Model.getColony()['node'] = centerNode
 
     // the surrounding colonies
     // as the game is not designed for more than 6 to 10 players, this is enough, any more nodes than these will be Grey
@@ -384,7 +382,8 @@ let createView = () => {
       width: 100,
       height: 100,
       fontSize: 12,
-      fill: 'white'
+      fill: 'white',
+      linethrough: colony.dead
     })
     let newtooltip = new fabric.Group([tooltipBackground, tooltipText])
     newtooltip.colony = colony
@@ -406,9 +405,7 @@ let createView = () => {
       canvas.requestRenderAll()
     }, 1000)
 
-    let eventLog = $('#event-log')
-    eventLog.append(new Date().toLocaleTimeString() + '> transfer from ' + sendingColony.name + ' to ' + receivingColony.name + ' of ' + transfer.amount + ' ' + transfer.material + '\n')
-    eventLog.scrollTop(eventLog[0].scrollHeight)
+    logEvent(sendingColony.name + ' transfered  ' + transfer.amount + ' ' + transfer.material + ' to ' + receivingColony.name)
   }
 
   let addChatMessage = (message) => {
@@ -417,19 +414,34 @@ let createView = () => {
     chatLog.scrollTop(chatLog[0].scrollHeight)
   }
 
+  let logEvent = (message) => {
+    let eventLog = $('#event-log')
+    eventLog.append(new Date().toLocaleTimeString() + '>' + message + '\n')
+    eventLog.scrollTop(eventLog[0].scrollHeight)
+  }
+
   let gameover = (status) => {
     // when the game is over, ei time is up, the client receives a 'gameover'
     // The 'status' contains what points each colony earned
-    addChatMessage('game over\n' + status)
+    logEvent('game over\n' + status)
     disableEverything()
   }
 
   let killColony = (colonyName) => {
     // when a colony runs out of a material, it dies
+    let node
     if (Model.getColony().name === colonyName) {
       disableEverything()
+      node = Model.getColony().node
+    } else {
+      node = Model.getOtherColonies().find(colony => colony.name === colonyName).node
     }
-    addChatMessage(colonyName + ' have died')
+    node.set('fill', 'rgb(179, 0, 0)')
+    // canvas.remove(node)
+    // canvas.add(node)
+    canvas.requestRenderAll()
+
+    logEvent(colonyName + ' have died')
   }
 
   // when this colony is dead or the game is over, disable all buttons and
