@@ -10,6 +10,7 @@ let createView = () => {
 
   let tooltip
   let canvas
+  let resizingCanvas = false
 
   let setup = (client, data) => {
     setupInterface(client, data)
@@ -33,11 +34,11 @@ let createView = () => {
     document.getElementsByTagName('head')[0].appendChild(script)
 
     // -------------------- TRADE --------------------
-    $('#trade-button').mouseup(e => {
-      e.preventDefault()
+    let tradeAction = () => {
       let amount = $('#trade-amount').val()
       // ignore anything that isn't a positive number
       if (amount > 0) {
+        $('#trade-amount').val('')
         let sendTransfer = () => {
           client.send('trade', {
             colony: $('#trade-colony').val(),
@@ -58,17 +59,25 @@ let createView = () => {
           sendTransfer()
         }
       }
+    }
+    $('#trade-button').mouseup(e => {
+      e.preventDefault()
+      tradeAction()
+    })
+    $('#trade-amount').keypress((e) => {
+      if (e.which === 13) {
+        tradeAction()
+      }
     })
     Model.getOtherColonies().forEach(colony => $('#trade-colony').append('<option>' + colony.name + '</option>'))
     Model.getMaterials().forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
 
     // -------------------- PRODUCTION --------------------
-    $('#production-button').mouseup(e => {
-      e.preventDefault()
+    let productionAction = () => {
       if (productionCountDown === 0 && $('#production-amount').val() > 0) {
         let index = $('#production-material').val()
         let amount = $('#production-amount').val()
-
+        $('#production-amount').val('')
         let startProduction = () => {
           client.send('produce', {
             index: index,
@@ -90,9 +99,6 @@ let createView = () => {
           }, 1000)
         }
 
-        console.log(Model.getColony().inventory.find(material => material.name === Model.getColony().specilisations[index].input).amount)
-        console.log(amount)
-
         if (Model.getColony().inventory.find(material => material.name === Model.getColony().specilisations[index].input).amount - amount < inventoryCriticalLimit) {
           $.confirm({
             title: 'Your inventory will be lower than the critical limit, continue?',
@@ -104,6 +110,15 @@ let createView = () => {
         } else {
           startProduction()
         }
+      }
+    }
+    $('#production-button').mouseup(e => {
+      e.preventDefault()
+      productionAction()
+    })
+    $('#production-amount').keypress((e) => {
+      if (e.which === 13) {
+        productionAction()
       }
     })
     for (let i = 0; i < Model.getColony().specilisations.length; i++) {
@@ -337,6 +352,17 @@ let createView = () => {
       })
     })
     canvas.getObjects().filter(object => object.type === 'circle').forEach(circle => canvas.bringToFront(circle))
+    $(window).resize(() => {
+      $('#map-canvas').remove()
+      $('#map-container').html('<canvas id="map-canvas">')
+      if (!resizingCanvas) {
+        resizingCanvas = true
+        setTimeout(() => {
+          setupMap(client)
+          resizingCanvas = false
+        }, 500)
+      }
+    })
   }
 
   // update this colonies inventory
@@ -437,10 +463,7 @@ let createView = () => {
       node = Model.getOtherColonies().find(colony => colony.name === colonyName).node
     }
     node.set('fill', 'rgb(179, 0, 0)')
-    // canvas.remove(node)
-    // canvas.add(node)
     canvas.requestRenderAll()
-
     logEvent(colonyName + ' have died')
   }
 
