@@ -50,7 +50,8 @@ export default {
         server.send('trade', {
           sender: colonies.find(colony => colony.id === clientId).name,
           receiver: transfer.colony,
-          amount: transfer.amount
+          amount: transfer.amount,
+          material: transferedAmount
         }).toClients(colonies.filter(colony => colony.game === sendingColony.game).map(colony => colony.id))
         sendColoniesInventories(server)
       }, config.trade_delay)

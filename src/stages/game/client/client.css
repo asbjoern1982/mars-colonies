@@ -99,3 +99,10 @@ td {
     opacity: 0;
   }
 }
+
+#event-log {
+    height: 205px;
+    background-color: rgb(100, 100, 100);
+    color: white;
+    resize: none;
+}

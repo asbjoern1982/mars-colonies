@@ -1,5 +1,4 @@
 import {Model} from './model'
-// import confirm from 'jquery-confirm'
 
 let createView = () => {
   let inventoryBonusLimit
@@ -406,6 +405,10 @@ let createView = () => {
       route.stroke = 'black'
       canvas.requestRenderAll()
     }, 1000)
+
+    let eventLog = $('#event-log')
+    eventLog.append(new Date().toLocaleTimeString() + '> transfer from ' + sendingColony.name + ' to ' + receivingColony.name + ' of ' + transfer.amount + ' ' + transfer.material + '\n')
+    eventLog.scrollTop(eventLog[0].scrollHeight)
   }
 
   let addChatMessage = (message) => {
