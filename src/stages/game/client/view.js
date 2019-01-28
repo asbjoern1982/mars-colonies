@@ -51,7 +51,14 @@ let createView = () => {
           $.confirm({
             title: 'Your inventory will be lower than the critical limit, continue?',
             buttons: {
-              confirm: () => { sendTransfer() },
+              confirm: {
+                text: 'confirm',
+                btnClass: 'btn-blue',
+                keys: ['enter'],
+                action: () => {
+                  sendTransfer()
+                }
+              },
               cancel: () => {}
             }
           })
