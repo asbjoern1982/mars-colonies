@@ -15,6 +15,12 @@ let createView = () => {
   let setup = (client, data) => {
     setupInterface(client, data)
     setupMap(client)
+
+    $('.bg').append('<audio loop autoplay id="backgroundsound">\n' +
+      '<source src="./../../../assets/08-Brian-Cook_raw_velocity_0.6_normalisedx1_2octavesUp_03.wav" type="audio/wav">\n' +
+      '</audio>')
+    // let backgroundMusic = $('#backgroundsound')
+    // backgroundMusic.play()
   }
 
   let setupInterface = (client, data) => {
