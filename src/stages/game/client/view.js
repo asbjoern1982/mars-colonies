@@ -33,6 +33,8 @@ let createView = () => {
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js'
     document.getElementsByTagName('head')[0].appendChild(script)
 
+    $('#colony-title').html('Controle Panel for: ' + Model.getColony().name)
+
     // -------------------- TRADE --------------------
     let tradeAction = () => {
       let amount = $('#trade-amount').val()

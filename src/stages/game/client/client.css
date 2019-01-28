@@ -27,6 +27,16 @@ body, html {
   color: white
 }
 
+
+#colony-title-container {
+}
+
+#colony-title {
+  font-size: 20px;
+  text-align: center;
+  width: 450px;
+}
+
 #map-view {
   height: 354px;
 }
