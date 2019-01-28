@@ -34,7 +34,7 @@ let createLatencyModule = () => {
     if ($('#graphs').length) {
       $('#graphs').append(htmlGraph)
     } else {
-      $('#admin').append('<div class="container"><div class="row" id="graphs">' + htmlGraph + '</div></div>')
+      $('#admin').append('<div class="container"><div class="row" style="background-color: white;" id="graphs">' + htmlGraph + '</div></div>')
     }
   }
 

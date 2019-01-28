@@ -76,6 +76,11 @@ $('#buttonNext').mouseup(e => {
   admin.sendCommand('next')
 })
 
+$('#buttonEnd').mouseup(e => {
+  e.preventDefault()
+  admin.sendCommand('endGame')
+})
+
 $('#buttonDownloadJSON').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('reqJSON')

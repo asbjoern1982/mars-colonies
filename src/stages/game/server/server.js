@@ -10,6 +10,9 @@ export default {
   commands: {
     'sendEventsSoFar': (server) => {
       server.send('eventsSoFar', Logger.getEvents().map(event => event.data)).toAdmin()
+    },
+    'endGame': (server) => {
+      tickcount = config.roundLengthInSeconds
     }
   },
   events: {

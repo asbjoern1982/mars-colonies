@@ -24,7 +24,7 @@ let createCPUModule = () => {
     if ($('#graphs').length) {
       $('#graphs').append(htmlGraph)
     } else {
-      $('#admin').append('<div class="container"><div class="row" id="graphs">' + htmlGraph + '</div></div>')
+      $('#admin').append('<div class="container"><div class="row" id="graphs" style="background-color: white;">' + htmlGraph + '</div></div>')
     }
   }
 
