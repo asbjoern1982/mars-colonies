@@ -19,8 +19,9 @@ let createView = () => {
     $('.bg').append('<audio loop autoplay id="backgroundsound">\n' +
       '<source src="./../../../assets/08-Brian-Cook_raw_velocity_0.6_normalisedx1_2octavesUp_03.wav" type="audio/wav">\n' +
       '</audio>')
-    // let backgroundMusic = $('#backgroundsound')
-    // backgroundMusic.play()
+    $('.bg').append('<audio loop id="criticalAlarm">\n' +
+      '<source src="./../../../assets/ISS-Emergency-short.wav" type="audio/wav">\n' +
+      '</audio>')
   }
 
   let setupInterface = (client, data) => {
@@ -387,6 +388,15 @@ let createView = () => {
       let amountColor = row.amount > inventoryBonusLimit ? 'inventory-bonus' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
       $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td class="' + amountColor + '">' + row.amount + '</td></tr>')
     })
+    checkInventoryAlarm()
+  }
+
+  let checkInventoryAlarm = () => {
+    if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit)) {
+      $('#criticalAlarm').trigger('play')
+    } else {
+      $('#criticalAlarm').trigger('pause')
+    }
   }
 
   // if there is a tooltip showing, it should be updated, this is done by removing the old and creating a new one
