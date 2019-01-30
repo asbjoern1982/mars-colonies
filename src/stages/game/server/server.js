@@ -155,6 +155,7 @@ let sendSetupData = (server, colony) => {
   let data = {
     materials: config.materials,
     chat: config.chat,
+    sounds: config.sounds,
     inventoryBonusLimit: config.inventoryBonusLimit,
     inventoryCriticalLimit: config.inventoryCriticalLimit,
     yourName: colony.name,

@@ -6,6 +6,7 @@
     {"name": "Selenium", "depletion_rate": 1},
     {"name": "Tungsten", "depletion_rate": 1}
   ],
+  "sounds": false,
   "roundLengthInSeconds":  1200,
   "inventoryBonusLimit": 500,
   "inventoryCriticalLimit": 100,
