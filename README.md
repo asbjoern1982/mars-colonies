@@ -14,3 +14,7 @@ In the root server.js the number of bots can be set, should be 0 if not debuggin
 <code>let numberOfBots = 0</code><br><br>
 For fast getting the game up and running with only 1 client<br>
 <code>let numberOfBots = config.participants - 1</code>
+
+# credit for sounds and images
+sounds: https://www.nasa.gov/connect/sounds/index.html
+images: https://en.wikipedia.org/wiki/Mars
