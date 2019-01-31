@@ -394,6 +394,23 @@ let createView = () => {
       $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td class="' + amountColor + '">' + row.amount + '</td></tr>')
     })
     checkInventoryAlarm()
+
+    // change the colony to red on the map if it has a critical inventory
+    if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit)) {
+      Model.getColony().node.set('fill', 'red')
+    } else {
+      Model.getColony().node.set('fill', 'grey')
+    }
+    if (Model.getOtherColonies().find(colony => colony.inventory)) {
+      Model.getOtherColonies().forEach(colony => {
+        if (colony.inventory.some(row => row.amount < inventoryCriticalLimit)) {
+          colony.node.set('fill', 'red')
+        } else {
+          colony.node.set('fill', 'rgb(100,100,100)')
+        }
+      })
+    }
+    canvas.requestRenderAll()
   }
 
   let checkInventoryAlarm = () => {
@@ -495,7 +512,7 @@ let createView = () => {
     } else {
       node = Model.getOtherColonies().find(colony => colony.name === colonyName).node
     }
-    node.set('fill', 'rgb(179, 0, 0)')
+    node.set('fill', 'black')
     canvas.requestRenderAll()
     logEvent(colonyName + ' have died')
   }
