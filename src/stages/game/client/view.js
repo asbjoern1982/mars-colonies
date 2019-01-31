@@ -16,13 +16,16 @@ let createView = () => {
     setupInterface(client, data)
     setupMap(client)
 
-    if (data.sounds) {
+    if (data.soundVolume > 0) {
       $('.bg').append('<audio loop autoplay id="backgroundsound">\n' +
         '<source src="./../../../assets/08-Brian-Cook_raw_velocity_0.6_normalisedx1_2octavesUp_03.wav" type="audio/wav">\n' +
         '</audio>')
       $('.bg').append('<audio loop id="criticalAlarm">\n' +
         '<source src="./../../../assets/ISS-Emergency-short.wav" type="audio/wav">\n' +
         '</audio>')
+      $('audio').prop('volume', data.soundVolume)
+      // $('#backgroundsound').set('volume', 1)
+      // $('#criticalAlarm').set('volume', data.soundVolume)
     }
   }
 
@@ -394,7 +397,7 @@ let createView = () => {
   }
 
   let checkInventoryAlarm = () => {
-    let audioTag = $('criticalAlarm')
+    let audioTag = $('#criticalAlarm')
     if (audioTag) {
       if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit)) {
         audioTag.trigger('play')
