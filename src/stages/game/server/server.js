@@ -5,6 +5,7 @@ import config from './../config/config.json'
 let numberOfGames = Math.floor(config.participants / config.players.length) // ignores leftover participants
 let colonies = []
 let gameloopRef
+let endTime
 
 export default {
   commands: {
@@ -96,6 +97,7 @@ export default {
         sendSetupData(server, reportingColony)
         // else, if all participants are ready, start the game
       } else if (colonies.every(colony => colony.ready)) {
+        endTime = Date.now() + config.roundLengthInSeconds * 1000
         colonies.forEach(colony => sendSetupData(server, colony))
 
         gameloopRef = setInterval(() => gameloop(server), 1000)
@@ -155,6 +157,7 @@ let sendSetupData = (server, colony) => {
   let data = {
     materials: config.materials,
     chat: config.chat,
+    endTime: endTime,
     soundVolume: config.soundVolume,
     inventoryBonusLimit: config.inventoryBonusLimit,
     inventoryCriticalLimit: config.inventoryCriticalLimit,

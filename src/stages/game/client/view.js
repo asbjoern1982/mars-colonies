@@ -12,6 +12,8 @@ let createView = () => {
   let canvas
   let resizingCanvas = false
 
+  let endTime
+
   let setup = (client, data) => {
     setupInterface(client, data)
     setupMap(client)
@@ -32,6 +34,7 @@ let createView = () => {
   let setupInterface = (client, data) => {
     inventoryBonusLimit = data.inventoryBonusLimit
     inventoryCriticalLimit = data.inventoryCriticalLimit
+    endTime = data.endTime
 
     let jqueryConfirmCssLink = document.querySelector("link[rel*='jquery-confirm.min.css']") || document.createElement('link')
     jqueryConfirmCssLink.rel = 'stylesheet'
@@ -466,6 +469,12 @@ let createView = () => {
     return newtooltip
   }
 
+  let updateTimeLeft = () => {
+    let secondsLeft = Math.floor((Math.floor(endTime) - Date.now()) / 1000)
+    if (secondsLeft < 0) secondsLeft = 0
+    $('#time-left').html(secondsLeft + ' seconds')
+  }
+
   let trade = (transfer) => {
     // when a trade has happened, the route between sender and receiver is
     // found and flashed white for a second as a visual cue to the participant
@@ -534,6 +543,7 @@ let createView = () => {
     updateInventory,
     updateTooltip,
     createTooltip,
+    updateTimeLeft,
     trade,
     addChatMessage,
     gameover,

@@ -4,6 +4,7 @@ import {View} from './view.js'
 import {Model} from './model.js'
 
 let gameloopRef
+let expectedEndTime
 
 let commands = {
   finish (client) {
@@ -82,4 +83,5 @@ let gameloop = () => {
   })
   View.updateInventory()
   View.updateTooltip()
+  View.updateTimeLeft()
 }

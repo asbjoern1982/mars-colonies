@@ -116,3 +116,9 @@ td {
     color: white;
     resize: none;
 }
+
+#time-left {
+  color: white;
+  background-color: rgb(30, 30, 30);
+  padding: 10px;
+}
