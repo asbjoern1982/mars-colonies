@@ -12,7 +12,8 @@ let createView = () => {
   let canvas
   let resizingCanvas = false
 
-  let endTime
+  let startTime
+  let timeLeft
 
   let setup = (client, data) => {
     setupInterface(client, data)
@@ -34,7 +35,8 @@ let createView = () => {
   let setupInterface = (client, data) => {
     inventoryBonusLimit = data.inventoryBonusLimit
     inventoryCriticalLimit = data.inventoryCriticalLimit
-    endTime = data.endTime
+    startTime = Date.now()
+    timeLeft = data.timeLeft // TODO this ignores lag between server, client and when this i called
 
     let jqueryConfirmCssLink = document.querySelector("link[rel*='jquery-confirm.min.css']") || document.createElement('link')
     jqueryConfirmCssLink.rel = 'stylesheet'
@@ -404,7 +406,7 @@ let createView = () => {
     } else {
       Model.getColony().node.set('fill', 'grey')
     }
-    if (Model.getOtherColonies().find(colony => colony.inventory)) {
+    if (Model.getOtherColonies()[0].inventory) {
       Model.getOtherColonies().forEach(colony => {
         if (colony.inventory.some(row => row.amount < inventoryCriticalLimit)) {
           colony.node.set('fill', 'red')
@@ -470,7 +472,7 @@ let createView = () => {
   }
 
   let updateTimeLeft = () => {
-    let secondsLeft = Math.floor((Math.floor(endTime) - Date.now()) / 1000)
+    let secondsLeft = timeLeft - Math.floor((Date.now() - startTime) / 1000)
     if (secondsLeft < 0) secondsLeft = 0
     $('#time-left').html(secondsLeft + ' seconds')
   }

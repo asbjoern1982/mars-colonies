@@ -5,7 +5,7 @@ import config from './../config/config.json'
 let numberOfGames = Math.floor(config.participants / config.players.length) // ignores leftover participants
 let colonies = []
 let gameloopRef
-let endTime
+let startTime
 
 export default {
   commands: {
@@ -97,7 +97,7 @@ export default {
         sendSetupData(server, reportingColony)
         // else, if all participants are ready, start the game
       } else if (colonies.every(colony => colony.ready)) {
-        endTime = Date.now() + config.roundLengthInSeconds * 1000
+        startTime = Date.now()
         colonies.forEach(colony => sendSetupData(server, colony))
 
         gameloopRef = setInterval(() => gameloop(server), 1000)
@@ -138,10 +138,10 @@ export default {
   options: {}
 }
 
-let sendSetupData = (server, colony) => {
+let sendSetupData = (server, receiver) => {
   // only send what is needed
   let simplifiedColonies = []
-  colonies.forEach(colony => {
+  colonies.filter(colony => colony.game === receiver.game).forEach(colony => {
     let simplifiedColony = {
       name: colony.name
     }
@@ -157,16 +157,16 @@ let sendSetupData = (server, colony) => {
   let data = {
     materials: config.materials,
     chat: config.chat,
-    endTime: endTime,
+    timeLeft: config.roundLengthInSeconds - Math.floor((Date.now() - startTime) / 1000),
     soundVolume: config.soundVolume,
     inventoryBonusLimit: config.inventoryBonusLimit,
     inventoryCriticalLimit: config.inventoryCriticalLimit,
-    yourName: colony.name,
-    yourSpecilisations: colony.specilisations,
-    yourStartingInventory: colony.inventory,
+    yourName: receiver.name,
+    yourSpecilisations: receiver.specilisations,
+    yourStartingInventory: receiver.inventory,
     colonies: simplifiedColonies
   }
-  server.send('setup', data).toClient(colony.id)
+  server.send('setup', data).toClient(receiver.id)
 }
 
 let tickcount = 0
@@ -176,13 +176,23 @@ let gameloop = (server) => {
     clearInterval(gameloopRef)
     // simple calculation of points, 10 points for being alive and 2 points for every material over 50%
     let status = colonies.map(colony => {
-      if (colony.dead) return colony.name + '\t0 points'
+      if (colony.dead) return colony.name + '(' + colony.id + ')\t0 points'
       let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
-      return colony.name + '\t' + points + ' points'
+      return colony.name + '(' + colony.id + ')\t' + points + ' points'
     })
     console.log('game over\n' + status.join('\n'))
-    server.send('gameover', status.join('\n')).toAll()
     Logger.logEvent(server, 'game over [' + status.join() + ']')
+
+    for (let i = 0; i < numberOfGames; i++) {
+      let coloniesInGame = colonies.filter(colony => colony.game === i)
+      let status = coloniesInGame.map(colony => {
+        if (colony.dead) return colony.name + '\t0 points'
+        let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
+        return colony.name + '\t' + points + ' points'
+      })
+      server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id))
+    }
+
     return
   }
   // update all colonies inventory
