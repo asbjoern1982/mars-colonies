@@ -1,3 +1,4 @@
+"skipSurveys": for debugging, skips the surveys for testrunning the game
 "participants": a number of expected participants in the round, used to know when a round can start and how many concurrent games that can run, it should be diviable by the number of "players"
 "materials": a list of materials and their depletion_rate in this game
 "roundLengthInSeconds": the length of a game, 1200 would be 20 minutes
