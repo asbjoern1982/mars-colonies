@@ -1,6 +1,7 @@
 "participants": a number of expected participants in the round, used to know when a round can start and how many concurrent games that can run, it should be diviable by the number of "players"
 "materials": a list of materials and their depletion_rate in this game
 "roundLengthInSeconds": the length of a game, 1200 would be 20 minutes
+"soundVolue": is the volume of the background music and notifications, from 0 to 1, 0 removes sound completely
 
 "inventoryBonusLimit": the bonus threashold, when calculating points for materials, being over this limit will yeld bonus points
 "inventoryCriticalLimit": when a player should get a visual cue about a low inventory, ei blinking red text
