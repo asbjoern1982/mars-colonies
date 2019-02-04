@@ -90,6 +90,9 @@ export default {
     },
     'ready': (server, clientId) => {
       let reportingColony = colonies.find(colony => colony.id === clientId)
+      if (!reportingColony) {
+        console.log('unknown client: ' + clientId)
+      }
       reportingColony.ready = true
 
       // if the game is running, the player is reconnecting and just needs the data
