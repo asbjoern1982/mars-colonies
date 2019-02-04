@@ -1,0 +1,231 @@
+{
+  "skipSurveys": true,
+  "participants": 15,
+  "materials": [
+    {"name": "Palladium", "depletion_rate": 1},
+    {"name": "Selenium", "depletion_rate": 1},
+    {"name": "Tungsten", "depletion_rate": 1}
+  ],
+  "soundVolume": 0,
+  "roundLengthInSeconds":  1200,
+  "inventoryBonusLimit": 500,
+  "inventoryCriticalLimit": 100,
+  "chat": "free",
+  "tooltip": ["inventories", "specilisations"],
+  "trade_delay": 0,
+  "players": [
+    {
+      "name": "Oceania Colony 1",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Palladium",
+        "output": "Selenium",
+        "gain": 2.0,
+      	"transform_rate": 10
+      }]
+    },
+    {
+      "name": "Eurasia Colony 1",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Tungsten",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Eastasia Colony 1",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Tungsten",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Airstrip One Colony 1",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Tungsten",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Brazzaville Colony 1",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Tungsten",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+
+    {
+      "name": "Oceania Colony 2",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Palladium",
+        "output": "Selenium",
+        "gain": 2.0,
+      	"transform_rate": 10
+      }]
+    },
+    {
+      "name": "Eurasia Colony 2",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Tungsten",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Eastasia Colony 2",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Tungsten",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Airstrip One Colony 2",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Tungsten",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Brazzaville Colony 2",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Tungsten",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+
+
+    {
+      "name": "Oceania Colony 3",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Palladium",
+        "output": "Selenium",
+        "gain": 2.0,
+      	"transform_rate": 10
+      }]
+    },
+    {
+      "name": "Eurasia Colony 3",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Tungsten",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Eastasia Colony 3",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Tungsten",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Airstrip One Colony 3",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Tungsten",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Brazzaville Colony 3",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Tungsten",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+body, html {
+  height: 100%;
+  background-color: rgb(89, 71, 50);
+}
+.bg {
+  /* The image used */
+  background-image: url("./../../../../assets/Mars_Ice_Home_concept.jpg");
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 20px;
+}
+
+.windowbg {
+  background-color: rgb(50, 50, 50);
+  margin-bottom: 20px;
+  padding: 5px;
+  /* width: 600px; */
+}
+
+.title {
+  color: white
+}
+
+
+#colony-title-container {
+}
+
+#colony-title {
+  font-size: 20px;
+  text-align: center;
+  width: 450px;
+}
+
+#map-view {
+  height: 354px;
+}
+#map-container {
+  /* padding-left: 5px;
+  padding-right: 5px; */
+}
+#map-canvas {
+  background-image: url("./../../../../assets/mars-map.png");
+  /* background-position: center;
+  background-clip: content-box; */
+  background-size: 100%;
+  height: 320px;
+  width: 100%;
+}
+
+#chat-view {
+  height: 322px;
+}
+#chat-log {
+  height: 252px;
+  background-color: rgb(100, 100, 100);
+  color: white;
+  resize: none;
+}
+#chat-input-group {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#trade-input {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#production-input {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#production-view {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#production-progress {
+  color: white;
+}
+
+td {
+  text-align: right;
+}
+.inventory-full {
+  color: grey;
+}
+.inventory-bonus {
+  color: lightgreen;
+}
+.inventory-low {
+  color: red;
+}
+
+/* for creating the blinking text effect it is animated */
+.inventory-critial {
+  color: red;
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+#event-log {
+    height: 205px;
+    background-color: rgb(100, 100, 100);
+    color: white;
+    resize: none;
+}
+
+#time-left {
+  color: white;
+  background-color: rgb(30, 30, 30);
+  padding: 10px;
+}
