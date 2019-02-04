@@ -1,6 +1,6 @@
 {
   "skipSurveys": true,
-  "participants": 3,
+  "participants": 5,
   "materials": [
     {"name": "Palladium", "depletion_rate": 1},
     {"name": "Selenium", "depletion_rate": 1},
@@ -52,6 +52,34 @@
       "specilisations": [{
         "input": "Tungsten",
         "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Airstrip One Colony",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Tungsten",
+        "output": "Palladium",
+        "gain": 2.0,
+	      "transform_rate": 10
+      }]
+    },
+    {
+      "name": "Brazzaville Colony",
+      "inventory": [
+        {"name": "Palladium", "amount": 1000},
+        {"name": "Selenium", "amount": 1000},
+        {"name": "Tungsten", "amount": 1000}
+      ],
+      "specilisations": [{
+        "input": "Selenium",
+        "output": "Tungsten",
         "gain": 2.0,
 	      "transform_rate": 10
       }]
