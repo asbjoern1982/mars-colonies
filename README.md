@@ -12,7 +12,7 @@ run `node dist/server.js`
 Open `localhost:3000` in 3 different sessions, I use chrome, chrome window in incognito and firefox.
 
 ## Bots
-to run the game with bots use
+For running the game with only one browser, there is a argument that will fill in all but one participant with a bot, run
 ```
 npm run bots
 ```
@@ -33,5 +33,5 @@ npm run server
 see [README.config.md](./src/stages/game/config/README.config.md)
 
 # credit for sounds and images
-sounds: https://www.nasa.gov/connect/sounds/index.html
-images: https://en.wikipedia.org/wiki/Mars
+- sounds: [NASA Audio and Ringtones](https://www.nasa.gov/connect/sounds/index.html)
+- images: https://en.wikipedia.org/wiki/Mars
