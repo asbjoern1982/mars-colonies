@@ -22,6 +22,7 @@ export default {
       Logger.logMouseOverColony(server, clientId, targetId)
     },
     'trade': (server, clientId, transfer) => {
+      server.log('client ' + clientId + ' transfer: ' + JSON.stringify(transfer))
       // remove amount from senders inventory
       let sendingColony = colonies.find(colony => colony.id === clientId)
       let senderInventory = sendingColony
@@ -61,11 +62,13 @@ export default {
       }, config.trade_delay)
     },
     'chat': (server, clientId, message) => {
+      server.log('client ' + clientId + ' sent message ' + message)
       let colony = colonies.find(colony => colony.id === clientId)
       server.send('chat', colony.name + '>' + message).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
       Logger.logChat(server, clientId, message)
     },
     'produce': (server, clientId, production) => {
+      server.log('client started production: ' + clientId + ' data: ' + JSON.stringify(production))
       let colony = colonies.find(colony => colony.id === clientId)
       let specilisation = colony.specilisations[production.index]
       let inputName = specilisation.input
@@ -89,6 +92,7 @@ export default {
       }, delay * 1000)
     },
     'ready': (server, clientId) => {
+      server.log('client reported ready: ' + clientId)
       let reportingColony = colonies.find(colony => colony.id === clientId)
       if (!reportingColony) {
         console.log('unknown client: ' + clientId)
@@ -108,6 +112,7 @@ export default {
       }
     },
     [Events.CLIENT_RECONNECTED]: (server, clientId) => {
+      server.log('client reconnect: ' + clientId)
       // when a client reconnects, wait for about 1 second to let it rebuild
       // the page and then send it the correct stage and data
       setTimeout(() => {
