@@ -2,7 +2,7 @@ import {Events} from 'monsterr'
 import {Logger} from '../../../database/logger'
 import config from './../config/config.json'
 
-let numberOfGames = Math.floor(config.participants / config.players.length) // ignores leftover participants
+let numberOfGames
 let colonies = []
 let gameloopRef
 let startTime
@@ -124,6 +124,8 @@ export default {
   setup: (server) => {
     console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
     Logger.logEvent(server, 'starting game stage (' + server.getCurrentStage().number + ')')
+
+    numberOfGames = Math.floor(server.getPlayers().length / config.players.length) // ignores leftover participants
 
     // randomize the order of the players
     let networkPlayers = server.getPlayers()

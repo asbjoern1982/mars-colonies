@@ -1,9 +1,5 @@
 import createServer, { Network, Events } from 'monsterr'
-// import presurvey from './src/stages/presurvey/server/server'
-import game from './src/stages/game/server/server'
-// import game15 from './src/stages/game15/server/server'
 import {Logger} from './src/database/logger'
-import config from './src/stages/game/config/config.json'
 import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
 import {CPUModule} from './src/modules/CPUModule'
@@ -15,7 +11,7 @@ const stages = configMain.serverStages
 let events = {
   // when all client have connected, push the server into the first stage
   [Events.CLIENT_CONNECTED] (server, clientId) {
-    if (server.getPlayers().length >= config.participants) {
+    if (server.getPlayers().length >= configMain.participants) {
       console.log('everyone connected, starting first stage')
       Logger.logEvent(server, 'everyone connected, starting first stage')
       server.start()
@@ -36,7 +32,7 @@ let commands = {
 }
 
 LatencyModule.addServerCommands(commands)
-let network = Network.groups(config.participants, config.players.length)
+let network = Network.clique(configMain.participants)
 NetworkModule.addServerCommands(commands, network)
 CPUModule.addServerEvents(events)
 
@@ -57,13 +53,13 @@ const monsterr = createServer({
 })
 
 monsterr.run()
-console.log('waiting for ' + config.participants + ' players')
+console.log('waiting for ' + configMain.participants + ' players')
 
 if (process.argv.includes('bots')) {
   let spawninfo = ['./src/bot.js']
   if (process.argv.includes('serv')) spawninfo.push('serv')
   // spawn bot-threads, use "config.participants - 1" for debuging with only 1 client
-  let numberOfBots = config.participants - 1
+  let numberOfBots = configMain.participants - 1
   for (let i = 0; i < numberOfBots; i++) {
     console.log('spawning bot #' + i)
     spawn('node', spawninfo)

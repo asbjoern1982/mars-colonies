@@ -8,7 +8,7 @@ import serverGame from './stages/game/server/server'
 // import serverGame15 from './src/stages/game15/server/server'
 
 export default {
-  clientStages: [client], // BUG: has to be set in client.js, this file cannot be read by the client
-  serverStages: [server],
+  clientStages: [clientGame], // BUG: has to be set in client.js, this file cannot be read by the client
+  serverStages: [serverGame],
   participants: 5
 }
