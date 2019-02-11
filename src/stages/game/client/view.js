@@ -1,4 +1,5 @@
 import {Model} from './model'
+import score from './../config/score'
 
 let createView = () => {
   let inventoryBonusLimit
@@ -478,6 +479,11 @@ let createView = () => {
     $('#time-left').html(secondsLeft + ' seconds')
   }
 
+  let updateScore = () => {
+    let currentScore = score.calculateScore(Model.getColony(), Model.getOtherColonies())
+    $('#score').html(currentScore)
+  }
+
   let trade = (transfer) => {
     // when a trade has happened, the route between sender and receiver is
     // found and flashed white for a second as a visual cue to the participant
@@ -547,6 +553,7 @@ let createView = () => {
     updateTooltip,
     createTooltip,
     updateTimeLeft,
+    updateScore,
     trade,
     addChatMessage,
     gameover,

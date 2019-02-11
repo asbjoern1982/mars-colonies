@@ -67,6 +67,12 @@ body, html {
   padding-right: 5px;
 }
 
+#score {
+  color: white;
+  background-color: rgb(30, 30, 30);
+  padding: 10px;
+}
+
 #trade-input {
   padding-left: 5px;
   padding-right: 5px;
