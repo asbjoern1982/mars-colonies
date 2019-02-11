@@ -178,6 +178,7 @@ let sendSetupData = (server, receiver) => {
     inventoryBonusLimit: config.inventoryBonusLimit,
     inventoryCriticalLimit: config.inventoryCriticalLimit,
     showInventoryInTooltip: config.tooltip.includes('inventories'),
+    showScoreInTooltip: config.tooltip.includes('score'),
     yourName: receiver.name,
     yourSpecilisations: receiver.specilisations,
     yourStartingInventory: receiver.inventory,

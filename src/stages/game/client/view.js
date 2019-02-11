@@ -11,6 +11,7 @@ let createView = () => {
 
   let tooltip
   let showInventory
+  let showScore
   let canvas
   let resizingCanvas = false
 
@@ -32,6 +33,7 @@ let createView = () => {
     }
 
     showInventory = data.showInventoryInTooltip
+    showScore = data.showScoreInTooltip
   }
 
   let setupInterface = (client, data) => {
@@ -443,7 +445,7 @@ let createView = () => {
 
   // create and return a tooltip with the appropiate information
   let createTooltip = (colony, left, top) => {
-    let height = (showInventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + 3
+    let height = (showInventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + (showScore ? 32 : 0) + 3
     let adjustedTop = top + height + 4 > canvas.height ? canvas.height - height - 4 : top
     let tooltipBackground = new fabric.Rect({
       left: left,
@@ -458,7 +460,8 @@ let createView = () => {
     // only display information if it is pressen on the colony
     let text = // colony.name +
       (showInventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') + '\n': '') +
-      (colony.specilisations ? 'Specilisations:\n' + colony.specilisations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') : '')
+      (colony.specilisations ? 'Specilisations:\n' + colony.specilisations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') + '\n' : '') +
+      (showScore ? 'Score:\n' + score.calculateScore(colony, Model.getOtherColonies()) : '')
     let tooltipText = new fabric.Text(text, {
       left: left + 3,
       top: adjustedTop + 3,
