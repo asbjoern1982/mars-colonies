@@ -128,10 +128,12 @@ export default {
     numberOfGames = Math.floor(server.getPlayers().length / config.players.length) // ignores leftover participants
 
     // randomize the order of the players
-    let networkPlayers = server.getPlayers()
-      .map((a) => ({sort: Math.random(), value: a}))
-      .sort((a, b) => a.sort - b.sort)
-      .map((a) => a.value)
+    let networkPlayers = config.shuffleParticipants
+      ? server.getPlayers()
+        .map((a) => ({sort: Math.random(), value: a}))
+        .sort((a, b) => a.sort - b.sort)
+        .map((a) => a.value)
+      : server.getPlayers()
 
     // create a colony to each player
     for (let i = 0; i < networkPlayers.length; i++) {
