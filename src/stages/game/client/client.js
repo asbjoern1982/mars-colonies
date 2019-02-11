@@ -2,6 +2,7 @@ import html from './client.html'
 import './client.css'
 import {View} from './view.js'
 import {Model} from './model.js'
+import score from './../config/score'
 
 let gameloopRef
 let expectedEndTime
@@ -84,4 +85,5 @@ let gameloop = () => {
   View.updateInventory()
   View.updateTooltip()
   View.updateTimeLeft()
+  console.log('score: ' + score.calculateScore(Model.getColony(), Model.getOtherColonies()))
 }

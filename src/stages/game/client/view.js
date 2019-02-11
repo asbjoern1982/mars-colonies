@@ -9,6 +9,7 @@ let createView = () => {
   let tradeRoutes
 
   let tooltip
+  let showInventory
   let canvas
   let resizingCanvas = false
 
@@ -27,9 +28,9 @@ let createView = () => {
         '<source src="./../../../assets/ISS-Emergency-short.wav" type="audio/wav">\n' +
         '</audio>')
       $('audio').prop('volume', data.soundVolume)
-      // $('#backgroundsound').set('volume', 1)
-      // $('#criticalAlarm').set('volume', data.soundVolume)
     }
+
+    showInventory = data.showInventoryInTooltip
   }
 
   let setupInterface = (client, data) => {
@@ -441,7 +442,7 @@ let createView = () => {
 
   // create and return a tooltip with the appropiate information
   let createTooltip = (colony, left, top) => {
-    let height = (colony.inventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + 3
+    let height = (showInventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + 3
     let adjustedTop = top + height + 4 > canvas.height ? canvas.height - height - 4 : top
     let tooltipBackground = new fabric.Rect({
       left: left,
@@ -455,8 +456,8 @@ let createView = () => {
     })
     // only display information if it is pressen on the colony
     let text = // colony.name +
-      (colony.inventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') : '') +
-      (colony.specilisations ? '\nSpecilisations:\n' + colony.specilisations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') : '')
+      (showInventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') + '\n': '') +
+      (colony.specilisations ? 'Specilisations:\n' + colony.specilisations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') : '')
     let tooltipText = new fabric.Text(text, {
       left: left + 3,
       top: adjustedTop + 3,

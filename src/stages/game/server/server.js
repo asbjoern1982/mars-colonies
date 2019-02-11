@@ -1,6 +1,7 @@
 import {Events} from 'monsterr'
 import {Logger} from '../../../database/logger'
 import config from './../config/config.json'
+import score from './../config/score'
 
 let numberOfGames
 let colonies = []
@@ -96,6 +97,9 @@ export default {
       let reportingColony = colonies.find(colony => colony.id === clientId)
       if (!reportingColony) {
         console.log('unknown client: ' + clientId)
+        Logger.logEvent(server, 'unknown client reconnected: ' + clientId)
+        server.send('not assigned a colony').toClient(clientId)
+        return
       }
       reportingColony.ready = true
 
@@ -157,9 +161,9 @@ let sendSetupData = (server, receiver) => {
     let simplifiedColony = {
       name: colony.name
     }
-    if (config.tooltip.includes('inventories')) {
-      simplifiedColony.inventory = colony.inventory
-    }
+    // if (config.tooltip.includes('inventories')) {
+    simplifiedColony.inventory = colony.inventory
+    // }
     if (config.tooltip.includes('specilisations')) {
       simplifiedColony.specilisations = colony.specilisations
     }
@@ -173,6 +177,7 @@ let sendSetupData = (server, receiver) => {
     soundVolume: config.soundVolume,
     inventoryBonusLimit: config.inventoryBonusLimit,
     inventoryCriticalLimit: config.inventoryCriticalLimit,
+    showInventoryInTooltip: config.tooltip.includes('inventories'),
     yourName: receiver.name,
     yourSpecilisations: receiver.specilisations,
     yourStartingInventory: receiver.inventory,
@@ -189,7 +194,8 @@ let gameloop = (server) => {
     // simple calculation of points, 10 points for being alive and 2 points for every material over 50%
     let status = colonies.map(colony => {
       if (colony.dead) return colony.name + '(' + colony.id + ')\t0 points'
-      let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
+      // let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
+      let points = score.calculateScore(colony, colonies)
       return colony.name + '(' + colony.id + ')\t' + points + ' points'
     })
     console.log('game over\n' + status.join('\n'))
@@ -198,9 +204,10 @@ let gameloop = (server) => {
     for (let i = 0; i < numberOfGames; i++) {
       let coloniesInGame = colonies.filter(colony => colony.game === i)
       let status = coloniesInGame.map(colony => {
-        if (colony.dead) return colony.name + '\t0 points'
-        let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
-        return colony.name + '\t' + points + ' points'
+        if (colony.dead) return colony.name
+        // let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
+        let points = score.calculateScore(colony, colonies)
+        return colony.name + '\t' + points
       })
       server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id))
     }
@@ -241,24 +248,22 @@ let killColony = (server, colony, materialName) => {
 // send inventory to all colonies
 let sendColoniesInventories = (server) => {
   // depending on how the stage is configured, it should or should not send the other colonies inventory
-  if (config.tooltip.includes('inventories')) {
-    for (let i = 0; i < numberOfGames; i++) {
-      let inventories = []
-      colonies.filter(colony => colony.game === i).forEach(colony =>
-        inventories.push({
-          name: colony.name,
-          inventory: colony.inventory
-        })
-      )
-      server.send('inventories', inventories).toClients(colonies.filter(colony => colony.game === i).map(colony => colony.id))
-    }
-  } else {
+  // if (config.tooltip.includes('inventories')) {
+  for (let i = 0; i < numberOfGames; i++) {
+    let inventories = []
+    colonies.filter(colony => colony.game === i).forEach(colony =>
+      inventories.push({
+        name: colony.name,
+        inventory: colony.inventory
+      })
+    )
+    server.send('inventories', inventories).toClients(colonies.filter(colony => colony.game === i).map(colony => colony.id))
+  } /* else {
     colonies.forEach(colony => {
       let inventories = [{
         name: colony.name,
         inventory: colony.inventory
       }]
       server.send('inventories', inventories).toClient(colony.id)
-    })
-  }
+    }) */
 }
