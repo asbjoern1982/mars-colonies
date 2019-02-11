@@ -193,8 +193,6 @@ let gameloop = (server) => {
     clearInterval(gameloopRef)
     // simple calculation of points, 10 points for being alive and 2 points for every material over 50%
     let status = colonies.map(colony => {
-      if (colony.dead) return colony.name + '(' + colony.id + ')\t0 points'
-      // let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
       let points = score.calculateScore(colony, colonies)
       return colony.name + '(' + colony.id + ')\t' + points + ' points'
     })
@@ -204,8 +202,6 @@ let gameloop = (server) => {
     for (let i = 0; i < numberOfGames; i++) {
       let coloniesInGame = colonies.filter(colony => colony.game === i)
       let status = coloniesInGame.map(colony => {
-        if (colony.dead) return colony.name
-        // let points = 10 + colony.inventory.reduce((bonus, row) => row.amount > config.inventoryBonusLimit ? bonus + 2 : bonus, 0)
         let points = score.calculateScore(colony, colonies)
         return colony.name + '\t' + points
       })
