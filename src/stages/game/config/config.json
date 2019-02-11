@@ -1,6 +1,6 @@
 {
   "skipSurveys": true,
-  "participants": 15,
+  "participants": 5,
   "materials": [
     {"name": "Palladium", "depletion_rate": 1},
     {"name": "Selenium", "depletion_rate": 1},

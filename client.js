@@ -1,15 +1,9 @@
 import createClient from 'monsterr'
-import presurvey from './src/stages/presurvey/client/client'
 import game from './src/stages/game/client/client'
-import game15 from './src/stages/game15/client/client'
 import {CPUModule} from './src/modules/CPUModule'
-import config from './src/stages/game/config/config.json'
-
-const stages = config.skipSurveys ? [game, game15] : [
-  presurvey,
-  game,
-  game15
-]
+// import configMain from './src/configMain'
+// BUG: cannot read .src/configMain
+const stages = [game]
 
 let options = {
   canvasBackgroundColor: 'white',
@@ -27,5 +21,4 @@ let client = createClient({
   stages
 })
 
-console.log(client)
 CPUModule.setupClient(client)

@@ -1,19 +1,16 @@
 import createServer, { Network, Events } from 'monsterr'
-import presurvey from './src/stages/presurvey/server/server'
+// import presurvey from './src/stages/presurvey/server/server'
 import game from './src/stages/game/server/server'
-import game15 from './src/stages/game15/server/server'
+// import game15 from './src/stages/game15/server/server'
 import {Logger} from './src/database/logger'
 import config from './src/stages/game/config/config.json'
 import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
 import {CPUModule} from './src/modules/CPUModule'
 import {spawn} from 'child_process'
+import configMain from './src/configMain'
 
-const stages = config.skipSurveys ? [game, game15] : [
-  presurvey,
-  game,
-  game15
-]
+const stages = configMain.serverStages
 
 let events = {
   // when all client have connected, push the server into the first stage
