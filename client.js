@@ -1,9 +1,8 @@
 import createClient from 'monsterr'
-import game from './src/stages/game/client/client'
 import {CPUModule} from './src/modules/CPUModule'
-// import configMain from './src/configMain'
-// BUG: cannot read .src/configMain
-const stages = [game]
+import configClient from './src/configClient'
+
+const stages = configClient.stages
 
 let options = {
   canvasBackgroundColor: 'white',
@@ -22,3 +21,4 @@ let client = createClient({
 })
 
 CPUModule.setupClient(client)
+testFunc.test();
