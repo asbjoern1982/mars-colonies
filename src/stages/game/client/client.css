@@ -54,10 +54,10 @@ body, html {
 }
 
 #chat-view {
-  height: 322px;
+  height: 342px;
 }
-#chat-log {
-  height: 252px;
+.chat-log {
+  height: 225px;
   background-color: rgb(100, 100, 100);
   color: white;
   resize: none;

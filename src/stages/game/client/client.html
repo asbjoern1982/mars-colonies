@@ -13,9 +13,18 @@
 
       <div class="col-md-12 windowbg" id="chat-view">
         <div class="title">Chat</div>
-        <div>
-          <textarea class="form-control" id="chat-log" disabled></textarea>
+        <div class="content">
+          <ul class="nav nav-tabs">
+            <li class="nav-link active"><a data-toggle="tab" href="#all">all</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="all" class="tab-pane fade show active" role="tabpanel">
+              <textarea class="form-control chat-log" id="chat-log" disabled></textarea>
+            </div>
+          </div>
         </div>
+
         <div class="form-row" id="chat-input-group">
           <div class="input-group" id="chat-input-bar"></div>
         </div>
