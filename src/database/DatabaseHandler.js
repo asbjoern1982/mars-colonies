@@ -23,10 +23,12 @@ let createDatabaseHandler = () => {
   }).write()
 
   // log a chatmessage with who sent it and the message
-  let saveChat = (clientId, message) => {
+  let saveChat = (clientId, sender, target, message) => {
     let event = {
       id: clientId,
       time: Date.now(),
+      sender: sender,
+      target: target,
       message: message
     }
     db.get('chat').push(event).write()

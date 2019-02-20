@@ -2,8 +2,8 @@
 import {DatabaseHandler} from './DatabaseHandler'
 
 let createLogger = () => {
-  let logChat = (server, clientId, message) => {
-    DatabaseHandler.saveChat(clientId, message)
+  let logChat = (server, clientId, sender, target, message) => {
+    DatabaseHandler.saveChat(clientId, sender, target, message)
   }
 
   let logProduction = (server, clientId, index, amount) => {

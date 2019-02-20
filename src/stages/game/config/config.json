@@ -10,6 +10,7 @@
   "inventoryBonusLimit": 500,
   "inventoryCriticalLimit": 100,
   "chat": "free",
+  "allowDirectMessages": true,
   "tooltip": ["inventories", "specilisations"],
   "trade_delay": 0,
   "players": [
@@ -51,34 +52,6 @@
       "specilisations": [{
         "input": "Tungsten",
         "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Airstrip One Colony",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 2.0,
-	      "transform_rate": 10
-      }]
-    },
-    {
-      "name": "Brazzaville Colony",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specilisations": [{
-        "input": "Selenium",
-        "output": "Tungsten",
         "gain": 2.0,
 	      "transform_rate": 10
       }]

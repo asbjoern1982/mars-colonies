@@ -62,11 +62,17 @@ export default {
         sendColoniesInventories(server)
       }, config.trade_delay)
     },
-    'chat': (server, clientId, message) => {
-      server.log('client ' + clientId + ' sent message ' + message)
+    'chat': (server, clientId, data) => {
+      server.log('client ' + clientId + ' (' + data.sender + ') sent message ' + data.message + ' to ' + data.target)
       let colony = colonies.find(colony => colony.id === clientId)
-      server.send('chat', colony.name + '>' + message).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
-      Logger.logChat(server, clientId, message)
+      // data.sender = colony.name
+      if (data.target === 'all') {
+        server.send('chat', data).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
+      } else {
+        let targetId = colonies.find(otherColonies => otherColonies.name === data.target).id
+        server.send('chat', data).toClients([clientId, targetId])
+      }
+      Logger.logChat(server, clientId, data.sender, data.target, data.message)
     },
     'produce': (server, clientId, production) => {
       server.log('client started production: ' + clientId + ' data: ' + JSON.stringify(production))
@@ -173,6 +179,7 @@ let sendSetupData = (server, receiver) => {
   let data = {
     materials: config.materials,
     chat: config.chat,
+    allowDirectMessages: config.allowDirectMessages,
     timeLeft: config.roundLengthInSeconds - Math.floor((Date.now() - startTime) / 1000),
     soundVolume: config.soundVolume,
     inventoryBonusLimit: config.inventoryBonusLimit,

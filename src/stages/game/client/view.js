@@ -17,6 +17,12 @@ let createView = () => {
 
   let startTime
   let timeLeft
+  let chat = {
+    'all': {
+      tag: undefined,
+      text: ''
+    }
+  }
 
   let setup = (client, data) => {
     setupInterface(client, data)
@@ -170,8 +176,15 @@ let createView = () => {
       $('#input-label').append(Model.getColony().name)
       $('#chat-button').mouseup(e => {
         e.preventDefault()
-        client.send('chat', $('#chat-input').val())
-        $('#chat-input').val($('#chat-input option:first').val())
+        if ($('#chat-input').val() !== '') {
+          let data = {
+            sender: Model.getColony().name,
+            target: Object.keys(chat).find(key => chat[key].tag.hasClass('active')),
+            message: $('#chat-input').val()
+          }
+          client.send('chat', data)
+          $('#chat-input').val($('#chat-input option:first').val())
+        }
       })
     } else if (data.chat === 'free') {
       $('#chat-input-bar').append('<div class="input-group-prepend">' +
@@ -183,20 +196,74 @@ let createView = () => {
         '</div>')
       $('#input-label').append(Model.getColony().name)
       $('#chat-input').keypress((e) => {
-        if (e.which === 13) {
-          client.send('chat', $('#chat-input').val())
+        if (e.which === 13 && $('#chat-input').val() !== '') {
+          let data = {
+            sender: Model.getColony().name,
+            target: Object.keys(chat).find(key => chat[key].tag.hasClass('active')),
+            message: $('#chat-input').val()
+          }
+          client.send('chat', data)
           $('#chat-input').val('')
         }
       })
       $('#chat-button').mouseup(e => {
         e.preventDefault()
         if ($('#chat-input').val() !== '') {
-          client.send('chat', $('#chat-input').val())
+          let data = {
+            sender: Model.getColony().name,
+            target: Object.keys(chat).find(key => chat[key].tag.hasClass('active')),
+            message: $('#chat-input').val()
+          }
+          client.send('chat', data)
           $('#chat-input').val('')
         }
       })
     } else {
       $('#chat-log').append('chat disabled')
+    }
+
+    // direct message system
+    if (Array.isArray(data.chat) && data.chat.length > 0 || data.chat === 'free') {
+      chat.all.tag = $('#chatAllLi')
+      if (data.allowDirectMessages) {
+        $('#chatTabs').append('<li class="nav-item dropdown" id="chatDropdown">' +
+          '<a class="nav-link dropdown-toggle" id="chatDropdownA" data-toggle="dropdown" href="#" data-toggle="tab" role="button">direct messages</a>'+
+          '<div class="dropdown-menu" id="chatTabsDM"></div></li>')
+        $('#chatAllLi').mouseup(e => {
+          $('#chatTabsDM').find('.active').removeClass('active')
+          $('#chatDropdownA').removeClass('active')
+          $('#chatAllLi').addClass('active')
+          $('#chatAllLi').removeClass('warning')
+          let chatBox = $('#chat-log')
+          chatBox.html(chat.all.text)
+          chatBox.scrollTop(chatBox[0].scrollHeight)
+          $('#chat-input').focus()
+        })
+        Model.getOtherColonies().forEach(colony => {
+          let trimmedName = colony.name.replace(' ', '')
+          $('#chatTabsDM').append('<a class="dropdown-item" href="#"  role="tab" id="' + trimmedName + 'Action">' + colony.name + '</a>')
+          $('#' + trimmedName + 'Action').mouseup(e => {
+            $('#chatAllLi').removeClass('active')
+            $('#chatTabsDM').find('.active').removeClass('active')
+            $('#chatDropdownA').removeClass('warning')
+            $('#' + trimmedName + 'Action').removeClass('warning')
+
+            $('#chatDropdownA').addClass('active')
+            $('#' + trimmedName + 'Action').addClass('active')
+            $('#chatDropdownA').html('dm to ' + colony.name)
+
+            // $('#chatContent').html(trimmedName)
+            let chatBox = $('#chat-log')
+            chatBox.html(chat[colony.name].text)
+            chatBox.scrollTop(chatBox[0].scrollHeight)
+            $('#chat-input').focus()
+          })
+          chat[colony.name] = {
+            tag: $('#' + trimmedName + 'Action'),
+            text: ''
+          }
+        })
+      }
     }
   }
 
@@ -505,10 +572,25 @@ let createView = () => {
     logEvent(sendingColony.name + ' transfered  ' + transfer.amount + ' ' + transfer.material + ' to ' + receivingColony.name)
   }
 
-  let addChatMessage = (message) => {
-    let chatLog = $('#chat-log')
-    chatLog.append(message + '\n')
-    chatLog.scrollTop(chatLog[0].scrollHeight)
+  let addChatMessage = (data) => {
+    let chatBox = $('#chat-log')
+
+    console.log(chat);
+    let chat_key = data.target === 'all' ? 'all' : (data.sender === Model.getColony().name ? data.target : data.sender)
+
+    chat[chat_key].text += data.sender + '> ' + data.message + '\n'
+
+
+
+    if (chat[chat_key].tag.hasClass('active')){
+      chatBox.html(chat[chat_key].text)
+      chatBox.scrollTop(chatBox[0].scrollHeight)
+    } else {
+      chat[chat_key].tag.addClass('warning')
+      if (chat_key !== 'all') {
+        $('#chatDropdownA').addClass('warning')
+      }
+    }
   }
 
   let logEvent = (message) => {

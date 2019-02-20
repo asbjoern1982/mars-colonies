@@ -14,8 +14,8 @@ let commands = {
 }
 
 let events = {
-  'chat': (client, message) => {
-    View.addChatMessage(message)
+  'chat': (client, data) => {
+    View.addChatMessage(data)
   },
   'gameover': (client, status) => {
     Model.getColony().dead = true
@@ -68,7 +68,7 @@ export default {
   },
   teardown (client) {},
   options: {
-    htmlContainerHeight: 0.98,
+    htmlContainerHeight: 0.99,
     hideChat: true
   }
 }

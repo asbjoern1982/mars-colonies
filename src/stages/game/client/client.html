@@ -14,12 +14,11 @@
       <div class="col-md-12 windowbg" id="chat-view">
         <div class="title">Chat</div>
         <div class="content">
-          <ul class="nav nav-tabs">
-            <li class="nav-link active"><a data-toggle="tab" href="#all">all</a></li>
+          <ul class="nav nav-tabs" id="chatTabs" role="tablist">
+            <li class="nav-link active" id="chatAllLi" ><a id="chatAll" data-toggle="tab" href="#" role="tab">all</a></li>
           </ul>
-
-          <div class="tab-content">
-            <div id="all" class="tab-pane fade show active" role="tabpanel">
+          <div id="chatContent">
+            <div id="all">
               <textarea class="form-control chat-log" id="chat-log" disabled></textarea>
             </div>
           </div>
