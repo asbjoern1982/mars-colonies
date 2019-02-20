@@ -265,6 +265,17 @@ let createView = () => {
         })
       }
     }
+
+    // if reconnecting
+    if (data.chatEvents) {
+      data.chatEvents.forEach(event => {
+        let chat_key = event.target === 'all' ? 'all' : (event.sender === Model.getColony().name ? event.target : event.sender)
+        chat[chat_key].text += event.sender + '> ' + event.message + '\n'
+      })
+      let chatBox = $('#chat-log')
+      chatBox.html(chat['all'].text)
+      chatBox.scrollTop(chatBox[0].scrollHeight)
+    }
   }
 
   // setting up the map
@@ -579,8 +590,6 @@ let createView = () => {
     let chat_key = data.target === 'all' ? 'all' : (data.sender === Model.getColony().name ? data.target : data.sender)
 
     chat[chat_key].text += data.sender + '> ' + data.message + '\n'
-
-
 
     if (chat[chat_key].tag.hasClass('active')){
       chatBox.html(chat[chat_key].text)

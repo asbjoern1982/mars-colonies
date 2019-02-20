@@ -7,6 +7,7 @@ let numberOfGames
 let colonies = []
 let gameloopRef
 let startTime
+let chatEvents = []
 
 export default {
   commands: {
@@ -63,13 +64,15 @@ export default {
       }, config.trade_delay)
     },
     'chat': (server, clientId, data) => {
+      data.clientId = clientId
+      chatEvents.push(data)
       server.log('client ' + clientId + ' (' + data.sender + ') sent message ' + data.message + ' to ' + data.target)
       let colony = colonies.find(colony => colony.id === clientId)
       // data.sender = colony.name
       if (data.target === 'all') {
         server.send('chat', data).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
       } else {
-        let targetId = colonies.find(otherColonies => otherColonies.name === data.target).id
+        let targetId = colonies.find(otherColonies => otherColonies.game === colony.game && otherColonies.name === data.target).id
         server.send('chat', data).toClients([clientId, targetId])
       }
       Logger.logChat(server, clientId, data.sender, data.target, data.message)
@@ -190,6 +193,13 @@ let sendSetupData = (server, receiver) => {
     yourSpecilisations: receiver.specilisations,
     yourStartingInventory: receiver.inventory,
     colonies: simplifiedColonies
+  }
+  if (chatEvents.length > 0) { // handle reconnect
+    data.chatEvents = chatEvents.filter(event => colonies.find(col => col.id === event.clientId).game === receiver.game && (
+      event.target === 'all' ||
+      event.sender === receiver.name ||
+      event.target === receiver.name
+    ))
   }
   server.send('setup', data).toClient(receiver.id)
 }
