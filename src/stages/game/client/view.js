@@ -565,10 +565,8 @@ let createView = () => {
     if (secondsLeft < 0) secondsLeft = 0
     $('#time-left').html(secondsLeft + ' seconds')
 
-    let procent2 = Math.floor(0.1 * Date.now() / (timeLeft * 1000 - startTime))
     let procent = Math.floor(100 * ((Date.now() - startTime) / 1000) / timeLeft)
     $('#time-left-bar').css('width', procent + '%')
-    console.log(timeLeft + ', ' + startTime + ', ' + Date.now() + ', ' + procent + '%')
   }
 
   let updateScore = () => {
