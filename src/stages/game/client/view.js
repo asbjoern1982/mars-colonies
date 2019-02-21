@@ -107,6 +107,8 @@ let createView = () => {
     })
     Model.getOtherColonies().forEach(colony => $('#trade-colony').append('<option>' + colony.name + '</option>'))
     Model.getMaterials().forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
+    $('#trade-colony').mouseup(e => $('#trade-amount').focus())
+    $('#trade-material').mouseup(e => $('#trade-amount').focus())
 
     // -------------------- PRODUCTION --------------------
     let productionAction = () => {
@@ -162,6 +164,7 @@ let createView = () => {
       let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%, ' + specilisation.transform_rate + ')'
       $('#production-material').append('<option value="' + i + '">' + option + '</option>')
     }
+    $('#production-material').mouseup(e => $('#production-amount').focus())
 
     // -------------------- CHAT --------------------
     if (Array.isArray(data.chat) && data.chat.length > 0) {
@@ -266,7 +269,7 @@ let createView = () => {
       }
     }
 
-    // if reconnecting
+    // if reconnecting, load previous chat messages
     if (data.chatEvents) {
       data.chatEvents.forEach(event => {
         let chat_key = event.target === 'all' ? 'all' : (event.sender === Model.getColony().name ? event.target : event.sender)
@@ -276,6 +279,9 @@ let createView = () => {
       chatBox.html(chat['all'].text)
       chatBox.scrollTop(chatBox[0].scrollHeight)
     }
+    // if reconnecting and someone was dead
+    Model.getColony().dead = Model.getColony().inventory.some(row => row.amount <= 0)
+    Model.getOtherColonies().forEach(colony => colony.dead = colony.inventory.some(row => row.amount <= 0))
   }
 
   // setting up the map
@@ -503,7 +509,7 @@ let createView = () => {
   let checkInventoryAlarm = () => {
     let audioTag = $('#criticalAlarm')
     if (audioTag) {
-      if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit)) {
+      if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit) && !Model.getColony().dead) {
         audioTag.trigger('play')
       } else {
         audioTag.trigger('pause')
@@ -558,6 +564,11 @@ let createView = () => {
     let secondsLeft = timeLeft - Math.floor((Date.now() - startTime) / 1000)
     if (secondsLeft < 0) secondsLeft = 0
     $('#time-left').html(secondsLeft + ' seconds')
+
+    let procent2 = Math.floor(0.1 * Date.now() / (timeLeft * 1000 - startTime))
+    let procent = Math.floor(100 * ((Date.now() - startTime) / 1000) / timeLeft)
+    $('#time-left-bar').css('width', procent + '%')
+    console.log(timeLeft + ', ' + startTime + ', ' + Date.now() + ', ' + procent + '%')
   }
 
   let updateScore = () => {
@@ -611,6 +622,7 @@ let createView = () => {
   let gameover = (status) => {
     // when the game is over, ei time is up, the client receives a 'gameover'
     // The 'status' contains what points each colony earned
+    $('#criticalAlarm').trigger('pause') // stop alarm
     logEvent('game over\n' + status)
     disableEverything()
   }
