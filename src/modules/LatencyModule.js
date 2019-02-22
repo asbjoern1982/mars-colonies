@@ -27,10 +27,11 @@ let createLatencyModule = () => {
   ]
   let chart
   let msgName = 'LatencyModuleUpdate'
+  let config
 
   let addHTML = (admin) => {
     // inject the html in the page
-    let htmlGraph = '<div class="col-sm" style="border: 1px solid lightgray; height: 300px; width: 300px; padding-bottom: 30px;"><div id="latencygraphtitle">Latency Graph</div><canvas id="latencygraph"></canvas></div>'
+    let htmlGraph = '<div class="col-lg-6 col-xl-4" style="border: 1px solid lightgray; height: 300px; padding-bottom: 30px;"><div id="latencygraphtitle">Latency Graph</div><canvas id="latencygraph"></canvas></div>'
     if ($('#graphs').length) {
       $('#graphs').append(htmlGraph)
     } else {
@@ -46,7 +47,7 @@ let createLatencyModule = () => {
     // - animation is not flued, it should move from right to left
     // - possible a save-button to save a picture of the graph to troubleshoot later, either case, a timestamp would be nice
     let ctx = $('#latencygraph')
-    let chart = new Chart(ctx, {
+    config = {
       type: 'line', // The type of chart we want to create
       data: {
         labels: ['0s', '5s', '10s', '15s', '20s', '25s', '30s', '35s', '40s', '45s', '50s', '55s'],
@@ -56,8 +57,8 @@ let createLatencyModule = () => {
         maintainAspectRatio: false,
         responsive: true,
         animation: {
-          duration: 0, // faster animations
-          easing: 'linear'
+          duration: 100, // faster animations
+          easing: 'easeInOutBack'
         },
         scales: {
           yAxes: [{
@@ -67,7 +68,8 @@ let createLatencyModule = () => {
           }]
         }
       } // Configuration options go here
-    })
+    }
+    let chart = new Chart(ctx, config)
     return chart
   }
 
@@ -86,7 +88,7 @@ let createLatencyModule = () => {
 
   let addAdminClientEvents = (events) => {
     events[msgName] = (admin, latencies) => {
-      let dataset = []
+      /* let dataset = []
       let colorCount = 0
       for (let key in latencies) {
         let color = colorCount < colors.length ? colors[colorCount] : 'rgb(0, 0, 0)'
@@ -97,7 +99,27 @@ let createLatencyModule = () => {
           data: latencies[key].data.reverse()
         })
       }
-      chart.data.datasets = dataset
+      chart.data.datasets = dataset */
+      if (!chart.data.datasets || Object.keys(latencies).length != chart.data.datasets.length) {
+        console.log('more keys!');
+        let newdatasets = []
+        let colorCount = 0
+        for (let key in latencies) {
+          let color = colorCount < colors.length ? colors[colorCount] : 'rgb(0, 0, 0)'
+          colorCount++
+          newdatasets.push({
+            label: key,
+            borderColor: color,
+            data: latencies[key].data.reverse()
+          })
+        }
+        chart.data.datasets = newdatasets
+      } else {
+        console.log('the same, just updating');
+        chart.data.datasets.forEach(dataset => {
+          dataset.data = latencies[dataset.label].data.reverse()
+        })
+      }
       chart.update()
     }
   }

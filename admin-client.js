@@ -1,5 +1,6 @@
 /* very basic admin client, the only addition to this class is the two download buttons */
 import createClient from 'monsterr'
+import vis from 'vis'
 import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
 import {CPUModule} from './src/modules/CPUModule'
@@ -8,7 +9,7 @@ import './src/admin/admin-client.css'
 
 let options = {
   canvasBackgroundColor: 'red',
-  htmlContainerHeight: 1,
+  htmlContainerHeight: 0.99,
   // HTML is included in options for admin
   html
 }
@@ -48,6 +49,21 @@ let events = {
   },
   'eventsSoFar': (admin, events) => {
     events.forEach(event => admin.getChat().append(event))
+  },
+  'gamenetwork' : (admin, data) => {
+    console.log(data)
+    /*
+    let nodes = new vis.DataSet([])
+    let edges = new vis.DataSet([])
+    let container = document.getElementById('networkgraph')
+    let data = {
+      nodes: nodes,
+      edges: edges
+    }
+    let options = {}
+    let ng new vis.Network(container, data, options)
+
+    */
   }
 }
 let commands = {}

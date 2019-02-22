@@ -13,6 +13,10 @@ export default {
   commands: {
     'sendEventsSoFar': (server) => {
       server.send('eventsSoFar', Logger.getEvents().map(event => event.data)).toAdmin()
+
+      let games = [...new Set(colonies.map(colony => colony.game))]
+      let gamenetworkdata = games.map(gameNo => colonies.filter(colony => colony.game === gameNo).map(colony => colony.id))
+      server.send('gamenetwork', gamenetworkdata).toAdmin()
     },
     'endGame': (server) => {
       tickcount = config.roundLengthInSeconds
@@ -70,13 +74,13 @@ export default {
       server.log('client ' + clientId + ' (' + data.sender + ') sent message ' + data.message + ' to ' + data.target)
       let colony = colonies.find(colony => colony.id === clientId)
       // data.sender = colony.name
-      let targetId = colonies.find(otherColonies => otherColonies.game === colony.game && otherColonies.name === data.target).id
-      if (data.target === 'all') {
-        server.send('chat', data).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
+      let target = colonies.find(col => col.game === colony.game && col.name === data.target)
+      if (!target) {
+        server.send('chat', data).toClients(colonies.filter(col => col.game === colony.game).map(col => col.id))
       } else {
-        server.send('chat', data).toClients([clientId, targetId])
+        server.send('chat', data).toClients([clientId, target.id])
       }
-      Logger.logChat(server, clientId, targetId, data.message)
+      Logger.logChat(server, clientId, target ? target.id : 'all', data.message)
     },
     'produce': (server, clientId, production) => {
       server.log('client started production: ' + clientId + ' data: ' + JSON.stringify(production))
@@ -157,9 +161,14 @@ export default {
       colony.game = Math.floor(i / config.players.length)
       colonies.push(colony)
     }
+    
     let games = [...new Set(colonies.map(colony => colony.game))]
     let log = games.map(gameNo => '"game ' + gameNo + ': [' + colonies.filter(colony => colony.game === gameNo).map(colony => colony.id).join() + ']').join() + '"'
     Logger.logEvent(server, log)
+
+    let gamenetworkdata = games.map(gameNo => colonies.filter(colony => colony.game === gameNo).map(colony => colony.id))
+    server.send('gamenetwork', gamenetworkdata).toAdmin()
+
   },
   teardown: (server) => {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())

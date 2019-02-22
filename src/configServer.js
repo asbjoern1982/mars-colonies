@@ -4,5 +4,5 @@ import game from './stages/game/server/server'
 
 export default {
   stages: [game],
-  participants: 9
+  participants: 3
 }
