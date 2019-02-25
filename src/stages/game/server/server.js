@@ -11,7 +11,7 @@ let chatEvents = []
 
 export default {
   commands: {
-    'sendEventsSoFar': (server) => {
+    'adminReady': (server) => {
       server.send('eventsSoFar', Logger.getEvents().map(event => event.data)).toAdmin()
 
       let games = [...new Set(colonies.map(colony => colony.game))]
@@ -161,7 +161,7 @@ export default {
       colony.game = Math.floor(i / config.players.length)
       colonies.push(colony)
     }
-    
+
     let games = [...new Set(colonies.map(colony => colony.game))]
     let log = games.map(gameNo => '"game ' + gameNo + ': [' + colonies.filter(colony => colony.game === gameNo).map(colony => colony.id).join() + ']').join() + '"'
     Logger.logEvent(server, log)

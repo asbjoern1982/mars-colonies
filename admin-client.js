@@ -9,7 +9,7 @@ import './src/admin/admin-client.css'
 
 let options = {
   canvasBackgroundColor: 'red',
-  htmlContainerHeight: 0.99,
+  htmlContainerHeight: 1,
   // HTML is included in options for admin
   html
 }
@@ -52,18 +52,40 @@ let events = {
   },
   'gamenetwork' : (admin, data) => {
     console.log(data)
-    /*
-    let nodes = new vis.DataSet([])
-    let edges = new vis.DataSet([])
-    let container = document.getElementById('networkgraph')
-    let data = {
-      nodes: nodes,
-      edges: edges
+
+    let nodes = []
+    let edges = []
+
+    data.forEach(game => {
+      game.forEach(from => {
+        game.forEach(to => {
+          if (from !== to && !edges.some(edge => edge.from === to && edge.to === from)) edges.push({
+            from: from,
+            to: to
+          })
+        })
+      })
+    })
+
+    data.forEach(game => {
+      game.forEach(player => {
+        nodes.push({
+          id: player,
+          label: player,
+          borderWidth: 3
+        })
+      })
+    })
+    console.log(nodes);
+    console.log(edges);
+
+    let container = document.getElementById('gamenetworkgraph') // cannot use jquery here
+    let graphdata = {
+      nodes: new vis.DataSet(nodes),
+      edges: new vis.DataSet(edges)
     }
     let options = {}
-    let ng new vis.Network(container, data, options)
-
-    */
+    let ng = new vis.Network(container, graphdata, options)
   }
 }
 let commands = {}
@@ -107,7 +129,7 @@ $('#buttonDownloadCSV').mouseup(e => {
   admin.sendCommand('reqCSV')
 })
 
-admin.sendCommand('sendEventsSoFar')
+admin.sendCommand('adminReady')
 
 let link = document.querySelector("link[rel*='icon']") || document.createElement('link')
 link.type = 'image/x-icon'
