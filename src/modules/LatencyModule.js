@@ -88,18 +88,6 @@ let createLatencyModule = () => {
 
   let addAdminClientEvents = (events) => {
     events[msgName] = (admin, latencies) => {
-      /* let dataset = []
-      let colorCount = 0
-      for (let key in latencies) {
-        let color = colorCount < colors.length ? colors[colorCount] : 'rgb(0, 0, 0)'
-        colorCount++
-        dataset.push({
-          label: key,
-          borderColor: color,
-          data: latencies[key].data.reverse()
-        })
-      }
-      chart.data.datasets = dataset */
       if (!chart.data.datasets || Object.keys(latencies).length != chart.data.datasets.length) {
         console.log('more keys!');
         let newdatasets = []

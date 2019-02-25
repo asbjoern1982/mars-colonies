@@ -32,11 +32,11 @@ let createNetworkModule = () => {
 
   let addHTML = (admin) => {
     // inject the html in the page
-    let htmlGraph = '<div class="col-lg-6 col-xl-4" style="border: 1px solid lightgray; height: 300px;"><div id="networkgraphtitle">Network Graph</div><div id="networkgraph"></div></div>'
+    let htmlGraph = '<div class="col-lg-6 col-xl-4" style="border: 1px solid lightgray; height: 300px;"><div id="networkgraphtitle">Network Graph</div><div id="networkgraph" style="height: 270px;"></div></div>'
     if ($('#graphs').length) {
       $('#graphs').append(htmlGraph)
     } else {
-      $('#admin').append('<div class="container"><div class="row" style="background-color: white;" id="graphs">' + htmlGraph + '</div></div>')
+      $('#admin').append('<div class="container"><div class="row" id="graphs">' + htmlGraph + '</div></div>')
     }
   }
 
