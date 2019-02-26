@@ -6,7 +6,7 @@
   ],
   "soundVolume": 0,
   "shuffleParticipants": true,
-  "roundLengthInSeconds":  120,
+  "roundLengthInSeconds":  1200,
   "inventoryBonusLimit": 500,
   "inventoryCriticalLimit": 100,
   "chat": "free",
