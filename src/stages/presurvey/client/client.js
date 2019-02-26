@@ -24,6 +24,7 @@ export default {
             onComplete: (survey) => {
               client.send('pre-survey_result', survey.data)
               $('#pre-survey').html(htmlThanks)
+              client.stageFinished()
             } // TODO add tell the server whenever an answer is answered
           })
         })
@@ -33,5 +34,5 @@ export default {
     })
   },
   teardown: (client) => {},
-  options: {htmlContainerHeight: 1}
+  options: {htmlContainerHeight: 0.98}
 }

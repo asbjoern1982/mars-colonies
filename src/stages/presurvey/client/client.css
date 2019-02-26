@@ -8,3 +8,8 @@
 #pre-survey-title {
   text-align: center;
 }
+
+#pre-survey {
+  background-color: white;
+  height: 100%;
+}
