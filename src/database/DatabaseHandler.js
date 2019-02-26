@@ -23,8 +23,9 @@ let createDatabaseHandler = () => {
   }).write()
 
   // log a chatmessage with who sent it and the message
-  let saveChat = (clientId, target, message) => {
+  let saveChat = (stage, clientId, target, message) => {
     let event = {
+      stage: stage,
       id: clientId,
       time: Date.now(),
       target: target,
@@ -34,8 +35,9 @@ let createDatabaseHandler = () => {
   }
 
   // log that a specilisation has been used
-  let saveProduction = (clientId, index, amount) => {
+  let saveProduction = (stage, clientId, index, amount) => {
     let event = {
+      stage: stage,
       id: clientId,
       time: Date.now(),
       index: index,
@@ -45,8 +47,9 @@ let createDatabaseHandler = () => {
   }
 
   // log a transfer of materials
-  let saveTrade = (clientId, receiver, material, amount) => {
+  let saveTrade = (stage, clientId, receiver, material, amount) => {
     let event = {
+      stage: stage,
       id: clientId,
       time: Date.now(),
       receiver: receiver,
@@ -57,8 +60,9 @@ let createDatabaseHandler = () => {
   }
 
   // at a certain interval the inventory of a client is logged for redundant storage
-  let saveInventory = (clientId, inventory) => {
+  let saveInventory = (stage, clientId, inventory) => {
     let event = {
+      stage: stage,
       id: clientId,
       time: Date.now(),
       inventory: inventory
@@ -67,8 +71,9 @@ let createDatabaseHandler = () => {
   }
 
   // log that a client has moved their mouse over an other colony on the map
-  let saveMouseOverColony = (clientId, colony) => {
+  let saveMouseOverColony = (stage, clientId, colony) => {
     let event = {
+      stage: stage,
       id: clientId,
       time: Date.now(),
       colony: colony
@@ -77,8 +82,9 @@ let createDatabaseHandler = () => {
   }
 
   // log any other events, typically a serverevent
-  let saveEvent = (data) => {
+  let saveEvent = (stage, data) => {
     let event = {
+      stage: stage,
       time: Date.now(),
       data: data
     }
@@ -86,8 +92,9 @@ let createDatabaseHandler = () => {
   }
 
   // save a survey
-  let saveSurvey = (clientId, data) => {
+  let saveSurvey = (stage, clientId, data) => {
     let survey = {
+      stage: stage,
       id: clientId,
       time: Date.now(),
       survey: data

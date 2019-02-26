@@ -3,34 +3,35 @@ import {DatabaseHandler} from './DatabaseHandler'
 
 let createLogger = () => {
   let logChat = (server, clientId, target, message) => {
-    DatabaseHandler.saveChat(clientId, target, message)
+    DatabaseHandler.saveChat(server.getCurrentStage().number, clientId, target, message)
   }
 
   let logProduction = (server, clientId, index, amount) => {
-    DatabaseHandler.saveProduction(clientId, index, amount)
+    DatabaseHandler.saveProduction(server.getCurrentStage().number, clientId, index, amount)
   }
 
   let logTrade = (server, clientId, receiver, material, amount) => {
-    DatabaseHandler.saveTrade(clientId, receiver, material, amount)
+    DatabaseHandler.saveTrade(server.getCurrentStage().number, clientId, receiver, material, amount)
   }
 
   let logInventory = (server, clientId, inventory) => {
     let inventorylist = inventory.map(row => row.amount)
-    DatabaseHandler.saveInventory(clientId, inventorylist)
+    DatabaseHandler.saveInventory(server.getCurrentStage().number, clientId, inventorylist)
   }
 
   let logMouseOverColony = (server, clientId, colony) => {
-    DatabaseHandler.saveMouseOverColony(clientId, colony)
+    DatabaseHandler.saveMouseOverColony(server.getCurrentStage().number, clientId, colony)
   }
 
   let logEvent = (server, data) => {
     server.send('logged', data).toAdmin()
-    DatabaseHandler.saveEvent(data)
+    let stage = server.getCurrentStage() ? server.getCurrentStage().number : 'setup'
+    DatabaseHandler.saveEvent(stage, data)
   }
 
   let logSurvey = (server, clientId, data) => {
     server.send('logged', clientId + ' completed the survey').toAdmin()
-    DatabaseHandler.saveSurvey(clientId, data)
+    DatabaseHandler.saveSurvey(server.getCurrentStage().number, clientId, data)
   }
 
   let exportAsJSON = () => {

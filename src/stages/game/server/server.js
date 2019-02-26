@@ -24,7 +24,7 @@ export default {
   },
   events: {
     'mouseover-colony': (server, clientId, target) => {
-      let senderColony = coloniecolonies.find(colony => colony.id === clientId)
+      let senderColony = colonies.find(colony => colony.id === clientId)
       let targetColony = colonies.find(colony => senderColony.game === colony.game && colony.name === target)
       Logger.logMouseOverColony(server, clientId, targetColony.id)
     },
@@ -43,18 +43,18 @@ export default {
         senderInventory.amount -= transferedAmount
       }
 
-      let receiverId = colonies.find(colony => colony.name === transfer.colony).id
+      let receiverId = colonies.find(colony => colony.game === sendingColony.game && colony.name === transfer.colony).id
       Logger.logTrade(server, clientId, receiverId, transfer.material, transferedAmount)
 
       // add amount to receivers inventory when the trade is complete
       setTimeout(() => {
         let amount = colonies
-          .find(colony => colony.name === transfer.colony)
+          .find(colony => colony.game === sendingColony.game && colony.name === transfer.colony)
           .inventory
           .find(material => material.name === transfer.material)
           .amount
         colonies
-          .find(colony => colony.name === transfer.colony)
+          .find(colony => colony.game === sendingColony.game && colony.name === transfer.colony)
           .inventory
           .find(material => material.name === transfer.material)
           .amount = Math.floor(amount) + Math.floor(transferedAmount) // it congatinate + as strings
@@ -110,8 +110,8 @@ export default {
       server.log('client reported ready: ' + clientId)
       let reportingColony = colonies.find(colony => colony.id === clientId)
       if (!reportingColony) {
-        console.log('unknown client: ' + clientId)
-        Logger.logEvent(server, 'unknown client reconnected: ' + clientId)
+        console.log('unknown client connected: ' + clientId)
+        Logger.logEvent(server, 'unknown client connected: ' + clientId)
         server.send('not assigned a colony').toClient(clientId)
         return
       }
@@ -126,7 +126,6 @@ export default {
         colonies.forEach(colony => sendSetupData(server, colony))
 
         gameloopRef = setInterval(() => gameloop(server), 1000)
-        Logger.logEvent(server, 'gameloop started')
       }
     },
     [Events.CLIENT_RECONNECTED]: (server, clientId) => {
@@ -141,7 +140,6 @@ export default {
   },
   setup: (server) => {
     console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
-    Logger.logEvent(server, 'starting game stage (' + server.getCurrentStage().number + ')')
 
     numberOfGames = Math.floor(server.getPlayers().length / config.players.length) // ignores leftover participants
 
@@ -163,7 +161,7 @@ export default {
     }
 
     let games = [...new Set(colonies.map(colony => colony.game))]
-    let log = games.map(gameNo => '"game ' + gameNo + ': [' + colonies.filter(colony => colony.game === gameNo).map(colony => colony.id).join() + ']').join() + '"'
+    let log = games.map(gameNo => '"game ' + gameNo + ': [' + colonies.filter(colony => colony.game === gameNo).map(colony => '(' + colony.id + ', ' + colony.name + ')').join() + ']').join() + '"'
     Logger.logEvent(server, log)
 
     let gamenetworkdata = games.map(gameNo => colonies.filter(colony => colony.game === gameNo).map(colony => colony.id))
