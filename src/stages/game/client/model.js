@@ -7,7 +7,8 @@ let createModel = () => {
     materials = data.materials
     colony = data.colonies.find(colony => colony.name === data.yourName)
     colony.specilisations = data.yourSpecilisations
-    colony.inventory = data.yourStartingInventory
+    colony.startingIventory = data.yourStartingInventory
+    colony.inventory = data.colonies.find(colony => colony.name === data.yourName).inventory
     otherColonies = data.colonies.filter(colony => colony.name !== data.yourName)
   }
 

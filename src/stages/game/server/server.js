@@ -202,7 +202,7 @@ let sendSetupData = (server, receiver) => {
     showScoreInTooltip: config.tooltip.includes('score'),
     yourName: receiver.name,
     yourSpecilisations: receiver.specilisations,
-    yourStartingInventory: receiver.inventory,
+    yourStartingInventory: config.players.find(player => player.name === receiver.name).inventory,
     colonies: simplifiedColonies
   }
   if (chatEvents.length > 0) { // handle reconnect

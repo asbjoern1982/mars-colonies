@@ -60,7 +60,41 @@ let createView = () => {
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js'
     document.getElementsByTagName('head')[0].appendChild(script)
 
-    $('#colony-title').html('Controle Panel for: ' + Model.getColony().name)
+    $('#colony-title').html('Control Panel for: ' + Model.getColony().name)
+
+    // ----------------- INVENTORY -------------------
+    Model.getColony().inventory.forEach(row => {
+      let amountColor = row.amount > inventoryBonusLimit ? 'inventory-bonus' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
+      let tagId = 'inventory' + row.name.replace(' ', '')
+
+      let cp,wp,bp = 0
+
+      let limit = Model.getColony().startingIventory.find(srow => srow.name === row.name).amount
+      if (limit >= row.amount) {
+        cp = 100 * (row.amount > inventoryCriticalLimit ? inventoryCriticalLimit : row.amount) / limit
+        wp = (100 * (row.amount > inventoryBonusLimit ? inventoryBonusLimit : row.amount) / limit) - cp
+        bp = 100 * (row.amount > inventoryBonusLimit ? row.amount - inventoryBonusLimit : 0) / limit
+      } else {
+        cp = 100 * inventoryCriticalLimit / row.amount
+        wp = 100 * (inventoryBonusLimit - inventoryCriticalLimit) / row.amount
+        bp = 100 - cp - wp
+      }
+
+
+      $('#inventory').find('tbody').append(
+        '<tr>' +
+          '<th scope="row">' + row.name + '</th>' +
+          '<th scope="row" class="align-middle">' +
+            '<div class="progress bg-dark align-right justify-content-end" style="width: 100%;">' +
+              '<div class="progress-bar bg-success"  id="' + tagId +'bp" role="progressbar" style="width: ' + bp + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-warning"  id="' + tagId +'wp" role="progressbar" style="width: ' + wp + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-danger"  id="' + tagId +'cp" role="progressbar" style="width: ' + cp + '%; margin: 0px;"></div>' +
+            '</div>' +
+          '</th>' +
+          '<td class="' + amountColor + '" id="' + tagId + '">' + row.amount + '</td>' +
+        '</tr>')
+
+    })
 
     // -------------------- TRADE --------------------
     let tradeAction = () => {
@@ -481,10 +515,31 @@ let createView = () => {
 
   // update this colonies inventory
   let updateInventory = () => {
-    $('#inventory').find('tbody').empty()
     Model.getColony().inventory.forEach(row => {
+      let tagId = '#inventory' + row.name.replace(' ', '')
+      let tag = $(tagId)
+      tag.html(row.amount)
+      tag.removeClass()
       let amountColor = row.amount > inventoryBonusLimit ? 'inventory-bonus' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
-      $('#inventory').find('tbody').append('<tr><th scope="row">' + row.name + '</th><td class="' + amountColor + '">' + row.amount + '</td></tr>')
+      tag.addClass(amountColor)
+
+      // TODO update progressbar
+      let cp,wp,bp = 0
+
+      let limit = Model.getColony().startingIventory.find(srow => srow.name === row.name).amount
+      if (limit >= row.amount) {
+        cp = 100 * (row.amount > inventoryCriticalLimit ? inventoryCriticalLimit : row.amount) / limit
+        wp = (100 * (row.amount > inventoryBonusLimit ? inventoryBonusLimit : row.amount) / limit) - cp
+        bp = 100 * (row.amount > inventoryBonusLimit ? row.amount - inventoryBonusLimit : 0) / limit
+      } else {
+        cp = 100 * inventoryCriticalLimit / row.amount
+        wp = 100 * (inventoryBonusLimit - inventoryCriticalLimit) / row.amount
+        bp = 100 - cp - wp
+      }
+
+      $(tagId +'bp').css('width', bp + '%')
+      $(tagId +'wp').css('width', wp + '%')
+      $(tagId +'cp').css('width', cp + '%')
     })
     checkInventoryAlarm()
 
