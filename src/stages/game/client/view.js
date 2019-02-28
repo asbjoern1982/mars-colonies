@@ -557,14 +557,18 @@ let createView = () => {
     checkInventoryAlarm()
 
     // change the colony to red on the map if it has a critical inventory
-    if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit)) {
+    if (Model.getColony().dead) {
+      Model.getColony().node.set('fill', 'black')
+    } else if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit)) {
       Model.getColony().node.set('fill', 'red')
     } else {
       Model.getColony().node.set('fill', 'grey')
     }
     if (Model.getOtherColonies()[0].inventory) {
       Model.getOtherColonies().forEach(colony => {
-        if (colony.inventory.some(row => row.amount < inventoryCriticalLimit)) {
+        if (colony.dead) {
+          colony.node.set('fill', 'black')
+        } else if (colony.inventory.some(row => row.amount < inventoryCriticalLimit)) {
           colony.node.set('fill', 'red')
         } else {
           colony.node.set('fill', 'rgb(100,100,100)')
@@ -700,6 +704,7 @@ let createView = () => {
     } else {
       node = Model.getOtherColonies().find(colony => colony.name === colonyName).node
     }
+    console.log('he be dead, ' + node);
     node.set('fill', 'black')
     canvas.requestRenderAll()
     logEvent(colonyName + ' have died')
