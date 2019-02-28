@@ -12,7 +12,7 @@
   "chat": "free",
   "allowDirectMessages": true,
   "tooltip": ["inventories", "specilisations"],
-  "trade_delay": 5,
+  "trade_delay": 0,
   "players": [
     {
       "name": "Oceania Colony",

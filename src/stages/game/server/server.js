@@ -136,6 +136,25 @@ export default {
         let stageNo = server.getCurrentStage().number
         server.send(Events.START_STAGE, stageNo).toClient(clientId)
       }, 1000)
+    },
+    [Events.CLIENT_DISCONNECTED] (server, clientId) {
+      Logger.logEvent(server, clientId + ' disconnected')
+    },
+    [Events.CLIENT_CONNECTED]: (server, clientId) => {
+      let avalibleColony = colonies.find(colony => !server.getPlayers().includes(colony.id))
+      if (avalibleColony) {
+        Logger.logEvent(server, 'player (' + clientId + ') connected, replacing ' + avalibleColony.id)
+        chatEvents.forEach(event => {
+          if (event.clientId === avalibleColony.id) event.clientId = clientId
+        })
+        avalibleColony.id = clientId
+        setTimeout(() => {
+          let stageNo = server.getCurrentStage().number
+          server.send(Events.START_STAGE, stageNo).toClient(clientId)
+        }, 1000)
+      } else {
+        Logger.logEvent(server, 'player (' + clientId + ') connected, no avalible colonies')
+      }
     }
   },
   setup: (server) => {
