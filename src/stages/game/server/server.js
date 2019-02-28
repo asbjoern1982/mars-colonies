@@ -89,7 +89,7 @@ export default {
       let inputName = specilisation.input
       let outputName = specilisation.output
       let gain = specilisation.gain
-      let delay = specilisation.transform_rate
+      let delay = specilisation.production_delay
 
       // substract input materials and inform the colony
       colony.inventory.find(material => material.name === inputName).amount -= production.amount

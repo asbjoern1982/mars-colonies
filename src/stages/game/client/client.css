@@ -27,10 +27,6 @@ body, html {
   color: white
 }
 
-.warning {
-  background-color: orange;
-}
-
 #colony-title-container {
 }
 
@@ -100,12 +96,6 @@ body, html {
 
 td {
   text-align: right;
-}
-.inventory-full {
-  color: grey;
-}
-.inventory-bonus {
-  color: lightgreen;
 }
 .inventory-low {
   color: red;

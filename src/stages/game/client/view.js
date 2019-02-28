@@ -85,10 +85,10 @@ let createView = () => {
         '<tr>' +
           '<th scope="row">' + row.name + '</th>' +
           '<th scope="row" class="align-middle">' +
-            '<div class="progress bg-dark align-right justify-content-end" style="width: 100%;">' +
-              '<div class="progress-bar bg-success"  id="' + tagId +'bp" role="progressbar" style="width: ' + bp + '%; margin: 0px;"></div>' +
-              '<div class="progress-bar bg-warning"  id="' + tagId +'wp" role="progressbar" style="width: ' + wp + '%; margin: 0px;"></div>' +
+            '<div class="progress bg-dark" style="width: 100%;">' +
               '<div class="progress-bar bg-danger"  id="' + tagId +'cp" role="progressbar" style="width: ' + cp + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-warning"  id="' + tagId +'wp" role="progressbar" style="width: ' + wp + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-success"  id="' + tagId +'bp" role="progressbar" style="width: ' + bp + '%; margin: 0px;"></div>' +
             '</div>' +
           '</th>' +
           '<td class="' + amountColor + '" id="' + tagId + '">' + row.amount + '</td>' +
@@ -141,8 +141,8 @@ let createView = () => {
     })
     Model.getOtherColonies().forEach(colony => $('#trade-colony').append('<option>' + colony.name + '</option>'))
     Model.getMaterials().forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
-    $('#trade-colony').mouseup(e => $('#trade-amount').focus())
-    $('#trade-material').mouseup(e => $('#trade-amount').focus())
+    $('#trade-colony').change(e => $('#trade-amount').focus())
+    $('#trade-material').change(e => $('#trade-amount').focus())
 
     // -------------------- PRODUCTION --------------------
     let productionAction = () => {
@@ -155,27 +155,37 @@ let createView = () => {
             index: index,
             amount: amount
           })
-          productionCountDown = Model.getColony().specilisations[index].transform_rate
-          productionCountTotal = productionCountDown
-          $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-          productionCountDown--
-          // countdown loop
-          let intervalRef = setInterval(() => {
-            if (productionCountDown <= 0) {
-              $('#production-progress').html('production finished')
-              clearInterval(intervalRef)
-            } else {
-              $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-              productionCountDown--
-            }
-          }, 1000)
+          productionCountDown = Model.getColony().specilisations[index].production_delay
+
+          if (productionCountDown > 0) {
+            productionCountTotal = productionCountDown
+            // countdown loop
+            $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+            productionCountDown--
+            let intervalRef = setInterval(() => {
+              if (productionCountDown <= 0) {
+                $('#production-progress').html('production finished')
+                clearInterval(intervalRef)
+              } else {
+                $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+                productionCountDown--
+              }
+            }, 1000)
+          } else {
+            $('#production-progress').html('production finished')
+          }
         }
 
         if (Model.getColony().inventory.find(material => material.name === Model.getColony().specilisations[index].input).amount - amount < inventoryCriticalLimit) {
           $.confirm({
             title: 'Your inventory will be lower than the critical limit, continue?',
             buttons: {
-              confirm: () => { startProduction() },
+              confirm: {
+                text: 'confirm',
+                btnClass: 'btn-blue',
+                keys: ['enter'],
+                action: () => startProduction()
+              },
               cancel: () => {}
             }
           })
@@ -195,10 +205,10 @@ let createView = () => {
     })
     for (let i = 0; i < Model.getColony().specilisations.length; i++) {
       let specilisation = Model.getColony().specilisations[i]
-      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%, ' + specilisation.transform_rate + ')'
+      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%, ' + specilisation.production_delay + ')'
       $('#production-material').append('<option value="' + i + '">' + option + '</option>')
     }
-    $('#production-material').mouseup(e => $('#production-amount').focus())
+    $('#production-material').change(e => $('#production-amount').focus())
 
     // -------------------- CHAT --------------------
     if (Array.isArray(data.chat) && data.chat.length > 0) {
@@ -520,7 +530,7 @@ let createView = () => {
       let tag = $(tagId)
       tag.html(row.amount)
       tag.removeClass()
-      let amountColor = row.amount > inventoryBonusLimit ? 'inventory-bonus' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
+      let amountColor = row.amount > inventoryBonusLimit ? 'text-success' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'text-warning'
       tag.addClass(amountColor)
 
       // TODO update progressbar
