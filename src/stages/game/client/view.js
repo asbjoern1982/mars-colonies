@@ -99,18 +99,21 @@ let createView = () => {
     // -------------------- TRADE --------------------
     let tradeAction = () => {
       let amount = $('#trade-amount').val()
+        let material = $('#trade-material').val()
       // ignore anything that isn't a positive number
       if (amount > 0) {
         $('#trade-amount').val('')
         let sendTransfer = () => {
           client.send('trade', {
             colony: $('#trade-colony').val(),
-            material: $('#trade-material').val(),
+            material: material,
             amount: amount
           })
+          Model.getColony().inventory.find(row => row.name === material).amount -= amount
+          updateInventory()
         }
         // confirm if it would bring the participant below the critical limit
-        if (Model.getColony().inventory.find(material => material.name === $('#trade-material').val()).amount - amount < inventoryCriticalLimit) {
+        if (Model.getColony().inventory.find(row => row.name === material).amount - amount < inventoryCriticalLimit) {
           $.confirm({
             title: 'Your inventory will be lower than the critical limit, continue?',
             buttons: {
@@ -659,8 +662,6 @@ let createView = () => {
 
   let addChatMessage = (data) => {
     let chatBox = $('#chat-log')
-
-    console.log(chat);
     let chat_key = data.target === 'all' ? 'all' : (data.sender === Model.getColony().name ? data.target : data.sender)
 
     chat[chat_key].text += data.sender + '> ' + data.message + '\n'

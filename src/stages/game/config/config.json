@@ -12,7 +12,7 @@
   "chat": "free",
   "allowDirectMessages": true,
   "tooltip": ["inventories", "specilisations"],
-  "trade_delay": 0,
+  "trade_delay": 5,
   "players": [
     {
       "name": "Oceania Colony",
@@ -25,7 +25,7 @@
         "input": "Palladium",
         "output": "Selenium",
         "gain": 2.0,
-      	"production_delay": 0
+      	"production_delay": 10
       }]
     },
     {
@@ -39,7 +39,7 @@
         "input": "Selenium",
         "output": "Tungsten",
         "gain": 2.0,
-	      "production_delay": 0
+	      "production_delay": 10
       }]
     },
     {
@@ -53,7 +53,7 @@
         "input": "Tungsten",
         "output": "Palladium",
         "gain": 2.0,
-	      "production_delay": 0
+	      "production_delay": 10
       }]
     }
   ]

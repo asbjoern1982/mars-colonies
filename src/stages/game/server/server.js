@@ -64,9 +64,9 @@ export default {
           receiver: transfer.colony,
           amount: transferedAmount,
           material: transfer.material
-        }).toClients(colonies.filter(colony => colony.game === sendingColony.game).map(colony => colony.id))
+        }).toClients(colonies.filter(colony => colony.game === sendingColony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
         sendColoniesInventories(server)
-      }, config.trade_delay)
+      }, config.trade_delay * 1000)
     },
     'chat': (server, clientId, data) => {
       data.clientId = clientId
@@ -76,9 +76,9 @@ export default {
       // data.sender = colony.name
       let target = colonies.find(col => col.game === colony.game && col.name === data.target)
       if (!target) {
-        server.send('chat', data).toClients(colonies.filter(col => col.game === colony.game).map(col => col.id))
+        server.send('chat', data).toClients(colonies.filter(col => col.game === colony.game).map(col => col.id).filter(id => server.getPlayers().includes(id)))
       } else {
-        server.send('chat', data).toClients([clientId, target.id])
+        server.send('chat', data).toClients([clientId, target.id].filter(id => server.getPlayers().includes(id)))
       }
       Logger.logChat(server, colony.game, colony.name, clientId, target ? target.id : 'all', data.message)
     },
@@ -234,7 +234,7 @@ let gameloop = (server) => {
         let points = score.calculateScore(colony, colonies.filter(col => col.game === colony.game))
         return colony.name + '\t' + points
       })
-      server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id))
+      server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
     }
 
     return
@@ -266,7 +266,7 @@ let gameloop = (server) => {
 let killColony = (server, colony, materialName) => {
   colony.dead = true
   colony.inventory.find(row => materialName === row.name).amount = 0
-  server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id))
+  server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
   Logger.logEvent(server, colony.id + ' has died')
 }
 
@@ -281,6 +281,6 @@ let sendColoniesInventories = (server) => {
         inventory: colony.inventory
       })
     )
-    server.send('inventories', inventories).toClients(colonies.filter(colony => colony.game === i).map(colony => colony.id))
+    server.send('inventories', inventories).toClients(colonies.filter(colony => colony.game === i).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
   }
 }
