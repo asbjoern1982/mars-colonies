@@ -26,7 +26,7 @@ export default {
     'mouseover-colony': (server, clientId, target) => {
       let senderColony = colonies.find(colony => colony.id === clientId)
       let targetColony = colonies.find(colony => senderColony.game === colony.game && colony.name === target)
-      Logger.logMouseOverColony(server, clientId, targetColony.id)
+      Logger.logMouseOverColony(server, senderColony.game, senderColony.name, clientId, targetColony.id)
     },
     'trade': (server, clientId, transfer) => {
       server.log('client ' + clientId + ' transfer: ' + JSON.stringify(transfer))
@@ -80,7 +80,7 @@ export default {
       } else {
         server.send('chat', data).toClients([clientId, target.id])
       }
-      Logger.logChat(server, clientId, target ? target.id : 'all', data.message)
+      Logger.logChat(server, colony.game, colony.name, clientId, target ? target.id : 'all', data.message)
     },
     'produce': (server, clientId, production) => {
       server.log('client started production: ' + clientId + ' data: ' + JSON.stringify(production))
@@ -95,7 +95,7 @@ export default {
       colony.inventory.find(material => material.name === inputName).amount -= production.amount
       sendColoniesInventories(server)
 
-      Logger.logProduction(server, clientId, production.index, production.amount)
+      Logger.logProduction(server, colony.game, colony.name, clientId, production.index, production.amount)
 
       // create a timeout that adds the output to the colony and informs the colony
       setTimeout(() => {
@@ -257,7 +257,7 @@ let gameloop = (server) => {
   if (tickcount % 100 === 0) {
     sendColoniesInventories(server)
     colonies.forEach(colony => {
-      Logger.logInventory(server, colony.id, colony.inventory)
+      Logger.logInventory(server, colony.game, colony.name, colony.id, colony.inventory)
     })
   }
 }
