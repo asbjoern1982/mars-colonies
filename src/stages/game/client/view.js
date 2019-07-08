@@ -635,7 +635,7 @@ let createView = () => {
   let updateTimeLeft = () => {
     let secondsLeft = timeLeft - Math.floor((Date.now() - startTime) / 1000)
     if (secondsLeft < 0) secondsLeft = 0
-    $('#time-left').html(secondsLeft + ' seconds')
+    $('#time-left').html(secondsLeft + ' seconds left')
 
     let procent = Math.floor(100 * ((Date.now() - startTime) / 1000) / timeLeft)
     $('#time-left-bar').css('width', procent + '%')
