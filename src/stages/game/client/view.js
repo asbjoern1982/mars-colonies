@@ -673,7 +673,8 @@ let createView = () => {
     let chatBox = $('#chat-log')
     let chat_key = data.target === 'all' ? 'all' : (data.sender === Model.getColony().name ? data.target : data.sender)
 
-    chat[chat_key].text += data.sender + '> ' + data.message + '\n'
+    let senderTag = Model.getColony().name === data.sender ? '<b class="text-warning">' : '<b>'
+    chat[chat_key].text += senderTag + data.sender + '</b>&gt; ' + data.message + '<br>'
 
     if (chat[chat_key].tag.hasClass('active')){
       chatBox.html(chat[chat_key].text)
