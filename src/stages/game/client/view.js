@@ -64,34 +64,36 @@ let createView = () => {
 
     // ----------------- INVENTORY -------------------
     Model.getColony().inventory.forEach(row => {
-      let amountColor = row.amount > inventoryBonusLimit ? 'inventory-bonus' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
+      let amountColor = row.amount > inventoryBonusLimit ? 'text-success' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'inventory-low'
       let tagId = 'inventory' + row.name.replace(' ', '')
 
-      let cp,wp,bp = 0
-
+      // find starting amount
       let limit = Model.getColony().startingIventory.find(srow => srow.name === row.name).amount
+
+      let criticalPoint = 100 * (row.amount > inventoryCriticalLimit ? inventoryCriticalLimit : row.amount) / limit
+      let warningPoint = (100 * (row.amount > inventoryBonusLimit ? inventoryBonusLimit : row.amount) / limit) - criticalPoint
+      let bonusPoint = 0
       if (limit >= row.amount) {
-        cp = 100 * (row.amount > inventoryCriticalLimit ? inventoryCriticalLimit : row.amount) / limit
-        wp = (100 * (row.amount > inventoryBonusLimit ? inventoryBonusLimit : row.amount) / limit) - cp
-        bp = 100 * (row.amount > inventoryBonusLimit ? row.amount - inventoryBonusLimit : 0) / limit
-      } else {
-        cp = 100 * inventoryCriticalLimit / row.amount
-        wp = 100 * (inventoryBonusLimit - inventoryCriticalLimit) / row.amount
-        bp = 100 - cp - wp
+        bonusPoint = 100 * (row.amount > inventoryBonusLimit ? row.amount - inventoryBonusLimit : 0) / limit
+      } else { // if there is more than the starting inventory, just fill it out
+        bonusPoint = 100 * (limit - inventoryBonusLimit) / limit
       }
 
+      // if there is more than starting amount, add a + to indicate that the progress-bar is overflowing
+      let overflow = row.amount > Model.getColony().startingIventory.find(srow => srow.name === row.name).amount ? '+' : ' '
 
       $('#inventory').find('tbody').append(
         '<tr>' +
-          '<th scope="row">' + row.name + '</th>' +
-          '<th scope="row" class="align-middle">' +
-            '<div class="progress bg-dark" style="width: 100%;">' +
-              '<div class="progress-bar bg-danger"  id="' + tagId +'cp" role="progressbar" style="width: ' + cp + '%; margin: 0px;"></div>' +
-              '<div class="progress-bar bg-warning"  id="' + tagId +'wp" role="progressbar" style="width: ' + wp + '%; margin: 0px;"></div>' +
-              '<div class="progress-bar bg-success"  id="' + tagId +'bp" role="progressbar" style="width: ' + bp + '%; margin: 0px;"></div>' +
+          '<td scope="row"><div class="text-left">' + row.name + '</div></td>' +
+          '<td scope="row" class="align-middle">' +
+            '<div class="progress bg-dark" style="width: 100%; padding-right:0px;">' +
+              '<div class="progress-bar bg-danger"  id="' + tagId +'cp" role="progressbar" style="width: ' + criticalPoint + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-warning"  id="' + tagId +'wp" role="progressbar" style="width: ' + warningPoint + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-success"  id="' + tagId +'bp" role="progressbar" style="width: ' + bonusPoint + '%; margin: 0px;"></div>' +
             '</div>' +
-          '</th>' +
-          '<td class="' + amountColor + '" id="' + tagId + '">' + row.amount + '</td>' +
+          '</td>' +
+          '<td class="text-success text-left" id="' + tagId + 'overflow" style="padding-left:0px;">' + overflow + '</td>' +
+          '<td scope="row" class="' + amountColor + '" id="' + tagId + '">' + row.amount + '</td>' +
         '</tr>')
 
     })
@@ -536,23 +538,26 @@ let createView = () => {
       let amountColor = row.amount > inventoryBonusLimit ? 'text-success' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'text-warning'
       tag.addClass(amountColor)
 
-      // TODO update progressbar
-      let cp,wp,bp = 0
-
+      // find starting amount
       let limit = Model.getColony().startingIventory.find(srow => srow.name === row.name).amount
+
+      let criticalPoint = 100 * (row.amount > inventoryCriticalLimit ? inventoryCriticalLimit : row.amount) / limit
+      let warningPoint = (100 * (row.amount > inventoryBonusLimit ? inventoryBonusLimit : row.amount) / limit) - criticalPoint
+      let bonusPoint = 0
       if (limit >= row.amount) {
-        cp = 100 * (row.amount > inventoryCriticalLimit ? inventoryCriticalLimit : row.amount) / limit
-        wp = (100 * (row.amount > inventoryBonusLimit ? inventoryBonusLimit : row.amount) / limit) - cp
-        bp = 100 * (row.amount > inventoryBonusLimit ? row.amount - inventoryBonusLimit : 0) / limit
-      } else {
-        cp = 100 * inventoryCriticalLimit / row.amount
-        wp = 100 * (inventoryBonusLimit - inventoryCriticalLimit) / row.amount
-        bp = 100 - cp - wp
+        bonusPoint = 100 * (row.amount > inventoryBonusLimit ? row.amount - inventoryBonusLimit : 0) / limit
+      } else { // if there is more than the starting inventory, just fill it out
+        bonusPoint = 100 * (limit - inventoryBonusLimit) / limit
       }
 
-      $(tagId +'bp').css('width', bp + '%')
-      $(tagId +'wp').css('width', wp + '%')
-      $(tagId +'cp').css('width', cp + '%')
+      // if there is more than starting amount, add a + to indicate that the progress-bar is overflowing
+      let overflow = row.amount > Model.getColony().startingIventory.find(srow => srow.name === row.name).amount ? '+' : ' '
+
+      $(tagId +'bp').css('width', bonusPoint + '%')
+      $(tagId +'wp').css('width', warningPoint + '%')
+      $(tagId +'cp').css('width', criticalPoint + '%')
+
+      $(tagId +'overflow').html(overflow)
     })
     checkInventoryAlarm()
 
