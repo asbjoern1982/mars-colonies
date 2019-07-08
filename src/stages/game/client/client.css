@@ -69,6 +69,16 @@ body, html {
   padding-right: 5px;
 }
 
+.chatTabWarning {
+  animation-name: chatTabWarningFade;
+  animation-duration: 1s;
+  background-color: rgb(319, 229, 86);
+}
+@keyframes chatTabWarningFade {
+  from {background-color: rgb(200, 200, 200);}
+  to {background-color: rgb(319, 229, 86);}
+}
+
 #score {
   color: white;
   background-color: rgb(30, 30, 30);

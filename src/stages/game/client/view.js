@@ -285,7 +285,7 @@ let createView = () => {
           $('#chatTabsDM').find('.active').removeClass('active')
           $('#chatDropdownA').removeClass('active')
           $('#chatAllLi').addClass('active')
-          $('#chatAllLi').removeClass('warning')
+          $('#chatAllLi').removeClass('chatTabWarning')
           let chatBox = $('#chat-log')
           chatBox.html(chat.all.text)
           chatBox.scrollTop(chatBox[0].scrollHeight)
@@ -297,8 +297,8 @@ let createView = () => {
           $('#' + trimmedName + 'Action').mouseup(e => {
             $('#chatAllLi').removeClass('active')
             $('#chatTabsDM').find('.active').removeClass('active')
-            $('#chatDropdownA').removeClass('warning')
-            $('#' + trimmedName + 'Action').removeClass('warning')
+            $('#chatDropdownA').removeClass('chatTabWarning')
+            $('#' + trimmedName + 'Action').removeClass('chatTabWarning')
 
             $('#chatDropdownA').addClass('active')
             $('#' + trimmedName + 'Action').addClass('active')
@@ -679,9 +679,9 @@ let createView = () => {
       chatBox.html(chat[chat_key].text)
       chatBox.scrollTop(chatBox[0].scrollHeight)
     } else {
-      chat[chat_key].tag.addClass('warning')
+      chat[chat_key].tag.addClass('chatTabWarning')
       if (chat_key !== 'all') {
-        $('#chatDropdownA').addClass('warning')
+        $('#chatDropdownA').addClass('chatTabWarning')
       }
     }
   }
