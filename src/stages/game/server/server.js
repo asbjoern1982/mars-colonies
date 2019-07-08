@@ -85,11 +85,11 @@ export default {
     'produce': (server, clientId, production) => {
       server.log('client started production: ' + clientId + ' data: ' + JSON.stringify(production))
       let colony = colonies.find(colony => colony.id === clientId)
-      let specilisation = colony.specilisations[production.index]
-      let inputName = specilisation.input
-      let outputName = specilisation.output
-      let gain = specilisation.gain
-      let delay = specilisation.production_delay
+      let specialization = colony.specializations[production.index]
+      let inputName = specialization.input
+      let outputName = specialization.output
+      let gain = specialization.gain
+      let delay = specialization.production_delay
 
       // substract input materials and inform the colony
       colony.inventory.find(material => material.name === inputName).amount -= production.amount
@@ -203,8 +203,8 @@ let sendSetupData = (server, receiver) => {
     // if (config.tooltip.includes('inventories')) {
     simplifiedColony.inventory = colony.inventory
     // }
-    if (config.tooltip.includes('specilisations')) {
-      simplifiedColony.specilisations = colony.specilisations
+    if (config.tooltip.includes('specializations')) {
+      simplifiedColony.specializations = colony.specializations
     }
     simplifiedColonies.push(simplifiedColony)
   })
@@ -220,7 +220,7 @@ let sendSetupData = (server, receiver) => {
     showInventoryInTooltip: config.tooltip.includes('inventories'),
     showScoreInTooltip: config.tooltip.includes('score'),
     yourName: receiver.name,
-    yourSpecilisations: receiver.specilisations,
+    yourSpecializations: receiver.specializations,
     yourStartingInventory: config.players.find(player => player.name === receiver.name).inventory,
     colonies: simplifiedColonies
   }

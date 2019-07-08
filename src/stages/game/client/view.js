@@ -158,7 +158,7 @@ let createView = () => {
             index: index,
             amount: amount
           })
-          productionCountDown = Model.getColony().specilisations[index].production_delay
+          productionCountDown = Model.getColony().specializations[index].production_delay
 
           if (productionCountDown > 0) {
             productionCountTotal = productionCountDown
@@ -179,7 +179,7 @@ let createView = () => {
           }
         }
 
-        if (Model.getColony().inventory.find(material => material.name === Model.getColony().specilisations[index].input).amount - amount < inventoryCriticalLimit) {
+        if (Model.getColony().inventory.find(material => material.name === Model.getColony().specializations[index].input).amount - amount < inventoryCriticalLimit) {
           $.confirm({
             title: 'Your inventory will be lower than the critical limit, continue?',
             buttons: {
@@ -206,9 +206,9 @@ let createView = () => {
         productionAction()
       }
     })
-    for (let i = 0; i < Model.getColony().specilisations.length; i++) {
-      let specilisation = Model.getColony().specilisations[i]
-      let option = specilisation.input + ' to ' + specilisation.output + ' (' + specilisation.gain * 100 + '%, ' + specilisation.production_delay + ')'
+    for (let i = 0; i < Model.getColony().specializations.length; i++) {
+      let specialization = Model.getColony().specializations[i]
+      let option = specialization.input + ' to ' + specialization.output + ' (' + specialization.gain * 100 + '%, ' + specialization.production_delay + ')'
       $('#production-material').append('<option value="' + i + '">' + option + '</option>')
     }
     $('#production-material').change(e => $('#production-amount').focus())
@@ -601,7 +601,7 @@ let createView = () => {
 
   // create and return a tooltip with the appropiate information
   let createTooltip = (colony, left, top) => {
-    let height = (showInventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specilisations ? 16 + 16 * colony.specilisations.length : 0) + (showScore ? 32 : 0) + 3
+    let height = (showInventory ? 16 + 16 * colony.inventory.length : 0) + (colony.specializations ? 16 + 16 * colony.specializations.length : 0) + (showScore ? 32 : 0) + 3
     let adjustedTop = top + height + 4 > canvas.height ? canvas.height - height - 4 : top
     let tooltipBackground = new fabric.Rect({
       left: left,
@@ -616,7 +616,7 @@ let createView = () => {
     // only display information if it is pressen on the colony
     let text = // colony.name +
       (showInventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') + '\n': '') +
-      (colony.specilisations ? 'Specilisations:\n' + colony.specilisations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') + '\n' : '') +
+      (colony.specializations ? 'Specializations:\n' + colony.specializations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') + '\n' : '') +
       (showScore ? 'Score:\n' + score.calculateScore(colony, Model.getOtherColonies()) : '')
     let tooltipText = new fabric.Text(text, {
       left: left + 3,

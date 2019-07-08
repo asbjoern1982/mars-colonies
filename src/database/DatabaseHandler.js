@@ -36,7 +36,7 @@ let createDatabaseHandler = () => {
     db.get('chat').push(event).write()
   }
 
-  // log that a specilisation has been used
+  // log that a specialization has been used
   let saveProduction = (stage, game, name, clientId, index, amount) => {
     let event = {
       stage: stage,

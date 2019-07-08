@@ -11,7 +11,7 @@
   "inventoryCriticalLimit": 100,
   "chat": "free",
   "allowDirectMessages": true,
-  "tooltip": ["inventories", "specilisations"],
+  "tooltip": ["inventories", "specializations"],
   "trade_delay": 0,
   "players": [
     {
@@ -21,7 +21,7 @@
         {"name": "Selenium", "amount": 1000},
         {"name": "Tungsten", "amount": 1000}
       ],
-      "specilisations": [{
+      "specializations": [{
         "input": "Palladium",
         "output": "Selenium",
         "gain": 2.0,
@@ -35,7 +35,7 @@
         {"name": "Selenium", "amount": 1000},
         {"name": "Tungsten", "amount": 1000}
       ],
-      "specilisations": [{
+      "specializations": [{
         "input": "Selenium",
         "output": "Tungsten",
         "gain": 2.0,
@@ -49,7 +49,7 @@
         {"name": "Selenium", "amount": 1000},
         {"name": "Tungsten", "amount": 1000}
       ],
-      "specilisations": [{
+      "specializations": [{
         "input": "Tungsten",
         "output": "Palladium",
         "gain": 2.0,
