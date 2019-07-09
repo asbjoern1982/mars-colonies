@@ -71,6 +71,15 @@ export default {
     'chat': (server, clientId, data) => {
       data.clientId = clientId
       chatEvents.push(data)
+      // sanitize message
+      data.message = data.message.replace(/[&"<>]/g, (c) => {
+        return {
+          '&': "&amp;",
+          '"': "&quot;",
+          '<': "&lt;",
+          '>': "&gt;"
+        }[c]
+      })
       server.log('client ' + clientId + ' (' + data.sender + ') sent message ' + data.message + ' to ' + data.target)
       let colony = colonies.find(colony => colony.id === clientId)
       // data.sender = colony.name
