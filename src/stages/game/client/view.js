@@ -664,7 +664,7 @@ let createView = () => {
     setTimeout(() => {
       route.stroke = 'black'
       canvas.requestRenderAll()
-    }, 1000)
+    }, 2000) // how long the line changes color
 
     logEvent(sendingColony.name + ' transfered  ' + transfer.amount + ' ' + transfer.material + ' to ' + receivingColony.name)
   }
