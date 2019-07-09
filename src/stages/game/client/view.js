@@ -322,7 +322,8 @@ let createView = () => {
     if (data.chatEvents) {
       data.chatEvents.forEach(event => {
         let chat_key = event.target === 'all' ? 'all' : (event.sender === Model.getColony().name ? event.target : event.sender)
-        chat[chat_key].text += event.sender + '> ' + event.message + '\n'
+        let senderTag = Model.getColony().name === event.sender ? '<b class="text-warning">' : '<b>'
+        chat[chat_key].text += senderTag + event.sender + '</b>&gt; ' + event.message + '<br>'
       })
       let chatBox = $('#chat-log')
       chatBox.html(chat['all'].text)
@@ -689,7 +690,8 @@ let createView = () => {
 
   let logEvent = (message) => {
     let eventLog = $('#event-log')
-    eventLog.append(new Date().toLocaleTimeString() + '>' + message + '\n')
+    let res = message.replace(Model.getColony().name, '<span class="text-warning">' + Model.getColony().name + '</span>')
+    eventLog.append(new Date().toLocaleTimeString() + '&gt' + res + '<br>')
     eventLog.scrollTop(eventLog[0].scrollHeight)
   }
 

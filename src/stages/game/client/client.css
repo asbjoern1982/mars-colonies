@@ -128,7 +128,9 @@ td {
     height: 205px;
     background-color: rgb(100, 100, 100);
     color: white;
-    resize: none;
+    overflow: auto;
+    padding: 2px;
+    border: 1px solid white;
 }
 
 #time-left {
