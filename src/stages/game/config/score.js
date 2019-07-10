@@ -21,5 +21,6 @@ export default {
     let procent = Math.floor(score / totalMaterials * 100)
     let payout = Math.floor((upperlimit - lowerlimit) * (score / totalMaterials) + lowerlimit)
     return payout + ' kr (' + procent + '%)'*/
-  }
+  },
+  basePayout
 }

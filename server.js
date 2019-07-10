@@ -1,5 +1,6 @@
 import createServer, { Network, Events } from 'monsterr'
 import {Logger} from './src/database/logger'
+import {PaymentHandler} from './src/database/PaymentHandler'
 import {LatencyModule} from './src/modules/LatencyModule'
 import {NetworkModule} from './src/modules/NetworkModule'
 import {CPUModule} from './src/modules/CPUModule'
@@ -26,8 +27,12 @@ let commands = {
   },
   'reqCSV': (server, clientId) => {
     let csv = Logger.exportAsCSV()
-    console.log(csv)
     server.send('resCSV', csv).toAdmin()
+  },
+  'reqPay': (server, clientId) => {
+    PaymentHandler.exportCSV(data => {
+      server.send('resPay', data).toAdmin()
+    })
   }
 }
 

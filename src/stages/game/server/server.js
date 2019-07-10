@@ -2,6 +2,7 @@ import {Events} from 'monsterr'
 import {Logger} from '../../../database/logger'
 import config from './../config/config.json'
 import score from './../config/score'
+import {PaymentHandler} from '../../../database/PaymentHandler'
 
 let numberOfGames
 let colonies = []
@@ -195,6 +196,8 @@ export default {
     let gamenetworkdata = games.map(gameNo => colonies.filter(colony => colony.game === gameNo).map(colony => colony.id))
     server.send('gamenetwork', gamenetworkdata).toAdmin()
 
+    // set the base payout for everyone in case the game ends early
+    PaymentHandler.setPayoutAmount(server.getPlayers().map(id => ({clientId: id, amount: score.basePayout})))
   },
   teardown: (server) => {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
@@ -264,6 +267,11 @@ let gameloop = (server) => {
       })
       server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
     }
+
+    PaymentHandler.setPayoutAmount(colonies.map(colony => ({
+      clientId: colony.id,
+      amount: score.calculateScore(colony, colonies.filter(col => col.game === colony.game))
+    })))
 
     return
   }
