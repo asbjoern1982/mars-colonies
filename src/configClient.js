@@ -1,7 +1,8 @@
 import presurvey from './stages/presurvey/client/client'
 import game from './stages/game/client/client'
-// import clientGame15 from './src/stages/game15/client/client'
+import postsurvey from './stages/postsurvey/client/client'
+import payment from './stages/paymentmodule/client/client'
 
 export default {
-  stages: [game]
+  stages: [presurvey, game, postsurvey, payment]
 }

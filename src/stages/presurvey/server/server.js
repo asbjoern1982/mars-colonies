@@ -1,10 +1,16 @@
 import {Logger} from '../../../database/logger'
 
+let completedSurveys = 0
+
 export default {
   commands: {},
   events: {
     'pre-survey_result': function (server, clientId, data) {
       Logger.logSurvey(server, clientId, data)
+      completedSurveys++
+      if (completedSurveys >= server.getPlayers().length) {
+        server.send('logged', 'everyone has completed the pre survey').toAdmin()
+      }
     }
   },
   setup: (server) => {

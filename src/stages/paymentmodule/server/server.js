@@ -1,6 +1,8 @@
 import {Logger} from '../../../database/logger'
 import {PaymentHandler} from '../../../database/PaymentHandler'
 
+let completedSurveys
+
 export default {
   commands: {},
   events: {
@@ -12,6 +14,11 @@ export default {
       server.log('client saved information: ' + clientId)
       Logger.logEvent(server, 'client saved information: ' + clientId)
       PaymentHandler.saveParticipantInformation(clientId, data)
+      
+      completedSurveys++
+      if (completedSurveys >= server.getPlayers().length) {
+        server.send('logged', 'everyone has completed the payment survey').toAdmin()
+      }
     }
   },
   setup: (server) => {
