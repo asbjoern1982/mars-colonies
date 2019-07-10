@@ -7,6 +7,12 @@
   prefixing admin-specific css to avoid unwanted
   behaviour.
 */
-.container {
+#graphs {
   padding-top: 5px;
+}
+.row {
+  margin-bottom: 10px;
+}
+.card {
+  width: 20rem;
 }

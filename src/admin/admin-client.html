@@ -1,9 +1,3 @@
-<!--
-  You can define html freely here.
-  The html will only be rendered on the admin.
-
-  We suggest that you wrap the html in a div.
--->
 <div id="admin">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <div class="container">
@@ -11,22 +5,41 @@
       <h3>Mars Colonies admin client</h3>
     </div>
     <div class="row">
-      <p>
-        <button class="btn btn-success" id="buttonStart">Start</button>
-        <button class="btn btn-warning" id="buttonEnd">End Game</button>
-        <button class="btn btn-danger" id="buttonNext">Next Stage</button>
-      </p>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Stage controls</h5>
+          <button class="btn btn-success" id="buttonStart">Start</button>
+          <button class="btn btn-warning" id="buttonEnd">End Game</button>
+          <button class="btn btn-danger" id="buttonNext">Next Stage</button>
+        </div>
+      </div>
     </div>
+
+    <div class="row" style="background-color: white;" id="graphs">
+      <div class="col-lg-6 col-xl-4" style="border: 1px solid lightgray; height: 300px; width: 300px;">
+        <div id="gamenetworkgraphtitle">Game Network Graph</div>
+        <div id="gamenetworkgraph" class="col-12" style="height: 270px;""></div>
+      </div>
+    </div>
+
     <div class="row">
-      <p>
-        <button class="btn btn-secondary" id="buttonDownloadJSON"><i class="fa fa-download"></i> Download JSON file</button>
-        <button class="btn btn-secondary" id="buttonDownloadCSV"><i class="fa fa-download"></i> Download CSV files</button>
-        <button class="btn btn-secondary" id="buttonDownloadPay"><i class="fa fa-download"></i> Download Payment file</button>
-      </p>
-    </div>
-    <div class="container">
-      <div class="row" style="background-color: white;" id="graphs">
-        <div class="col-lg-6 col-xl-4" style="border: 1px solid lightgray; height: 300px; width: 300px;"><div id="gamenetworkgraphtitle">Game Network Graph</div><div id="gamenetworkgraph" class="col-12" style="height: 270px;""></div></div>
+      <div class="card-group">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Download game and survey data</h5>
+            <p class="card-text">When the experiment is done, download data from the game and survey here either as a one big json file or a number csv files</p>
+            <button class="btn btn-secondary" id="buttonDownloadJSON"><i class="fa fa-download"></i> JSON file</button>
+            <button class="btn btn-secondary" id="buttonDownloadCSV"><i class="fa fa-download"></i> CSV files</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Download payment information</h5>
+            <p class="card-text">When the participants are done with entering their payment information, the CSV file can be downloaded here. It is kept seperate from the game data </p>
+            <button class="btn btn-secondary" id="buttonDownloadPay"><i class="fa fa-download"></i> CSV file</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
