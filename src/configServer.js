@@ -4,6 +4,6 @@ import postsurvey from './stages/postsurvey/server/server'
 import payment from './stages/paymentmodule/server/server'
 
 export default {
-  stages: [presurvey, game, postsurvey, payment],
+  stages: [game, postsurvey, payment],
   participants: 3
 }

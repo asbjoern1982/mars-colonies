@@ -699,8 +699,12 @@ let createView = () => {
     // when the game is over, ei time is up, the client receives a 'gameover'
     // The 'status' contains what points each colony earned
     $('#criticalAlarm').trigger('pause') // stop alarm
-    logEvent('game over\n' + status)
+    logEvent('game over\n' + status.replace('/\n/g', '<br>'))
     disableEverything()
+
+    let text = 'Status for this game:<br>' + status.replace(/\n/g, '<br>')
+    $('#gameoverModalBody').html(text)
+    $('#modalGameover').modal('show')
   }
 
   let killColony = (colonyName) => {

@@ -68,7 +68,7 @@ export default {
   },
   teardown (client) {},
   options: {
-    htmlContainerHeight: 1,
+    htmlContainerHeight: 0.99,
     hideChat: true
   }
 }
