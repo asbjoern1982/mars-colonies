@@ -19,8 +19,8 @@ let createLogger = () => {
     DatabaseHandler.saveInventory(server.getCurrentStage().number, game, name, clientId, inventorylist)
   }
 
-  let logMouseOverColony = (server, game, name, clientId, colony) => {
-    DatabaseHandler.saveMouseOverColony(server.getCurrentStage().number, game, name, clientId, colony)
+  let logMouseOverColony = (server, game, name, clientId, targetName, targetId) => {
+    DatabaseHandler.saveMouseOverColony(server.getCurrentStage().number, game, name, clientId, targetName, targetId)
   }
 
   let logEvent = (server, data) => {

@@ -27,7 +27,7 @@ export default {
     'mouseover-colony': (server, clientId, target) => {
       let senderColony = colonies.find(colony => colony.id === clientId)
       let targetColony = colonies.find(colony => senderColony.game === colony.game && colony.name === target)
-      Logger.logMouseOverColony(server, senderColony.game, senderColony.name, clientId, targetColony.id)
+      Logger.logMouseOverColony(server, senderColony.game, senderColony.name, clientId, target, targetColony.id)
     },
     'trade': (server, clientId, transfer) => {
       server.log('client ' + clientId + ' transfer: ' + JSON.stringify(transfer))

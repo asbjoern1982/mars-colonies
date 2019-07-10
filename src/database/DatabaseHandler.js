@@ -17,7 +17,7 @@ let createDatabaseHandler = () => {
     production: [],
     trade: [],
     inventory: [],
-    logMouseOverColony: [],
+    mouseover: [],
     events: [],
     surveys: []
   }).write()
@@ -79,16 +79,17 @@ let createDatabaseHandler = () => {
   }
 
   // log that a client has moved their mouse over an other colony on the map
-  let saveMouseOverColony = (stage, game, name, clientId, colony) => {
+  let saveMouseOverColony = (stage, game, name, clientId, targetName, targetId) => {
     let event = {
       stage: stage,
       game: game,
       name: name,
       id: clientId,
       time: Date.now(),
-      colony: colony
+      targetName: targetName,
+      targetId: targetId
     }
-    db.get('logMouseOverColony').push(event).write()
+    db.get('mouseover').push(event).write()
   }
 
   // log any other events, typically a serverevent
@@ -120,6 +121,7 @@ let createDatabaseHandler = () => {
     let output = {
       chats: db.get('chat').value(),
       productions: db.get('production').value(),
+      mouseover: db.get('mouseover').value(),
       trades: db.get('trade').value(),
       inventories: db.get('inventory').value(),
       events: db.get('events').value(),
