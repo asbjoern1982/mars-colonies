@@ -103,7 +103,12 @@ export default {
       let delay = specialization.production_delay
 
       // substract input materials and inform the colony
-      colony.inventory.find(material => material.name === inputName).amount -= production.amount
+      let inventory = colony.inventory.find(material => material.name === inputName)
+      if (inventory.amount < production.amount) {
+        // if the amount is larger than what is inventory, just use everything that is left
+        production.amount = inventory.amount
+      }
+      inventory.amount -= production.amount
       sendColoniesInventories(server)
 
       Logger.logProduction(server, colony.game, colony.name, clientId, production.index, production.amount, inputName, outputName, gain)
