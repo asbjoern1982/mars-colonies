@@ -201,9 +201,6 @@ export default {
 
     let gamenetworkdata = games.map(gameNo => colonies.filter(colony => colony.game === gameNo).map(colony => colony.id))
     server.send('gamenetwork', gamenetworkdata).toAdmin()
-
-    // set the base payout for everyone in case the game ends early
-    PaymentHandler.setPayoutAmount(server.getPlayers().map(id => ({clientId: id, amount: score.basePayout})))
   },
   teardown: (server) => {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())

@@ -14,7 +14,7 @@ export default {
       server.log('client saved information: ' + clientId)
       Logger.logEvent(server, 'client saved information: ' + clientId)
       PaymentHandler.saveParticipantInformation(clientId, data)
-      
+
       completedSurveys++
       if (completedSurveys >= server.getPlayers().length) {
         server.send('logged', 'everyone has completed the payment survey').toAdmin()
@@ -24,6 +24,7 @@ export default {
   setup: (server) => {
     console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
     Logger.logEvent(server, 'starting payment stage (' + server.getCurrentStage().number + ')')
+    PaymentHandler.randomizePayout()
   },
   teardown: (server) => {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
