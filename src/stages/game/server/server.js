@@ -71,7 +71,6 @@ export default {
     },
     'chat': (server, clientId, data) => {
       data.clientId = clientId
-      chatEvents.push(data)
       // sanitize message
       data.message = data.message.replace(/[&"<>]/g, (c) => {
         return {
@@ -81,6 +80,8 @@ export default {
           '>': "&gt;"
         }[c]
       })
+      chatEvents.push(data)
+
       server.log('client ' + clientId + ' (' + data.sender + ') sent message ' + data.message + ' to ' + data.target)
       let colony = colonies.find(colony => colony.id === clientId)
       // data.sender = colony.name
@@ -90,7 +91,7 @@ export default {
       } else {
         server.send('chat', data).toClients([clientId, target.id].filter(id => server.getPlayers().includes(id)))
       }
-      Logger.logChat(server, colony.game, colony.name, clientId, target ? target.id : 'all', data.message)
+      Logger.logChat(server, colony.game, colony.name, clientId, target ? target.name : 'all', target ? target.id : '', data.message)
     },
     'produce': (server, clientId, production) => {
       server.log('client started production: ' + clientId + ' data: ' + JSON.stringify(production))
@@ -105,7 +106,7 @@ export default {
       colony.inventory.find(material => material.name === inputName).amount -= production.amount
       sendColoniesInventories(server)
 
-      Logger.logProduction(server, colony.game, colony.name, clientId, production.index, production.amount)
+      Logger.logProduction(server, colony.game, colony.name, clientId, production.index, production.amount, inputName, outputName, gain)
 
       // create a timeout that adds the output to the colony and informs the colony
       setTimeout(() => {

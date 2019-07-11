@@ -23,29 +23,33 @@ let createDatabaseHandler = () => {
   }).write()
 
   // log a chatmessage with who sent it and the message
-  let saveChat = (stage, game, name, clientId, target, message) => {
+  let saveChat = (stage, game, name, clientId, targetName, targetId, message) => {
     let event = {
       stage: stage,
       game: game,
       name: name,
       id: clientId,
       time: Date.now(),
-      target: target,
+      targetName: targetName,
+      targetId: targetId,
       message: message
     }
     db.get('chat').push(event).write()
   }
 
   // log that a specialization has been used
-  let saveProduction = (stage, game, name, clientId, index, amount) => {
+  let saveProduction = (stage, game, name, clientId, index, amount, inputName, outputName, gain) => {
     let event = {
       stage: stage,
       game: game,
       name: name,
       id: clientId,
       time: Date.now(),
-      index: index,
-      amount: Math.floor(amount)
+      specializationIndex: index,
+      amount: Math.floor(amount),
+      inputMaterial: inputName,
+      outputMaterial: outputName,
+      gain: gain
     }
     db.get('production').push(event).write()
   }

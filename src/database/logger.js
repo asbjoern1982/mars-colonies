@@ -2,12 +2,12 @@
 import {DatabaseHandler} from './DatabaseHandler'
 
 let createLogger = () => {
-  let logChat = (server, game, name, clientId, target, message) => {
-    DatabaseHandler.saveChat(server.getCurrentStage().number, game, name, clientId, target, message)
+  let logChat = (server, game, name, clientId, targetName, targetId, message) => {
+    DatabaseHandler.saveChat(server.getCurrentStage().number, game, name, clientId, targetName, targetId, message)
   }
 
-  let logProduction = (server, game, name, clientId, index, amount) => {
-    DatabaseHandler.saveProduction(server.getCurrentStage().number, game, name, clientId, index, amount)
+  let logProduction = (server, game, name, clientId, index, amount, inputName, outputName, gain) => {
+    DatabaseHandler.saveProduction(server.getCurrentStage().number, game, name, clientId, index, amount, inputName, outputName, gain)
   }
 
   let logTrade = (server, game, name, clientId, receiver, material, amount) => {
