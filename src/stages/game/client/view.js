@@ -704,7 +704,7 @@ let createView = () => {
 
     let text = 'Status for this game:<br>' + status.replace(/\n/g, '<br>')
     $('#gameoverModalBody').html(text)
-    $('#modalGameover').modal('show')
+    // TODO this blocks the next stage $('#modalGameover').modal('show')
   }
 
   let killColony = (colonyName) => {
