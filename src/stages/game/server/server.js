@@ -306,7 +306,7 @@ let killColony = (server, colony, materialName) => {
   colony.dead = true
   colony.inventory.find(row => materialName === row.name).amount = 0
   server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
-  Logger.logEvent(server, colony.id + ' has died')
+  Logger.logEvent(server, colony.id + '(' +colony.name + ') has died')
 }
 
 // send inventory to all colonies
