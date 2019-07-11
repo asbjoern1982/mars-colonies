@@ -44,8 +44,8 @@ export default {
         senderInventory.amount -= transferedAmount
       }
 
-      let receiverId = colonies.find(colony => colony.game === sendingColony.game && colony.name === transfer.colony).id
-      Logger.logTrade(server, sendingColony.game, sendingColony.name, clientId, receiverId, transfer.material, transferedAmount)
+      let receiver = colonies.find(colony => colony.game === sendingColony.game && colony.name === transfer.colony)
+      Logger.logTrade(server, sendingColony.game, sendingColony.name, clientId, receiver.name, receiver.id, transfer.material, transferedAmount)
 
       // add amount to receivers inventory when the trade is complete
       setTimeout(() => {

@@ -55,14 +55,15 @@ let createDatabaseHandler = () => {
   }
 
   // log a transfer of materials
-  let saveTrade = (stage, game, name, clientId, receiver, material, amount) => {
+  let saveTrade = (stage, game, name, clientId, receiverName, receiverId, material, amount) => {
     let event = {
       stage: stage,
       game: game,
       name: name,
       id: clientId,
       time: Date.now(),
-      receiver: receiver,
+      receiverName: receiverName,
+      receiverId: receiverId,
       material: material,
       amount: Math.floor(amount)
     }

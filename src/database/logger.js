@@ -10,8 +10,8 @@ let createLogger = () => {
     DatabaseHandler.saveProduction(server.getCurrentStage().number, game, name, clientId, index, amount, inputName, outputName, gain)
   }
 
-  let logTrade = (server, game, name, clientId, receiver, material, amount) => {
-    DatabaseHandler.saveTrade(server.getCurrentStage().number, game, name, clientId, receiver, material, amount)
+  let logTrade = (server, game, name, clientId, receiverName, receiverId, material, amount) => {
+    DatabaseHandler.saveTrade(server.getCurrentStage().number, game, name, clientId, receiverName, receiverId, material, amount)
   }
 
   let logInventory = (server, game, name, clientId, inventory) => {
