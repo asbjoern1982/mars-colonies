@@ -34,5 +34,5 @@ export default {
     })
   },
   teardown: (client) => {},
-  options: {htmlContainerHeight: 0.98}
+  options: {htmlContainerHeight: 1}
 }

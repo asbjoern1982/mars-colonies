@@ -1,47 +1,51 @@
 <div class="container bg-light" style="width: 100%; height: 100%;">
-  <div class="container">
-    <h1>Payment</h1>
-    The experiment is now over
+  <div class="row">
+    <div class="container">
+      <h1>Payment</h1>
+      The experiment is now over
+    </div>
   </div>
-  <div class="card" id="paymentInformationCard">
-    <div class="card-body">
-      <p>
-        You will receive: <scan class="badge badge-secondary" id="paymentAmount"></scan>
-      </p>
-      <form>
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="firstname">First Name(s)</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="firstname" placeholder="Enter your first name(s)">
-              <div class="invalid-feedback">
-                Enter a first name
+  <div class="row">
+    <div class="card" id="paymentInformationCard">
+      <div class="card-body">
+        <p>
+          You will receive: <scan class="badge badge-secondary" id="paymentAmount"></scan>
+        </p>
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="firstname">First Name(s)</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="firstname" placeholder="Enter your first name(s)">
+                <div class="invalid-feedback">
+                  Enter a first name
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="lastname">Last Name</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="lastname"  placeholder="Enter your last name">
+                <div class="invalid-feedback">
+                  Enter a last name
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="form-group col-md-4">
-            <label for="lastname">Last Name</label>
+          <div class="form-group">
+            <label for="cprnumber">CPR number</label>
             <div class="input-group">
-              <input type="text" class="form-control" id="lastname"  placeholder="Enter your last name">
+              <input type="text" class="form-control" id="cprnumber" aria-describedby="cprHelp" placeholder="Enter your CPR number">
               <div class="invalid-feedback">
-                Enter a last name
+                Not a valid CPR number
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="form-group">
-          <label for="cprnumber">CPR number</label>
-          <div class="input-group">
-            <input type="text" class="form-control" id="cprnumber" aria-describedby="cprHelp" placeholder="Enter your CPR number">
-            <div class="invalid-feedback">
-              Not a valid CPR number
-            </div>
-          </div>
-        </div>
-      </form>
-      <button class="btn btn-primary" id="submitButton">Submit</button>
+        </form>
+        <button class="btn btn-primary" id="submitButton">Submit</button>
+      </div>
     </div>
   </div>
 </div>
