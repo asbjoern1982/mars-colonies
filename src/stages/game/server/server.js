@@ -159,7 +159,7 @@ export default {
     [Events.CLIENT_CONNECTED]: (server, clientId) => {
       let avalibleColony = colonies.find(colony => !server.getPlayers().includes(colony.id))
       if (avalibleColony) {
-        Logger.logEvent(server, 'player (' + clientId + ') connected, replacing ' + avalibleColony.id)
+        Logger.logEvent(server, 'unknown player (' + clientId + ') connected, replacing ' + avalibleColony.id + ' (' + avalibleColony.name + ') in game ' + avalibleColony.game)
         chatEvents.forEach(event => {
           if (event.clientId === avalibleColony.id) event.clientId = clientId
         })
@@ -169,7 +169,7 @@ export default {
           server.send(Events.START_STAGE, stageNo).toClient(clientId)
         }, 1000)
       } else {
-        Logger.logEvent(server, 'player (' + clientId + ') connected, no avalible colonies')
+        Logger.logEvent(server, 'unknown player (' + clientId + ') connected, no avalible colonies')
       }
     }
   },
