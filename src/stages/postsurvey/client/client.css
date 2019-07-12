@@ -2,14 +2,3 @@
     background-image: url(../img/survey-back.png);
     background-size: cover;
 }
-.row {
-    font-size: 15px;
-}
-#post-survey-title {
-  text-align: center;
-}
-
-#post-survey {
-  background-color: white;
-  height: 100%;
-}

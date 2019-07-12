@@ -4,5 +4,5 @@ import postsurvey from './stages/postsurvey/client/client'
 import payment from './stages/paymentmodule/client/client'
 
 export default {
-  stages: [game, postsurvey, payment]
+  stages: [postsurvey, payment]
 }

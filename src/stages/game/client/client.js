@@ -66,9 +66,14 @@ export default {
     // when the client is ready to start the game, tell the server
     client.send('ready')
   },
-  teardown (client) {},
+  teardown (client) {
+    console.log('closing stage')
+    $('#gameoverWindow').modal('hide')
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+  },
   options: {
-    htmlContainerHeight: 0.99,
+    htmlContainerHeight: 1,
     hideChat: true
   }
 }

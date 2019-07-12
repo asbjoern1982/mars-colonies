@@ -1,5 +1,6 @@
 import {Logger} from '../../../database/logger'
 import {PaymentHandler} from '../../../database/PaymentHandler'
+import {Events} from 'monsterr'
 
 let completedSurveys
 
@@ -19,6 +20,16 @@ export default {
       if (completedSurveys >= server.getPlayers().length) {
         server.send('logged', 'everyone has completed the payment survey').toAdmin()
       }
+    },
+    [Events.CLIENT_RECONNECTED]: (server, clientId) => {
+      server.log('client reconnect: ' + clientId)
+      // when a client reconnects, wait for about 1 second to let it rebuild
+      // the page and then send it the correct stage and data
+
+      setTimeout(() => {
+        let stageNo = server.getCurrentStage().number
+        server.send(Events.START_STAGE, stageNo).toClient(clientId)
+      }, 1000)
     }
   },
   setup: (server) => {

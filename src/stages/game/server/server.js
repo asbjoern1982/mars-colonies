@@ -269,6 +269,11 @@ let gameloop = (server) => {
         return colony.name + '\t' + points
       })
       server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
+
+      // go to next stage after 5 sec
+      setTimeout(() => {
+        server.nextStage()
+      }, 5000)
     }
 
     PaymentHandler.setPayoutAmount(colonies.map(colony => ({
@@ -307,6 +312,10 @@ let killColony = (server, colony, materialName) => {
   colony.inventory.find(row => materialName === row.name).amount = 0
   server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
   Logger.logEvent(server, colony.id + '(' +colony.name + ') has died')
+
+  if (colonies.every(colony => colony.dead)) {
+    tickcount = config.roundLengthInSeconds
+  }
 }
 
 // send inventory to all colonies

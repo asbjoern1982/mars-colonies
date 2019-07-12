@@ -10,7 +10,24 @@ export default {
     client.stageFinished()
     return false
   }},
-  events: {},
+  events: {
+    'everyoneIsReady': () => {
+      console.log('everyone is ready, going to next stage in 5')
+      // countdown
+      let seconds = 5
+      $('#countdownSurvey').html('Everyone is finished, the next stage will start in ' + seconds + ' seconds')
+      $('#doneCountdown').text(seconds)
+      let countdownInterval = setInterval(() => {
+        seconds--
+        $('#countdownSurvey').html('Everyone is finished, the next stage will start in ' + seconds + ' seconds')
+        if (seconds <= 0) {
+          clearInterval(countdownInterval)
+        }
+      }, 1000)
+      console.log('showing the window!')
+      $('doneWindow').modal('show')
+    }
+  },
   setup: (client) => {
     Survey.StylesManager.applyTheme('bootstrap')
     let surveyModel = new Survey.Model(surveyJSON)
@@ -24,7 +41,7 @@ export default {
             onComplete: (survey) => {
               client.send('post-survey_result', survey.data)
               $('#post-survey').html(htmlThanks)
-              client.stageFinished()
+              // client.stageFinished()
             }
           })
         })
@@ -33,6 +50,10 @@ export default {
         })
     })
   },
-  teardown: (client) => {},
+  teardown: (client) => {
+    $('#doneWindow').modal('hide')
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+  },
   options: {htmlContainerHeight: 1}
 }

@@ -695,18 +695,33 @@ let createView = () => {
     eventLog.scrollTop(eventLog[0].scrollHeight)
   }
 
+  // when the game is over, ei time is up, the client receives a 'gameover'
+  // The 'status' contains what points each colony earned
   let gameover = (status) => {
-    // when the game is over, ei time is up, the client receives a 'gameover'
-    // The 'status' contains what points each colony earned
-    $('#criticalAlarm').trigger('pause') // stop alarm
-    logEvent('game over\n' + status.replace('/\n/g', '<br>'))
+    // hide other popups
+    $('#youDiedWindow').modal('hide')
+
+    // highlight own colonyname
+    let text = 'Final score:<br>' + status.replace(/\n/g, '<br>').replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>')
+    logEvent('game over<br>' + text)
     disableEverything()
 
-    let text = 'Status for this game:<br>' + status.replace(/\n/g, '<br>')
-    $.alert({
-      title: 'Gameover',
-      content: text
-    })
+    let everyoneIsDead = Model.getOtherColonies().every(colony => colony.dead) && Model.getColony().dead
+    $('#gameoverTitle').html(everyoneIsDead ? 'Everyone is dead' : 'Gameover')
+
+    $('#gameoverScore').html(text)
+    $('#gameoverWindow').modal('show')
+
+    // countdown
+    let seconds = 5
+    $('#gameoverCountdown').text(seconds)
+    let countdownInterval = setInterval(() => {
+      seconds--
+      $('#gameoverCountdown').text(seconds)
+      if (seconds <= 0) {
+        clearInterval(countdownInterval)
+      }
+    }, 1000)
   }
 
   let killColony = (colonyName) => {
@@ -718,7 +733,6 @@ let createView = () => {
     } else {
       node = Model.getOtherColonies().find(colony => colony.name === colonyName).node
     }
-    console.log('he be dead, ' + node);
     node.set('fill', 'black')
     canvas.requestRenderAll()
     logEvent(colonyName + ' have died')
@@ -727,6 +741,7 @@ let createView = () => {
   // when this colony is dead or the game is over, disable all buttons and
   // inputfields
   let disableEverything = () => {
+    $('#criticalAlarm').trigger('pause') // stop alarm
     $('#trade-colony').prop('disabled', true)
     $('#trade-material').prop('disabled', true)
     $('#trade-amount').prop('disabled', true)
