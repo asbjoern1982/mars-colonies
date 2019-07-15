@@ -1,8 +1,8 @@
 import createClient from 'monsterr'
 import {CPUModule} from './src/modules/CPUModule'
-import configClient from './src/configClient'
+import clientStages from './src/clientStages'
 
-const stages = configClient.stages
+const stages = clientStages.stages
 
 let options = {
   canvasBackgroundColor: 'white',

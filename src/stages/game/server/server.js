@@ -3,6 +3,7 @@ import {Logger} from '../../../database/logger'
 import config from './../config/config.json'
 import score from './../config/score'
 import {PaymentHandler} from '../../../database/PaymentHandler'
+import serverStages from '../../../serverStages'
 
 let numberOfGames
 let colonies = []
