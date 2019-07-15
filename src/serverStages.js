@@ -10,9 +10,9 @@ import round3 from './stages/game/config/config.json'
 
 let configurations = [
 //  {stage: survey, config: preSurvey},
-  {stage: game, config: round1},
-//  {stage: survey, config: postSurvey, },
-//  {stage: payment}
+//  {stage: game, config: round1},
+  {stage: survey, config: postSurvey, },
+  {stage: payment}
 ]
 
 export default {

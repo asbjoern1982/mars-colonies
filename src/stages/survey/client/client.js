@@ -60,5 +60,5 @@ export default {
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
   },
-  options: {htmlContainerHeight: 1}
+  options: {htmlContainerHeight: 0.99}
 }

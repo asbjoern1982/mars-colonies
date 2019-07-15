@@ -5,8 +5,8 @@ import payment from './stages/paymentmodule/client/client'
 export default {
   stages: [
 //    survey,
-    game,
-//    survey,
-//    payment
+//    game,
+    survey,
+    payment
   ]
 }
