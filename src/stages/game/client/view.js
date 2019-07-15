@@ -6,6 +6,7 @@ let createView = () => {
   let inventoryCriticalLimit
   let productionCountDown = 0
   let productionCountTotal = 0
+  let productionProgressInterval
 
   let tradeRoutes
 
@@ -167,10 +168,10 @@ let createView = () => {
             // countdown loop
             $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
             productionCountDown--
-            let intervalRef = setInterval(() => {
+            productionProgressInterval = setInterval(() => {
               if (productionCountDown <= 0) {
                 $('#production-progress').html('production finished')
-                clearInterval(intervalRef)
+                clearInterval(productionProgressInterval)
               } else {
                 $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
                 productionCountDown--
@@ -726,9 +727,10 @@ let createView = () => {
 
   let killColony = (colonyName) => {
     // when a colony runs out of a material, it dies
-    let node
+    let node // node to be coloered
     if (Model.getColony().name === colonyName) {
       disableEverything()
+      clearInterval(productionProgressInterval) // stop production
       node = Model.getColony().node
     } else {
       node = Model.getOtherColonies().find(colony => colony.name === colonyName).node

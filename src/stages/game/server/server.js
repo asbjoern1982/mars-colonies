@@ -11,6 +11,8 @@ let gameloopRef
 let startTime
 let chatEvents = []
 
+let runningTimeouts = []
+
 export default {
   commands: {
     'adminReady': (server) => {
@@ -49,7 +51,7 @@ export default {
       Logger.logTrade(server, sendingColony.game, sendingColony.name, clientId, receiver.name, receiver.id, transfer.material, transferedAmount)
 
       // add amount to receivers inventory when the trade is complete
-      setTimeout(() => {
+      let ref = setTimeout(() => {
         let amount = colonies
           .find(colony => colony.game === sendingColony.game && colony.name === transfer.colony)
           .inventory
@@ -68,7 +70,10 @@ export default {
           material: transfer.material
         }).toClients(colonies.filter(colony => colony.game === sendingColony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
         sendColoniesInventories(server)
+
+        runningTimeouts = runningTimeouts.filter(t => t.ref !== ref) // removes this timeout
       }, config.trade_delay * 1000)
+      runningTimeouts.push({colony: receiver, ref: ref})
     },
     'chat': (server, clientId, data) => {
       data.clientId = clientId
@@ -115,13 +120,15 @@ export default {
       Logger.logProduction(server, colony.game, colony.name, clientId, production.index, production.amount, inputName, outputName, gain)
 
       // create a timeout that adds the output to the colony and informs the colony
-      setTimeout(() => {
+      let ref = setTimeout(() => {
         let currentAmount = colony.inventory.find(material => material.name === outputName).amount
         colony.inventory
           .find(material => material.name === outputName)
           .amount = Math.floor(currentAmount) + Math.floor(production.amount * gain) // it congatinate + as strings
         sendColoniesInventories(server)
+        runningTimeouts = runningTimeouts.filter(t => t.ref !== ref) // removes this timeout
       }, delay * 1000)
+      runningTimeouts.push({colony: colony, ref: ref})
     },
     'ready': (server, clientId) => {
       server.log('client reported ready: ' + clientId)
@@ -205,6 +212,8 @@ export default {
   },
   teardown: (server) => {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
+    runningTimeouts.forEach(t => clearTimeout(t)) // remove any timeouts
+    // TODO: clear gameloop interval?
   },
   options: {}
 }
@@ -310,10 +319,14 @@ let gameloop = (server) => {
 // kill a given colony
 let killColony = (server, colony, materialName) => {
   colony.dead = true
-  colony.inventory.find(row => materialName === row.name).amount = 0
+  colony.inventory.find(row => materialName === row.name).amount = 0 // overwrite amount if gameloop have substracted something
   server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
   Logger.logEvent(server, colony.id + '(' +colony.name + ') has died')
 
+  // clear any timeouts with the colony
+  runningTimeouts.filter(t => t.colony.id === colony.id).map(t => t.ref).forEach(ref => clearTimeout(ref))
+
+  // if everyone is dead, end the round
   if (colonies.every(colony => colony.dead)) {
     tickcount = config.roundLengthInSeconds
   }
