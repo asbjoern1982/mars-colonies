@@ -30,6 +30,7 @@ let createDatabaseHandler = () => {
       name: name,
       id: clientId,
       time: Date.now(),
+      timestr: new Date().toLocaleTimeString(),
       targetName: targetName,
       targetId: targetId,
       message: message
@@ -45,6 +46,7 @@ let createDatabaseHandler = () => {
       name: name,
       id: clientId,
       time: Date.now(),
+      timestr: new Date().toLocaleTimeString(),
       specializationIndex: index,
       amount: Math.floor(amount),
       inputMaterial: inputName,
@@ -62,6 +64,7 @@ let createDatabaseHandler = () => {
       name: name,
       id: clientId,
       time: Date.now(),
+      timestr: new Date().toLocaleTimeString(),
       receiverName: receiverName,
       receiverId: receiverId,
       material: material,
@@ -78,6 +81,7 @@ let createDatabaseHandler = () => {
       name: name,
       id: clientId,
       time: Date.now(),
+      timestr: new Date().toLocaleTimeString(),
       inventory: inventory
     }
     db.get('inventory').push(event).write()
@@ -91,6 +95,7 @@ let createDatabaseHandler = () => {
       name: name,
       id: clientId,
       time: Date.now(),
+      timestr: new Date().toLocaleTimeString(),
       targetName: targetName,
       targetId: targetId
     }
@@ -102,6 +107,7 @@ let createDatabaseHandler = () => {
     let event = {
       stage: stage,
       time: Date.now(),
+      timestr: new Date().toLocaleTimeString(),
       data: data
     }
     db.get('events').push(event).write()
@@ -113,6 +119,7 @@ let createDatabaseHandler = () => {
       stage: stage,
       id: clientId,
       time: Date.now(),
+      timestr: new Date().toLocaleTimeString(),
       survey: data
     }
     db.get('surveys').push(survey).write()

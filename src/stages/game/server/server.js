@@ -49,6 +49,7 @@ export default {
 
       let receiver = colonies.find(colony => colony.game === sendingColony.game && colony.name === transfer.colony)
       Logger.logTrade(server, sendingColony.game, sendingColony.name, clientId, receiver.name, receiver.id, transfer.material, transferedAmount)
+      sendColoniesInventories(server)
 
       // add amount to receivers inventory when the trade is complete
       let ref = setTimeout(() => {
@@ -70,6 +71,8 @@ export default {
           material: transfer.material
         }).toClients(colonies.filter(colony => colony.game === sendingColony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
         sendColoniesInventories(server)
+
+        Logger.logInventory(server, sendingColony.game, sendingColony.name, sendingColony.id, sendingColony.inventory)
 
         runningTimeouts = runningTimeouts.filter(t => t.ref !== ref) // removes this timeout
       }, config.trade_delay * 1000)
@@ -204,7 +207,7 @@ export default {
     }
 
     let games = [...new Set(colonies.map(colony => colony.game))]
-    let log = games.map(gameNo => '"game ' + gameNo + ': [' + colonies.filter(colony => colony.game === gameNo).map(colony => '(' + colony.id + ', ' + colony.name + ')').join() + ']').join() + '"'
+    let log = games.map(gameNo => 'game ' + gameNo + ': [' + colonies.filter(colony => colony.game === gameNo).map(colony => '(' + colony.id + ', ' + colony.name + ')').join() + ']').join() + ''
     Logger.logEvent(server, log)
 
     let gamenetworkdata = games.map(gameNo => colonies.filter(colony => colony.game === gameNo).map(colony => colony.id))
@@ -310,9 +313,6 @@ let gameloop = (server) => {
   // every 100th second, set the clients inventory, it might have drifted
   if (tickcount % 100 === 0) {
     sendColoniesInventories(server)
-    colonies.forEach(colony => {
-      Logger.logInventory(server, colony.game, colony.name, colony.id, colony.inventory)
-    })
   }
 }
 
@@ -322,6 +322,7 @@ let killColony = (server, colony, materialName) => {
   colony.inventory.find(row => materialName === row.name).amount = 0 // overwrite amount if gameloop have substracted something
   server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
   Logger.logEvent(server, colony.id + '(' +colony.name + ') has died')
+  Logger.logInventory(server, colony.game, colony.name, colony.id, colony.inventory)
 
   // clear any timeouts with the colony
   runningTimeouts.filter(t => t.colony.id === colony.id).map(t => t.ref).forEach(ref => clearTimeout(ref))
@@ -345,4 +346,8 @@ let sendColoniesInventories = (server) => {
     )
     server.send('inventories', inventories).toClients(colonies.filter(colony => colony.game === i).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
   }
+  // save a log of every inventory
+  colonies.forEach(colony => {
+    Logger.logInventory(server, colony.game, colony.name, colony.id, colony.inventory)
+  })
 }
