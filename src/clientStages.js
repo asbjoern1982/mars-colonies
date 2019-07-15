@@ -3,5 +3,10 @@ import survey from './stages/survey/client/client'
 import payment from './stages/paymentmodule/client/client'
 
 export default {
-  stages: [survey, game, survey, payment]
+  stages: [
+    survey,
+    game,
+    survey,
+    payment
+  ]
 }

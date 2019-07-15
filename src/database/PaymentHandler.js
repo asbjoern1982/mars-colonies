@@ -85,12 +85,8 @@ let createPaymentHandler = () => {
     // update stored data
     let participant = participants.find(p => p.clientId === clientId)
 
-    if (participant.cprnumber !== '') {
-      
-    }
-
     // DEBUG: if the participant isnt in the system, the setPayoutAmount hasnt been used but to not lose data, an empty participant is used
-    if (!participant) { // DEBUG: just for testing
+    if (!participant) {
       console.log('ISSUE: no participant found when saving information, setPayoutAmount might not have been run')
       participant = {
         clientId: clientId,
@@ -101,6 +97,11 @@ let createPaymentHandler = () => {
         amounts: ['0']
       }
       participants.push(participant)
+    }
+
+    // TODO might need to handle dublication of cpr numbers
+    if (participant.cprnumber !== '') {
+      console.log('the cpr number has already been saved')
     }
 
     participant.cprnumber = clientData.cprnumber
