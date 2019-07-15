@@ -48,8 +48,9 @@ let createLogger = () => {
     // for each survey, add id, time and questions, if it is not present,
     // it just adds ',' so the columns are presisent and multiple answers are
     // put into quotes
-    let surveyCSV = 'clientId,time,' + headers.join() + '\n' +
+    let surveyCSV = 'stage,clientId,time,' + headers.join() + '\n' +
       data.surveys.map(survey =>
+        survey['stage'] + ',' +
         survey['id'] + ',' +
         survey['time'] + ',' +
         headers.map((header) =>
