@@ -45,7 +45,7 @@ let events = {
     })
   },
   'resPay': (admin, data) => {
-    let fileName = 'mars-colonies_' + Date.now() + '.csv'
+    let fileName = 'mars-colonies_payment_' + Date.now() + '.csv'
     let url = window.URL.createObjectURL(new Blob([data], {type: 'text/csv'}))
     var a = document.createElement('a')
     document.body.appendChild(a)
