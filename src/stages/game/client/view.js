@@ -102,9 +102,9 @@ let createView = () => {
     // -------------------- TRADE --------------------
     let tradeAction = () => {
       let amount = $('#trade-amount').val()
-        let material = $('#trade-material').val()
+      let material = $('#trade-material').val()
       // ignore anything that isn't a positive number
-      if (amount > 0) {
+      if (amount > 0 && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
         $('#trade-amount').val('')
         let sendTransfer = () => {
           client.send('trade', {
