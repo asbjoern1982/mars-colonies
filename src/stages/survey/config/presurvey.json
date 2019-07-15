@@ -1,0 +1,36 @@
+{
+ "title": "Pre Survey",
+ "showProgressBar": "top",
+ "pages": [
+  {
+   "name": "First Page",
+   "elements": [
+    {
+     "type": "dropdown",
+     "name": "gender",
+     "title": "What gender do you identify as?",
+     "choices": [
+      {
+       "value": "item1",
+       "text": "Male"
+      },
+      {
+       "value": "item2",
+       "text": "Female"
+      },
+      {
+       "value": "item3",
+       "text": "Other"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "name": "age",
+     "title": "What is your age",
+     "inputType": "number"
+    }
+   ]
+  }
+ ]
+}

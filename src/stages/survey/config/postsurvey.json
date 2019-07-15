@@ -1,0 +1,36 @@
+{
+ "title": "Post Survey",
+ "showProgressBar": "top",
+ "pages": [
+  {
+   "name": "First Page",
+   "elements": [
+    {
+     "type": "dropdown",
+     "name": "snack",
+     "title": "What is your favorite fruit?",
+     "choices": [
+      {
+       "value": "item1",
+       "text": "Orage"
+      },
+      {
+       "value": "item2",
+       "text": "Apple"
+      },
+      {
+       "value": "item3",
+       "text": "Kiwi"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "name": "favnumber",
+     "title": "What is your favorite number",
+     "inputType": "number"
+    }
+   ]
+  }
+ ]
+}
