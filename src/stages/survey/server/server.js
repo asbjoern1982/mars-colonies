@@ -36,7 +36,7 @@ export default {
   },
   setup: (server) => {
     // console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
-    Logger.logEvent(server, 'starting post survey stage (' + server.getCurrentStage().number + ')')
+    Logger.logEvent(server, -1, 'starting post survey stage (' + server.getCurrentStage().number + ')')
     console.log('Starting stage: ' + serverStages.configurations[server.getCurrentStage().number].title)
     completedSurveys = 0 // this carries over from previous stages
   },

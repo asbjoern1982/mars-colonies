@@ -14,7 +14,7 @@ let events = {
   [Events.CLIENT_CONNECTED] (server, clientId) {
     if (server.getPlayers().length >= serverStages.participants) {
       console.log('everyone connected, starting first stage')
-      Logger.logEvent(server, 'everyone connected, starting first stage (' + server.getPlayers().join() + ')')
+      Logger.logEvent(server, -1, 'everyone connected, starting first stage (' + server.getPlayers().join() + ')')
       server.start()
     }
   }

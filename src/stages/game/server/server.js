@@ -5,13 +5,14 @@ import score from './../config/score'
 import {PaymentHandler} from '../../../database/PaymentHandler'
 import serverStages from '../../../serverStages'
 
-let numberOfGames
-let colonies = []
-let gameloopRef
-let startTime
-let chatEvents = []
+let numberOfGames // amount of games to run on the same time, ei 6 participants in 2 different games with 3 players each
+let colonies // list of all colonies
+let gameloopRef // ref to the gameloop
+let startTime // time all players reported ready and the gameloop started
+let chatEvents // list of all chat messages, saved to be able to send the chat to reconnecting clients
 
-let runningTimeouts = []
+let runningTimeouts // ref to trade and production timeouts so it is possible to stop them if the stage restarts
+let eventId = 0 // save eventId so it is possible to see connect start and stop production events in inventory log
 
 export default {
   commands: {
@@ -30,12 +31,16 @@ export default {
     'mouseover-colony': (server, clientId, target) => {
       let senderColony = colonies.find(colony => colony.id === clientId)
       let targetColony = colonies.find(colony => senderColony.game === colony.game && colony.name === target)
-      Logger.logMouseOverColony(server, senderColony.game, senderColony.name, clientId, target, targetColony.id)
+      Logger.logMouseOverColony(server, eventId++, senderColony.game, senderColony.name, clientId, target, targetColony.id)
     },
     'trade': (server, clientId, transfer) => {
       server.log('client ' + clientId + ' transfer: ' + JSON.stringify(transfer))
       // remove amount from senders inventory
       let sendingColony = colonies.find(colony => colony.id === clientId)
+
+      let eventIdRef = eventId++
+      Logger.logInventory(server, eventId++, sendingColony.game, sendingColony.name, sendingColony.id,  'pre-trade start', eventIdRef, sendingColony.inventory)
+
       let senderInventory = sendingColony
         .inventory
         .find(material => material.name === transfer.material)
@@ -48,11 +53,16 @@ export default {
       }
 
       let receiver = colonies.find(colony => colony.game === sendingColony.game && colony.name === transfer.colony)
-      Logger.logTrade(server, sendingColony.game, sendingColony.name, clientId, receiver.name, receiver.id, transfer.material, transferedAmount)
+
+      Logger.logTrade(server, eventIdRef, sendingColony.game, sendingColony.name, clientId, receiver.name, receiver.id, transfer.material, transferedAmount)
       sendColoniesInventories(server)
+      Logger.logInventory(server, eventId++, sendingColony.game, sendingColony.name, sendingColony.id,  'trade started', eventIdRef, sendingColony.inventory)
+
 
       // add amount to receivers inventory when the trade is complete
       let ref = setTimeout(() => {
+        Logger.logInventory(server, eventId++, sendingColony.game, sendingColony.name, sendingColony.id,  'pre-trade finish', eventIdRef, sendingColony.inventory)
+
         let amount = colonies
           .find(colony => colony.game === sendingColony.game && colony.name === transfer.colony)
           .inventory
@@ -72,7 +82,7 @@ export default {
         }).toClients(colonies.filter(colony => colony.game === sendingColony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
         sendColoniesInventories(server)
 
-        Logger.logInventory(server, sendingColony.game, sendingColony.name, sendingColony.id, sendingColony.inventory)
+        Logger.logInventory(server, eventId++, sendingColony.game, sendingColony.name, sendingColony.id,  'trade finished', eventIdRef, sendingColony.inventory)
 
         runningTimeouts = runningTimeouts.filter(t => t.ref !== ref) // removes this timeout
       }, config.trade_delay * 1000)
@@ -100,7 +110,7 @@ export default {
       } else {
         server.send('chat', data).toClients([clientId, target.id].filter(id => server.getPlayers().includes(id)))
       }
-      Logger.logChat(server, colony.game, colony.name, clientId, target ? target.name : 'all', target ? target.id : '', data.message)
+      Logger.logChat(server, eventId++, colony.game, colony.name, clientId, target ? target.name : 'all', target ? target.id : '', data.message)
     },
     'produce': (server, clientId, production) => {
       server.log('client started production: ' + clientId + ' data: ' + JSON.stringify(production))
@@ -111,6 +121,9 @@ export default {
       let gain = specialization.gain
       let delay = specialization.production_delay
 
+      let eventIdRef = eventId++
+      Logger.logInventory(server, eventId++, colony.game, colony.name, colony.id, 'pre-production start', eventIdRef, colony.inventory)
+
       // substract input materials and inform the colony
       let inventory = colony.inventory.find(material => material.name === inputName)
       if (inventory.amount < production.amount) {
@@ -120,15 +133,18 @@ export default {
       inventory.amount -= production.amount
       sendColoniesInventories(server)
 
-      Logger.logProduction(server, colony.game, colony.name, clientId, production.index, production.amount, inputName, outputName, gain)
+      Logger.logProduction(server, eventIdRef, colony.game, colony.name, clientId, production.index, production.amount, inputName, outputName, gain)
+      Logger.logInventory(server, eventId++, colony.game, colony.name, colony.id, 'production started', eventIdRef, colony.inventory)
 
       // create a timeout that adds the output to the colony and informs the colony
       let ref = setTimeout(() => {
+              Logger.logInventory(server, eventId++, colony.game, colony.name, colony.id, 'pre-production finish', eventIdRef, colony.inventory)
         let currentAmount = colony.inventory.find(material => material.name === outputName).amount
         colony.inventory
           .find(material => material.name === outputName)
           .amount = Math.floor(currentAmount) + Math.floor(production.amount * gain) // it congatinate + as strings
         sendColoniesInventories(server)
+        Logger.logInventory(server, eventId++, colony.game, colony.name, colony.id, 'production finished', eventIdRef, colony.inventory)
         runningTimeouts = runningTimeouts.filter(t => t.ref !== ref) // removes this timeout
       }, delay * 1000)
       runningTimeouts.push({colony: colony, ref: ref})
@@ -138,7 +154,7 @@ export default {
       let reportingColony = colonies.find(colony => colony.id === clientId)
       if (!reportingColony) {
         console.log('unknown client connected: ' + clientId)
-        Logger.logEvent(server, 'unknown client connected: ' + clientId)
+        Logger.logEvent(server, eventId++, 'unknown client connected: ' + clientId)
         server.send('not assigned a colony').toClient(clientId)
         return
       }
@@ -165,12 +181,12 @@ export default {
       }, 1000)
     },
     [Events.CLIENT_DISCONNECTED] (server, clientId) {
-      Logger.logEvent(server, clientId + ' disconnected')
+      Logger.logEvent(server, eventId++, clientId + ' disconnected')
     },
     [Events.CLIENT_CONNECTED]: (server, clientId) => {
       let avalibleColony = colonies.find(colony => !server.getPlayers().includes(colony.id))
       if (avalibleColony) {
-        Logger.logEvent(server, 'unknown player (' + clientId + ') connected, replacing ' + avalibleColony.id + ' (' + avalibleColony.name + ') in game ' + avalibleColony.game)
+        Logger.logEvent(server, eventId++, 'unknown player (' + clientId + ') connected, replacing ' + avalibleColony.id + ' (' + avalibleColony.name + ') in game ' + avalibleColony.game)
         chatEvents.forEach(event => {
           if (event.clientId === avalibleColony.id) event.clientId = clientId
         })
@@ -180,12 +196,15 @@ export default {
           server.send(Events.START_STAGE, stageNo).toClient(clientId)
         }, 1000)
       } else {
-        Logger.logEvent(server, 'unknown player (' + clientId + ') connected, no avalible colonies')
+        Logger.logEvent(server, eventId++, 'unknown player (' + clientId + ') connected, no avalible colonies')
       }
     }
   },
   setup: (server) => {
-    console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
+    // reset the game variables
+    colonies = []
+    chatEvents = []
+    runningTimeouts = []
 
     numberOfGames = Math.floor(server.getPlayers().length / config.players.length) // ignores leftover participants
 
@@ -208,7 +227,7 @@ export default {
 
     let games = [...new Set(colonies.map(colony => colony.game))]
     let log = games.map(gameNo => 'game ' + gameNo + ': [' + colonies.filter(colony => colony.game === gameNo).map(colony => '(' + colony.id + ', ' + colony.name + ')').join() + ']').join() + ''
-    Logger.logEvent(server, log)
+    Logger.logEvent(server, eventId++, log)
 
     let gamenetworkdata = games.map(gameNo => colonies.filter(colony => colony.game === gameNo).map(colony => colony.id))
     server.send('gamenetwork', gamenetworkdata).toAdmin()
@@ -273,7 +292,7 @@ let gameloop = (server) => {
       return colony.name + '(' + colony.id + ')\t' + points + ' points'
     })
     console.log('game over\n' + status.join('\n'))
-    Logger.logEvent(server, 'game over [' + status.join() + ']')
+    Logger.logEvent(server, eventId++, 'game over [' + status.join() + ']')
 
     for (let i = 0; i < numberOfGames; i++) {
       let coloniesInGame = colonies.filter(colony => colony.game === i)
@@ -313,6 +332,9 @@ let gameloop = (server) => {
   // every 100th second, set the clients inventory, it might have drifted
   if (tickcount % 100 === 0) {
     sendColoniesInventories(server)
+    colonies.forEach(colony => {
+      Logger.logInventory(server, eventId++, colony.game, colony.name, colony.id, 'sync', '', colony.inventory)
+    })
   }
 }
 
@@ -321,8 +343,9 @@ let killColony = (server, colony, materialName) => {
   colony.dead = true
   colony.inventory.find(row => materialName === row.name).amount = 0 // overwrite amount if gameloop have substracted something
   server.send('colonyDied', colony.name).toClients(colonies.filter(col => col.game === colony.game).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
-  Logger.logEvent(server, colony.id + '(' +colony.name + ') has died')
-  Logger.logInventory(server, colony.game, colony.name, colony.id, colony.inventory)
+  let eventIdRef = eventId++
+  Logger.logEvent(server, eventIdRef, colony.id + '(' +colony.name + ') has died')
+  Logger.logInventory(server, eventId++, colony.game, colony.name, colony.id, colony.name + ' died', eventIdRef, colony.inventory)
 
   // clear any timeouts with the colony
   runningTimeouts.filter(t => t.colony.id === colony.id).map(t => t.ref).forEach(ref => clearTimeout(ref))
@@ -346,8 +369,4 @@ let sendColoniesInventories = (server) => {
     )
     server.send('inventories', inventories).toClients(colonies.filter(colony => colony.game === i).map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
   }
-  // save a log of every inventory
-  colonies.forEach(colony => {
-    Logger.logInventory(server, colony.game, colony.name, colony.id, colony.inventory)
-  })
 }

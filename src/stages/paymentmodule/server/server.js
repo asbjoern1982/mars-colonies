@@ -34,7 +34,7 @@ export default {
   },
   setup: (server) => {
     console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
-    Logger.logEvent(server, 'starting payment stage (' + server.getCurrentStage().number + ')')
+    Logger.logEvent(server, -1, 'starting payment stage (' + server.getCurrentStage().number + ')')
     PaymentHandler.randomizePayout()
   },
   teardown: (server) => {

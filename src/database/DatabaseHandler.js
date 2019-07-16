@@ -23,9 +23,10 @@ let createDatabaseHandler = () => {
   }).write()
 
   // log a chatmessage with who sent it and the message
-  let saveChat = (stage, game, name, clientId, targetName, targetId, message) => {
+  let saveChat = (stage, eventId, game, name, clientId, targetName, targetId, message) => {
     let event = {
       stage: stage,
+      eventId: eventId,
       game: game,
       name: name,
       id: clientId,
@@ -39,9 +40,10 @@ let createDatabaseHandler = () => {
   }
 
   // log that a specialization has been used
-  let saveProduction = (stage, game, name, clientId, index, amount, inputName, outputName, gain) => {
+  let saveProduction = (stage, eventId, game, name, clientId, index, amount, inputName, outputName, gain) => {
     let event = {
       stage: stage,
+      eventId: eventId,
       game: game,
       name: name,
       id: clientId,
@@ -57,9 +59,10 @@ let createDatabaseHandler = () => {
   }
 
   // log a transfer of materials
-  let saveTrade = (stage, game, name, clientId, receiverName, receiverId, material, amount) => {
+  let saveTrade = (stage, eventId, game, name, clientId, receiverName, receiverId, material, amount) => {
     let event = {
       stage: stage,
+      eventId: eventId,
       game: game,
       name: name,
       id: clientId,
@@ -74,23 +77,28 @@ let createDatabaseHandler = () => {
   }
 
   // at a certain interval the inventory of a client is logged for redundant storage
-  let saveInventory = (stage, game, name, clientId, inventory) => {
+  let saveInventory = (stage, eventId, game, name, clientId, eventDescription, eventIdRef, inventory) => {
     let event = {
       stage: stage,
+      eventId: eventId,
       game: game,
       name: name,
       id: clientId,
       time: Date.now(),
       timestr: new Date().toLocaleTimeString(),
-      inventory: inventory
+      eventDescription: eventDescription,
+      eventIdRef: eventIdRef
     }
+    // add a column for each material
+    inventory.forEach(row => event[row.name] = row.amount)
     db.get('inventory').push(event).write()
   }
 
   // log that a client has moved their mouse over an other colony on the map
-  let saveMouseOverColony = (stage, game, name, clientId, targetName, targetId) => {
+  let saveMouseOverColony = (stage, eventId, game, name, clientId, targetName, targetId) => {
     let event = {
       stage: stage,
+      eventId: eventId,
       game: game,
       name: name,
       id: clientId,
@@ -103,9 +111,10 @@ let createDatabaseHandler = () => {
   }
 
   // log any other events, typically a serverevent
-  let saveEvent = (stage, data) => {
+  let saveEvent = (stage, eventId, data) => {
     let event = {
       stage: stage,
+      eventId: eventId,
       time: Date.now(),
       timestr: new Date().toLocaleTimeString(),
       data: data

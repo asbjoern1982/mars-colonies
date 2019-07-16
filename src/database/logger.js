@@ -2,31 +2,30 @@
 import {DatabaseHandler} from './DatabaseHandler'
 
 let createLogger = () => {
-  let logChat = (server, game, name, clientId, targetName, targetId, message) => {
-    DatabaseHandler.saveChat(server.getCurrentStage().number, game, name, clientId, targetName, targetId, message)
+  let logChat = (server, eventId, game, name, clientId, targetName, targetId, message) => {
+    DatabaseHandler.saveChat(server.getCurrentStage().number, eventId, game, name, clientId, targetName, targetId, message)
   }
 
-  let logProduction = (server, game, name, clientId, index, amount, inputName, outputName, gain) => {
-    DatabaseHandler.saveProduction(server.getCurrentStage().number, game, name, clientId, index, amount, inputName, outputName, gain)
+  let logProduction = (server, eventId, game, name, clientId, index, amount, inputName, outputName, gain) => {
+    DatabaseHandler.saveProduction(server.getCurrentStage().number, eventId, game, name, clientId, index, amount, inputName, outputName, gain)
   }
 
-  let logTrade = (server, game, name, clientId, receiverName, receiverId, material, amount) => {
-    DatabaseHandler.saveTrade(server.getCurrentStage().number, game, name, clientId, receiverName, receiverId, material, amount)
+  let logTrade = (server, eventId, game, name, clientId, receiverName, receiverId, material, amount) => {
+    DatabaseHandler.saveTrade(server.getCurrentStage().number, eventId, game, name, clientId, receiverName, receiverId, material, amount)
   }
 
-  let logInventory = (server, game, name, clientId, inventory) => {
-    let inventorylist = inventory.map(row => row.amount)
-    DatabaseHandler.saveInventory(server.getCurrentStage().number, game, name, clientId, inventorylist)
+  let logInventory = (server, eventId, game, name, clientId, eventDescription, eventIdRef, inventory) => {
+    DatabaseHandler.saveInventory(server.getCurrentStage().number, eventId, game, name, clientId, eventDescription, eventIdRef, inventory)
   }
 
-  let logMouseOverColony = (server, game, name, clientId, targetName, targetId) => {
-    DatabaseHandler.saveMouseOverColony(server.getCurrentStage().number, game, name, clientId, targetName, targetId)
+  let logMouseOverColony = (server, eventId, game, name, clientId, targetName, targetId) => {
+    DatabaseHandler.saveMouseOverColony(server.getCurrentStage().number, eventId, game, name, clientId, targetName, targetId)
   }
 
-  let logEvent = (server, data) => {
+  let logEvent = (server, eventId, data) => {
     server.send('logged', data).toAdmin()
-    let stage = server.getCurrentStage() ? server.getCurrentStage().number : 'setup'
-    DatabaseHandler.saveEvent(stage, data)
+    let stage = server.getCurrentStage() ? server.getCurrentStage().number : 'no stage'
+    DatabaseHandler.saveEvent(stage, eventId, data)
   }
 
   let logSurvey = (server, clientId, data) => {
