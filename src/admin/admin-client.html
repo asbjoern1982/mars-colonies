@@ -4,23 +4,6 @@
     <div class="row">
       <h3>Mars Colonies admin client</h3>
     </div>
-    <div class="row">
-      <div class="card admincards">
-        <div class="card-body">
-          <h5 class="card-title">Stage controls</h5>
-          <button class="btn btn-success" id="buttonStart">Start</button>
-          <button class="btn btn-warning" id="buttonEnd">End Game</button>
-          <button class="btn btn-danger" id="buttonNext">Next Stage</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" style="background-color: white;" id="graphs">
-      <div class="col-lg-6 col-xl-4" style="border: 1px solid lightgray; height: 300px; width: 300px;">
-        <div id="gamenetworkgraphtitle">Game Network Graph</div>
-        <div id="gamenetworkgraph" class="col-12" style="height: 270px;""></div>
-      </div>
-    </div>
 
     <div class="row">
       <div class="card-group">
@@ -42,5 +25,30 @@
         </div>
       </div>
     </div>
+
+    <div class="row" style="background-color: white;" id="graphs">
+      <div class="col-lg-6 col-xl-4" style="border: 1px solid lightgray; height: 300px; width: 300px;">
+        <div id="gamenetworkgraphtitle">Game Network Graph</div>
+        <div id="gamenetworkgraph" class="col-12" style="height: 270px;""></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card admincards">
+        <div class="card-body">
+          <h5 class="card-title">Stage controls</h5>
+          <p>
+            <button class="btn btn-success" id="buttonStart" disabled>Start</button>
+            <button class="btn btn-warning" id="buttonEnd" disabled>End Game</button>
+            <button class="btn btn-danger" id="buttonNext" disabled>Next Stage</button>
+          </p>
+          <div class="checkbox">
+            <label><input type="checkbox" id="buttonEnable"> Enable controls</label>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

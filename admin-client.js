@@ -146,6 +146,12 @@ $('#buttonDownloadPay').mouseup(e => {
   admin.sendCommand('reqPay')
 })
 
+$('#buttonEnable').change(() => {
+  $('#buttonStart').prop('disabled', !$('#buttonEnable').prop('checked'))
+  $('#buttonNext').prop('disabled', !$('#buttonEnable').prop('checked'))
+  $('#buttonEnd').prop('disabled', !$('#buttonEnable').prop('checked'))
+});
+
 admin.sendCommand('adminReady')
 
 let link = document.querySelector("link[rel*='icon']") || document.createElement('link')
