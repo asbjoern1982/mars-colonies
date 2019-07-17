@@ -308,11 +308,12 @@ let gameloop = (server) => {
       }, 5000)
     }
 
-    PaymentHandler.setPayoutAmount(colonies.map(colony => ({
-      clientId: colony.id,
-      amount: score.calculateScore(colony, colonies.filter(col => col.game === colony.game))
-    })))
-
+    if (!config.practiceRun) {
+      PaymentHandler.setPayoutAmount(colonies.map(colony => ({
+        clientId: colony.id,
+        amount: score.calculateScore(colony, colonies.filter(col => col.game === colony.game))
+      })))
+    }
     return
   }
   // update all colonies inventory

@@ -650,7 +650,6 @@ let createView = () => {
 
   let updateScore = () => {
     let currentScore = score.calculateScore(Model.getColony(), Model.getOtherColonies())
-    currentScore = Math.round(currentScore * 100) / 100 // round to a precision of two
     $('#score').html(currentScore)
   }
 

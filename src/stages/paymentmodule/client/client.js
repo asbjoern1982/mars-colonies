@@ -12,6 +12,7 @@ export default {
   },
   events: {
     'setup': (client, data) => {
+      $('#paymentAmount').text(data)
       $('#firstname').keypress(e => validateWithEnter(client, e))
       $('#lastname').keypress(e => validateWithEnter(client, e))
       $('#cprnumber').keypress(e => validateWithEnter(client, e))

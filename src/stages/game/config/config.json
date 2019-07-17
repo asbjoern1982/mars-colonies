@@ -4,6 +4,7 @@
     {"name": "Selenium", "depletion_rate": 1},
     {"name": "Tungsten", "depletion_rate": 1}
   ],
+  "practiceRun": false,
   "soundVolume": 0,
   "shuffleParticipants": true,
   "roundLengthInSeconds":  1200,
@@ -24,7 +25,7 @@
       "specializations": [{
         "input": "Palladium",
         "output": "Selenium",
-        "gain": 2.0,
+        "gain": 1.5,
       	"production_delay": 10
       }]
     },
@@ -38,7 +39,7 @@
       "specializations": [{
         "input": "Selenium",
         "output": "Tungsten",
-        "gain": 2.0,
+        "gain": 1.5,
 	      "production_delay": 10
       }]
     },
@@ -52,7 +53,7 @@
       "specializations": [{
         "input": "Tungsten",
         "output": "Palladium",
-        "gain": 2.0,
+        "gain": 1.5,
 	      "production_delay": 10
       }]
     }

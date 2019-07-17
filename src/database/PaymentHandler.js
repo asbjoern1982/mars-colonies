@@ -45,18 +45,6 @@ let createPaymentHandler = () => {
         participant.amounts.push(token.amount)
       }
     })
-
-    /*participants = data.map(p => {
-      let participant = {
-        clientId: p.clientId,
-        cprnumber: '',
-        firstname: '',
-        lastname: '',
-        date: datestr,
-        amount: p.amount
-      }
-      return participant
-    })*/
   }
 
   // to be run when the payment-system starts up to select a random game the participants will get payed for
@@ -64,7 +52,7 @@ let createPaymentHandler = () => {
     if (participants.length > 0) {
       // pick a random game
       let gameIndex = Math.floor(Math.random() * participants[0].amounts.length)
-      console.log('Payout for game: ' + gameIndex)
+      console.log('Chosen game ' + gameIndex + ' out of ' + participants[0].amounts.length + ' games')
       // put the payout for that game in front
       participants.forEach(p => {
         let temp = p.amounts[0]

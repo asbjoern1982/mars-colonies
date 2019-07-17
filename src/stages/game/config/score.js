@@ -4,7 +4,7 @@ let bonus = 50
 
 export default {
   calculateScore: (colony, colonies) => {
-    return (basePayout + (colony.dead ? 0 : (colony.inventory.filter(row => row.amount > config.inventoryBonusLimit).length * bonus))) + 'kr'
+    return Math.round((basePayout + (colony.dead ? 0 : (colony.inventory.filter(row => row.amount > config.inventoryBonusLimit).length * bonus)))*100)/100
 
     // let payout = 107 + colony.dead ? 0 : colony.inventory
     // let score = 10 + colony.inventory.filter(row => row.amount > 500).map(row => 2).reduce((total, num) => total + num)
