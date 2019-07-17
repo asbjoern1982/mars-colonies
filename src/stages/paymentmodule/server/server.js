@@ -17,7 +17,7 @@ export default {
 
       completedSurveys.push(clientId)
       let str = completedSurveys.length + '/' + server.getPlayers().length + ' has finished paymentsurvey, just now: ' + clientId
-      Logger.logEvent(server, str)
+      Logger.logEvent(server, -1, str)
       server.send('logged', str).toAdmin()
 
       if (completedSurveys.length >= server.getPlayers().length) {

@@ -1,4 +1,3 @@
-
 import {DatabaseHandler} from './DatabaseHandler'
 
 let createLogger = () => {

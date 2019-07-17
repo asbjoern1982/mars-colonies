@@ -9,7 +9,7 @@ import './src/admin/admin-client.css'
 
 let options = {
   canvasBackgroundColor: 'red',
-  htmlContainerHeight: 1,
+  htmlContainerHeight: 0.99,
   // HTML is included in options for admin
   html
 }
@@ -57,6 +57,15 @@ let events = {
   },
   'logged': (admin, data) => {
     admin.getChat().append(data)
+  },
+  'downloadReady': (admin, sender) => {
+    $('#downloadAllCSV').mouseup(e => {
+      admin.sendCommand('reqCSV')
+      admin.sendCommand('reqPay')
+      $('#downloadAllWindow').modal('hide')
+    })
+
+    $('#downloadAllWindow').modal('show')
   },
   'eventsSoFar': (admin, events) => {
     events.forEach(event => admin.getChat().append(event))
