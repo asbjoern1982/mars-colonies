@@ -40,27 +40,38 @@ let createLogger = () => {
   let exportAsCSV = () => {
     let data = exportAsJSON()
 
-    // get a list of headers (questions)
-    let headers = [...new Set([].concat(...data.surveys.map(survey => Object.keys(survey.survey))))].sort()
+    let surveyStages = [...new Set(data.surveys.map(survey => survey.stage))]
+    //console.log('number of surveys: ' + surveyStages.join())
 
-    // for each survey, add id, time and questions, if it is not present,
-    // it just adds ',' so the columns are presisent and multiple answers are
-    // put into quotes
-    let surveyCSV = 'stage,clientId,time,timestr' + headers.join() + '\n' +
-      data.surveys.map(survey =>
-        survey['stage'] + ',' +
-        survey['id'] + ',' +
-        survey['time'] + ',' +
-        survey['timestr'] + ',' +
-        headers.map((header) =>
-          survey.survey[header]
-            ? (Array.isArray(survey.survey[header])
-              ? '"' + survey.survey[header].join() + '"'
-              : survey.survey[header])
-            : ''
-        ).join()
-      ).join('\n')
+    let convertSurvey = (surveys) => {
+        // get a list of headers (questions)
+        let headers = [...new Set([].concat(...surveys.map(survey => Object.keys(survey.survey))))].sort()
+
+        // for each survey, add id, time and questions, if it is not present,
+        // it just adds ',' so the columns are presisent and multiple answers are
+        // put into quotes
+        let surveyCSV = 'stage,clientId,time,timestr,' + headers.join() + '\n' +
+          surveys.map(survey =>
+            survey['stage'] + ',' +
+            survey['id'] + ',' +
+            survey['time'] + ',' +
+            survey['timestr'] + ',' +
+            headers.map((header) =>
+              survey.survey[header]
+                ? (Array.isArray(survey.survey[header])
+                  ? '"' + survey.survey[header].join() + '"'
+                  : survey.survey[header])
+                : ''
+            ).join()
+          ).join('\n')
+
+        return surveyCSV
+    }
+
     let files = {}
+    surveyStages.forEach(surveyStage => {
+      files['survey' + surveyStage] = convertSurvey(data.surveys.filter(survey => survey.stage === surveyStage))
+    })
 
     Object.keys(data).filter(logname => logname !== 'surveys').forEach(logName => {
       let log = data[logName]
@@ -73,7 +84,7 @@ let createLogger = () => {
           ).join('\n')
       }
     })
-    files['surveys'] = surveyCSV
+    //files['surveys'] = surveyCSV
     return files
   }
 
