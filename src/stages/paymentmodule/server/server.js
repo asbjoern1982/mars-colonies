@@ -2,7 +2,7 @@ import {Logger} from '../../../database/logger'
 import {PaymentHandler} from '../../../database/PaymentHandler'
 import {Events} from 'monsterr'
 
-let completedSurveys
+let completedSurveys = []
 
 export default {
   commands: {},
@@ -13,12 +13,15 @@ export default {
     },
     'save': function (server, clientId, data) {
       server.log('client saved information: ' + clientId)
-      Logger.logEvent(server, 'client saved information: ' + clientId)
       PaymentHandler.saveParticipantInformation(clientId, data)
 
-      completedSurveys++
-      if (completedSurveys >= server.getPlayers().length) {
-        server.send('logged', 'everyone has completed the payment survey').toAdmin()
+      completedSurveys.push(clientId)
+      let str = completedSurveys.length + '/' + server.getPlayers().length + ' has finished paymentsurvey, just now: ' + clientId
+      Logger.logEvent(server, str)
+      server.send('logged', str).toAdmin()
+
+      if (completedSurveys.length >= server.getPlayers().length) {
+        server.send('downloadReady', 'payment').toAdmin()
       }
     },
     [Events.CLIENT_RECONNECTED]: (server, clientId) => {
