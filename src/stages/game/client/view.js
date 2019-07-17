@@ -535,7 +535,7 @@ let createView = () => {
     Model.getColony().inventory.forEach(row => {
       let tagId = '#inventory' + row.name.replace(' ', '')
       let tag = $(tagId)
-      tag.html(row.amount)
+      tag.html(Math.round(row.amount))
       tag.removeClass()
       let amountColor = row.amount > inventoryBonusLimit ? 'text-success' : row.amount < inventoryCriticalLimit ? 'inventory-critial' : 'text-warning'
       tag.addClass(amountColor)
@@ -650,6 +650,7 @@ let createView = () => {
 
   let updateScore = () => {
     let currentScore = score.calculateScore(Model.getColony(), Model.getOtherColonies())
+    currentScore = Math.round(currentScore * 100) / 100 // round to a precision of two
     $('#score').html(currentScore)
   }
 

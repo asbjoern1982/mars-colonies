@@ -72,7 +72,7 @@ export default {
           .find(colony => colony.game === sendingColony.game && colony.name === transfer.colony)
           .inventory
           .find(material => material.name === transfer.material)
-          .amount = Math.floor(amount) + Math.floor(transferedAmount) // it congatinate + as strings
+          .amount = parseFloat(amount) + parseFloat(transferedAmount) // it congatinate + as strings
 
         server.send('trade', {
           sender: colonies.find(colony => colony.id === clientId).name,
@@ -142,7 +142,7 @@ export default {
         let currentAmount = colony.inventory.find(material => material.name === outputName).amount
         colony.inventory
           .find(material => material.name === outputName)
-          .amount = Math.floor(currentAmount) + Math.floor(production.amount * gain) // it congatinate + as strings
+          .amount = parseFloat(currentAmount) + parseFloat(production.amount * gain) // issue it congatinate + as strings
         sendColoniesInventories(server)
         Logger.logInventory(server, eventId++, colony.game, colony.name, colony.id, 'production finished', eventIdRef, colony.inventory)
         runningTimeouts = runningTimeouts.filter(t => t.ref !== ref) // removes this timeout
