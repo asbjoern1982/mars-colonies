@@ -1,53 +1,55 @@
-<div class="container bg-light" style="width: 100%; height: 100%;">
+<div class="bg">
   <div class="row">
-    <div class="container">
-    <h1>Payment</h1>
-      The experiment is now over
-    </div>
-  </div>
-  <div class="row">
-    <div class="container">
-      <div class="card col-md-12" id="paymentInformationCard">
-        <div class="card-body">
-          <p>
-            You will receive: <scan class="badge badge-secondary" id="paymentAmount"></scan>
-          </p>
-          <form>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="firstname">First Name(s)</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" id="firstname" placeholder="Enter your first name(s)">
-                  <div class="invalid-feedback">
-                    Enter a first name
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+      <div class="jumbotron">
+        <div class="row">
+          <h1>Payment</h1>
+        </div>
+        <div class="row">
+          <div class="card col-md-12" id="paymentInformationCard">
+            <div class="card-body">
+              <p>
+                You will receive: <scan class="badge badge-secondary" id="paymentAmount"></scan>
+              </p>
+              <form>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="firstname">First Name(s)</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="firstname" placeholder="Enter your first name(s)">
+                      <div class="invalid-feedback">
+                        Enter a first name
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <div class="form-group col-md-6">
-                <label for="lastname">Last Name</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" id="lastname"  placeholder="Enter your last name">
-                  <div class="invalid-feedback">
-                    Enter a last name
+                  <div class="form-group col-md-6">
+                    <label for="lastname">Last Name</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="lastname"  placeholder="Enter your last name">
+                      <div class="invalid-feedback">
+                        Enter a last name
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="form-group col-md-12">
-                <label for="cprnumber">CPR number</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" id="cprnumber" aria-describedby="cprHelp" placeholder="DDMMYY-XXXX">
-                  <div class="invalid-feedback">
-                    Invalid CPR number, please use DDMMYY-XXXX
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="cprnumber">CPR number</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="cprnumber" aria-describedby="cprHelp" placeholder="DDMMYY-XXXX">
+                      <div class="invalid-feedback">
+                        Invalid CPR number, please use DDMMYY-XXXX
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </form>
+              <button class="btn btn-primary" id="submitButton">Submit</button>
             </div>
-          </form>
-          <button class="btn btn-primary" id="submitButton">Submit</button>
+          </div>
         </div>
       </div>
     </div>

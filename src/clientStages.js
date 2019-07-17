@@ -6,7 +6,7 @@ export default {
   stages: [
     //survey,
     game,
-    //survey,
+    survey,
     payment
   ]
 }

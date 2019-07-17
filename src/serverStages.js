@@ -12,7 +12,7 @@ import round3 from './stages/game/config/config.json'
 let configurations = [
   //{stage: survey, config: preSurvey},
   {stage: game, config: {config: round1config, score: round1score}},
-  //{stage: survey, config: postSurvey, },
+  {stage: survey, config: postSurvey},
   {stage: payment, config: undefined}
 ]
 
