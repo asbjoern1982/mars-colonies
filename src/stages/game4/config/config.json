@@ -1,10 +1,10 @@
 {
   "materials": [
-    {"name": "Palladium", "depletion_rate": 0},
-    {"name": "Selenium", "depletion_rate": 0},
-    {"name": "Tungsten", "depletion_rate": 0}
+    {"name": "Palladium", "depletion_rate": 2.777777778},
+    {"name": "Selenium", "depletion_rate": 2.777777778},
+    {"name": "Tungsten", "depletion_rate": 2.777777778}
   ],
-  "practiceRun": true,
+  "practiceRun": false,
   "soundVolume": 0,
   "shuffleParticipants": true,
   "roundLengthInSeconds":  600,

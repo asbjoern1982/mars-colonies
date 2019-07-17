@@ -11,15 +11,15 @@
      "title": "What is your favorite fruit?",
      "choices": [
       {
-       "value": "item1",
+       "value": "oragen",
        "text": "Orange"
       },
       {
-       "value": "item2",
+       "value": "apple",
        "text": "Apple"
       },
       {
-       "value": "item3",
+       "value": "kiwi",
        "text": "Kiwi"
       }
      ]

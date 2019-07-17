@@ -11,15 +11,15 @@
      "title": "What gender do you identify as?",
      "choices": [
       {
-       "value": "item1",
+       "value": "m",
        "text": "Male"
       },
       {
-       "value": "item2",
+       "value": "f",
        "text": "Female"
       },
       {
-       "value": "item3",
+       "value": "o",
        "text": "Other"
       }
      ]

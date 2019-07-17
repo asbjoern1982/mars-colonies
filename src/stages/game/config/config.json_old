@@ -1,14 +1,14 @@
 {
   "materials": [
-    {"name": "Palladium", "depletion_rate": 0},
-    {"name": "Selenium", "depletion_rate": 0},
-    {"name": "Tungsten", "depletion_rate": 0}
+    {"name": "Palladium", "depletion_rate": 1},
+    {"name": "Selenium", "depletion_rate": 1},
+    {"name": "Tungsten", "depletion_rate": 1}
   ],
-  "practiceRun": true,
+  "practiceRun": false,
   "soundVolume": 0,
   "shuffleParticipants": true,
-  "roundLengthInSeconds":  600,
-  "inventoryBonusLimit": 600,
+  "roundLengthInSeconds":  1200,
+  "inventoryBonusLimit": 500,
   "inventoryCriticalLimit": 100,
   "chat": "free",
   "allowDirectMessages": true,
@@ -45,48 +45,6 @@
     },
     {
       "name": "Eastasia Colony",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specializations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 1.5,
-	      "production_delay": 10
-      }]
-    },
-    {
-      "name": "Africa Colony",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specializations": [{
-        "input": "Palladium",
-        "output": "Selenium",
-        "gain": 1.5,
-      	"production_delay": 10
-      }]
-    },
-    {
-      "name": "South America Colony",
-      "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
-      ],
-      "specializations": [{
-        "input": "Selenium",
-        "output": "Tungsten",
-        "gain": 1.5,
-	      "production_delay": 10
-      }]
-    },
-    {
-      "name": "North America Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000},
