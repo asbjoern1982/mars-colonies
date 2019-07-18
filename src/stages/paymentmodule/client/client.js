@@ -23,7 +23,7 @@ export default {
     client.send('ready')
   },
   teardown: (client) => {},
-  options: {htmlContainerHeight: 0.99}
+  options: {htmlContainerHeight: 1}
 }
 
 let validateWithEnter = (client, e) => {

@@ -14,7 +14,7 @@ let createView = () => {
   let showInventory
   let showScore
   let canvas
-  let resizingCanvas = false
+  let resizingCanvas
 
   let startTime
   let timeLeft
@@ -44,6 +44,7 @@ let createView = () => {
   }
 
   let setupInterface = (client, data) => {
+    resizingCanvas = false
     inventoryBonusLimit = data.inventoryBonusLimit
     inventoryCriticalLimit = data.inventoryCriticalLimit
     startTime = Date.now()
@@ -337,7 +338,9 @@ let createView = () => {
 
   // setting up the map
   let setupMap = (client) => {
-    canvas = new fabric.Canvas('map-canvas', {
+    console.log('setting up map!')
+    let canvasElement = document.getElementById('map-canvas')
+    canvas = new fabric.Canvas(canvasElement, {
       selection: false,
       width: $('#map-canvas').width(),
       height: $('#map-canvas').height(),
@@ -622,7 +625,7 @@ let createView = () => {
     })
     // only display information if it is pressen on the colony
     let text = // colony.name +
-      (showInventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + row.amount).join('\n') + '\n': '') +
+      (showInventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + Math.round(row.amount)).join('\n') + '\n': '') +
       (colony.specializations ? 'Specializations:\n' + colony.specializations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') + '\n' : '') +
       (showScore ? 'Score:\n' + score.calculateScore(colony, Model.getOtherColonies()) : '')
     let tooltipText = new fabric.Text(text, {

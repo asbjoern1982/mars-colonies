@@ -67,10 +67,14 @@ export default {
     client.send('ready')
   },
   teardown (client) {
+    Model.clear()
+    $('#html-container').clear()
+
     console.log('closing stage')
     $('#gameoverWindow').modal('hide')
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
+    clearInterval(gameloopRef)
   },
   options: {
     htmlContainerHeight: 1,
