@@ -316,7 +316,7 @@ let gameloop = (server) => {
       // go to next stage after 5 sec
       setTimeout(() => {
         server.nextStage()
-      }, 5000)
+      }, 20000)
     }
 
     if (!config.practiceRun) {

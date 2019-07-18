@@ -722,7 +722,7 @@ let createView = () => {
     $('#gameoverWindow').modal('show')
 
     // countdown
-    let seconds = 5
+    let seconds = 20
     $('#gameoverCountdown').text(seconds)
     let countdownInterval = setInterval(() => {
       seconds--
