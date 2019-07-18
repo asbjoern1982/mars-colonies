@@ -29,6 +29,8 @@ let createView = () => {
     setupInterface(client, data)
     setupMap(client)
 
+    //score =
+
     if (data.soundVolume > 0) {
       $('.bg').append('<audio loop autoplay id="backgroundsound">\n' +
         '<source src="./../../../assets/08-Brian-Cook_raw_velocity_0.6_normalisedx1_2octavesUp_03.wav" type="audio/wav">\n' +
@@ -294,9 +296,10 @@ let createView = () => {
           $('#chat-input').focus()
         })
         Model.getOtherColonies().forEach(colony => {
-          let trimmedName = colony.name.replace(' ', '')
+          let trimmedName = colony.name.replace(/ /g, '')
           $('#chatTabsDM').append('<a class="dropdown-item" href="#"  role="tab" id="' + trimmedName + 'Action">' + colony.name + '</a>')
           $('#' + trimmedName + 'Action').mouseup(e => {
+            console.log('opening dm with ' + trimmedName);
             $('#chatAllLi').removeClass('active')
             $('#chatTabsDM').find('.active').removeClass('active')
             $('#chatDropdownA').removeClass('chatTabWarning')
