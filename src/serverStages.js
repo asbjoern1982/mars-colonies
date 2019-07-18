@@ -12,15 +12,22 @@ import round3 from './configurations/game-3_config.json'
 import round4 from './configurations/game-4_config.json'
 import score from './configurations/score'
 
-let configurations = [
-  // {stage: survey, config: preSurvey},
+let stages = [
+  {stage: survey, config: preSurvey},
   {stage: game, config: {config: round0, score: score}},
-  // {stage: survey, config: postSurvey},
-  // {stage: payment, config: undefined}
+  {stage: game, config: {config: round1, score: score}},
+  {stage: game, config: {config: round2, score: score}},
+  {stage: game, config: {config: round3, score: score}},
+  {stage: game, config: {config: round4, score: score}},
+  {stage: survey, config: postSurvey},
+  {stage: payment, config: undefined}
 ]
 
 export default {
-  stages: configurations.map(config => config.stage),
+  stages: stages.map(s => s.stage),
   participants: 6,
-  configurations: configurations.map(config => config.config)
+  configs: stages.map(s => {
+    if (s.config) return s.config
+    else return undefined
+  })
 }

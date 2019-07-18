@@ -1,9 +1,11 @@
 import {Events} from 'monsterr'
 import {Logger} from '../../../database/logger'
-import config from './../config/config.json'
-import score from './../config/score'
+// import config from './../config/config.json'
+// import score from './../config/score'
 import {PaymentHandler} from '../../../database/PaymentHandler'
 import serverStages from '../../../serverStages'
+
+let config
 
 let numberOfGames // amount of games to run on the same time, ei 6 participants in 2 different games with 3 players each
 let colonies // list of all colonies
@@ -13,6 +15,9 @@ let chatEvents // list of all chat messages, saved to be able to send the chat t
 
 let runningTimeouts // ref to trade and production timeouts so it is possible to stop them if the stage restarts
 let eventId = 0 // save eventId so it is possible to see connect start and stop production events in inventory log
+
+let tickcount
+let score
 
 export default {
   commands: {
@@ -168,6 +173,7 @@ export default {
         startTime = Date.now()
         colonies.forEach(colony => sendSetupData(server, colony))
 
+        tickcount = 0
         gameloopRef = setInterval(() => gameloop(server), 1000)
       }
     },
@@ -202,11 +208,15 @@ export default {
   },
   setup: (server) => {
     // reset the game variables
+    config = serverStages.configs[server.getCurrentStage().number].config
+    score = serverStages.configs[server.getCurrentStage().number].score
+
     colonies = []
     chatEvents = []
     runningTimeouts = []
 
     numberOfGames = Math.floor(server.getPlayers().length / config.players.length) // ignores leftover participants
+
 
     // randomize the order of the players
     let networkPlayers = config.shuffleParticipants
@@ -257,6 +267,7 @@ let sendSetupData = (server, receiver) => {
   })
 
   let data = {
+    stage: server.getCurrentStage().number,
     materials: config.materials,
     chat: config.chat,
     allowDirectMessages: config.allowDirectMessages,
@@ -281,14 +292,14 @@ let sendSetupData = (server, receiver) => {
   server.send('setup', data).toClient(receiver.id)
 }
 
-let tickcount = 0
 let gameloop = (server) => {
   // check if the game is over
   if (tickcount >= config.roundLengthInSeconds) {
     clearInterval(gameloopRef)
+    gameloopRef = undefined
     // simple calculation of points, 10 points for being alive and 2 points for every material over 50%
     let status = colonies.map(colony => {
-      let points = score.calculateScore(colony, colonies.filter(col => col.game === colony.game))
+      let points = score.calculateScore(colony, colonies.filter(col => col.game === colony.game), config.inventoryBonusLimit)
       return colony.name + '(' + colony.id + ')\t' + points + ' points'
     })
     console.log('game over\n' + status.join('\n'))
@@ -297,7 +308,7 @@ let gameloop = (server) => {
     for (let i = 0; i < numberOfGames; i++) {
       let coloniesInGame = colonies.filter(colony => colony.game === i)
       let status = coloniesInGame.map(colony => {
-        let points = score.calculateScore(colony, colonies.filter(col => col.game === colony.game))
+        let points = score.calculateScore(colony, colonies.filter(col => col.game === colony.game), config.inventoryBonusLimit)
         return colony.name + '\t' + points
       })
       server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
@@ -311,7 +322,7 @@ let gameloop = (server) => {
     if (!config.practiceRun) {
       PaymentHandler.setPayoutAmount(colonies.map(colony => ({
         clientId: colony.id,
-        amount: score.calculateScore(colony, colonies.filter(col => col.game === colony.game))
+        amount: score.calculateScore(colony, colonies.filter(col => col.game === colony.game), config.inventoryBonusLimit)
       })))
     }
     return

@@ -1,5 +1,6 @@
 import {Model} from './model'
-import score from './../config/score'
+import clientStages from '../../../clientStages'
+// import score from './../config/score'
 
 let createView = () => {
   let inventoryBonusLimit
@@ -13,6 +14,7 @@ let createView = () => {
   let tooltip
   let showInventory
   let showScore
+  let score
   let canvas
   let resizingCanvas
 
@@ -29,7 +31,7 @@ let createView = () => {
     setupInterface(client, data)
     setupMap(client)
 
-    //score =
+    score = clientStages.configs[data.stage]
 
     if (data.soundVolume > 0) {
       $('.bg').append('<audio loop autoplay id="backgroundsound">\n' +
@@ -299,7 +301,6 @@ let createView = () => {
           let trimmedName = colony.name.replace(/ /g, '')
           $('#chatTabsDM').append('<a class="dropdown-item" href="#"  role="tab" id="' + trimmedName + 'Action">' + colony.name + '</a>')
           $('#' + trimmedName + 'Action').mouseup(e => {
-            console.log('opening dm with ' + trimmedName);
             $('#chatAllLi').removeClass('active')
             $('#chatTabsDM').find('.active').removeClass('active')
             $('#chatDropdownA').removeClass('chatTabWarning')
@@ -341,7 +342,6 @@ let createView = () => {
 
   // setting up the map
   let setupMap = (client) => {
-    console.log('setting up map!')
     let canvasElement = document.getElementById('map-canvas')
     canvas = new fabric.Canvas(canvasElement, {
       selection: false,
@@ -529,6 +529,8 @@ let createView = () => {
       if (!resizingCanvas) {
         resizingCanvas = true
         setTimeout(() => {
+          $('#map-canvas').remove()
+          $('#map-container').html('<canvas id="map-canvas">')
           setupMap(client)
           resizingCanvas = false
         }, 500)
@@ -630,7 +632,7 @@ let createView = () => {
     let text = // colony.name +
       (showInventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + Math.round(row.amount)).join('\n') + '\n': '') +
       (colony.specializations ? 'Specializations:\n' + colony.specializations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') + '\n' : '') +
-      (showScore ? 'Score:\n' + score.calculateScore(colony, Model.getOtherColonies()) : '')
+      (showScore ? 'Score:\n' + score.calculateScore(colony, Model.getOtherColonies(), inventoryBonusLimit) : '')
     let tooltipText = new fabric.Text(text, {
       left: left + 3,
       top: adjustedTop + 3,
@@ -655,7 +657,7 @@ let createView = () => {
   }
 
   let updateScore = () => {
-    let currentScore = score.calculateScore(Model.getColony(), Model.getOtherColonies())
+    let currentScore = score.calculateScore(Model.getColony(), Model.getOtherColonies(), inventoryBonusLimit)
     $('#score').html(currentScore)
   }
 

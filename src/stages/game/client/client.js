@@ -44,6 +44,7 @@ let events = {
     View.killColony(colonyName)
   },
   'setup': (client, data) => {
+    console.log('handeling setup event')
     Model.setup(data)
     View.setup(client, data)
 
@@ -67,9 +68,6 @@ export default {
     client.send('ready')
   },
   teardown (client) {
-    Model.clear()
-    $('#html-container').clear()
-
     console.log('closing stage')
     $('#gameoverWindow').modal('hide')
     $('body').removeClass('modal-open');

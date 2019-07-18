@@ -8,7 +8,7 @@ export default {
   commands: {},
   events: {
     'ready': (server, clientId) => {
-      server.send('ready', serverStages.configurations[server.getCurrentStage().number]).toClient(clientId)
+      server.send('ready', serverStages.configs[server.getCurrentStage().number]).toClient(clientId)
     },
     'surveyResult': (server, clientId, data) => {
       Logger.logSurvey(server, clientId, data)
@@ -37,7 +37,7 @@ export default {
   setup: (server) => {
     // console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
     Logger.logEvent(server, -1, 'starting post survey stage (' + server.getCurrentStage().number + ')')
-    console.log('Starting stage: ' + serverStages.configurations[server.getCurrentStage().number].title)
+    console.log('Starting stage: ' + serverStages.configs[server.getCurrentStage().number].title)
     completedSurveys = 0 // this carries over from previous stages
   },
   teardown: (server) => {
