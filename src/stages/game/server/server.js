@@ -268,6 +268,7 @@ let sendSetupData = (server, receiver) => {
 
   let data = {
     stage: server.getCurrentStage().number,
+    practiceRun: config.practiceRun,
     materials: config.materials,
     chat: config.chat,
     allowDirectMessages: config.allowDirectMessages,
@@ -313,7 +314,7 @@ let gameloop = (server) => {
       })
       server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
 
-      // go to next stage after 5 sec
+      // go to next stage after 20 sec
       setTimeout(() => {
         server.nextStage()
       }, 20000)

@@ -18,6 +18,8 @@ let createView = () => {
   let canvas
   let resizingCanvas
 
+  let practiceRun
+
   let startTime
   let timeLeft
   let chat = {
@@ -45,6 +47,7 @@ let createView = () => {
 
     showInventory = data.showInventoryInTooltip
     showScore = data.showScoreInTooltip
+    practiceRun = data.practiceRun
   }
 
   let setupInterface = (client, data) => {
@@ -658,6 +661,7 @@ let createView = () => {
 
   let updateScore = () => {
     let currentScore = score.calculateScore(Model.getColony(), Model.getOtherColonies(), inventoryBonusLimit)
+    if (practiceRun) currentScore += ' (Practice Run)'
     $('#score').html(currentScore)
   }
 
