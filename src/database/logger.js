@@ -113,7 +113,7 @@ let createLogger = () => {
     })
   }
 
-  let saveGameCSV = (stage) => {
+  let saveGameCSV = (stage, config) => {
     let data = exportAsJSON()
 
     let files = {}
@@ -141,6 +141,10 @@ let createLogger = () => {
       })
     })
 
+    fs.writeFile(stageDir + 'config' + stage + '.json', JSON.stringify(config), (err) => {
+      if (err) throw err
+      console.log('configuration json file saved for stage ' + stage)
+    })
   }
 
   let savePaymentCSV = (stage) => {

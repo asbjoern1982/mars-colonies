@@ -244,7 +244,7 @@ export default {
   },
   teardown: (server) => {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage().number)
-    Logger.saveGameCSV(server.getCurrentStage().number)
+    Logger.saveGameCSV(server.getCurrentStage().number, serverStages.configs[server.getCurrentStage().number].config)
     runningTimeouts.forEach(t => clearTimeout(t)) // remove any timeouts
     // TODO: clear gameloop interval?
   },
