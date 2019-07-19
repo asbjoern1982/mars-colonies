@@ -1,12 +1,14 @@
 import {DatabaseHandler} from './DatabaseHandler'
 import {PaymentHandler} from './PaymentHandler'
 const fs = require('fs')
+const archiver = require('archiver')
 
 let createLogger = () => {
+  let experimentTime = Date.now()
 
   let directoryCSV = './src/database/csv/'
   if (!fs.existsSync(directoryCSV)) fs.mkdirSync(directoryCSV)
-  let experimentDir = './src/database/csv/experiment' + Date.now() + '/'
+  let experimentDir = './src/database/csv/experiment' + experimentTime + '/'
   if (!fs.existsSync(experimentDir)) fs.mkdirSync(experimentDir)
 
   let logChat = (server, eventId, game, name, clientId, targetName, targetId, message) => {
@@ -159,6 +161,30 @@ let createLogger = () => {
     })
   }
 
+  let exportSavedAsZip = (server) => {
+
+
+    let directoryZip = './assets/zips/'
+    if (!fs.existsSync(directoryZip)) fs.mkdirSync(directoryZip)
+
+    let filename = directoryZip + 'experiment' + experimentTime + '.zip'
+
+    let output = fs.createWriteStream(filename)
+    let archive = archiver('zip')
+
+    output.on('close', () => {
+      console.log(archive.pointer() + ' total bytes zip file written')
+      server.send('resZIP', filename).toAdmin()
+    })
+    archive.on('error', (err) => {
+      throw err
+    })
+
+    archive.pipe(output);
+    archive.directory(experimentDir, false);
+    archive.finalize();
+  }
+
   let getEvents = () => DatabaseHandler.getEvents()
 
   return {
@@ -174,6 +200,7 @@ let createLogger = () => {
     saveSurveyCSV,
     saveGameCSV,
     savePaymentCSV,
+    exportSavedAsZip,
     getEvents
   }
 }

@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "archiver": "^3.0.0",
     "chart.js": "^2.7.3",
     "jquery-confirm": "^3.3.3",
     "lowdb": "^1.0.0",

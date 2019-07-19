@@ -5,7 +5,12 @@ import serverStages from '../../../serverStages'
 let completedSurveys = 0
 
 export default {
-  commands: {},
+  commands: {
+    'endGame': (server) => {
+      console.log('Admin forced end stage')
+      endStage(server)
+    }
+  },
   events: {
     'ready': (server, clientId) => {
       server.send('ready', serverStages.configs[server.getCurrentStage().number]).toClient(clientId)
@@ -15,11 +20,7 @@ export default {
       completedSurveys++
       if (completedSurveys >= server.getPlayers().length) {
         server.send('logged', 'everyone has completed the survey').toAdmin()
-        // send message to clients and set a timeout
-        server.send('everyoneIsReady').toAll()
-        setTimeout(() => {
-          server.nextStage()
-        }, 5000)
+        endStage(server)
       }
     },
     [Events.CLIENT_RECONNECTED]: (server, clientId) => {
@@ -45,4 +46,12 @@ export default {
     // console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
   },
   options: {}
+}
+
+let endStage = (server) => {
+  // send message to clients and set a timeout
+  server.send('everyoneIsReady').toAll()
+  setTimeout(() => {
+    server.nextStage()
+  }, 5000)
 }

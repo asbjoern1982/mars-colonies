@@ -33,6 +33,9 @@ let commands = {
     PaymentHandler.exportCSV(data => {
       server.send('resPay', data).toAdmin()
     })
+  },
+  'reqZIP': (server, clientId) => {
+    Logger.exportSavedAsZip(server)
   }
 }
 

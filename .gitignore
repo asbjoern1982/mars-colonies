@@ -5,3 +5,4 @@ src/database/logs/*
 src/database/payments/*
 src/database/csv/*
 logs/
+assets/zips/*

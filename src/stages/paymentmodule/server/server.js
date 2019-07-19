@@ -5,7 +5,12 @@ import {Events} from 'monsterr'
 let completedSurveys = []
 
 export default {
-  commands: {},
+  commands: {
+    'endGame': (server) => {
+      console.log('Admin forced end stage')
+      finishStage(server)
+    }
+  },
   events: {
     'ready': (server, clientId) => {
       server.log('client reported ready: ' + clientId)
@@ -21,11 +26,8 @@ export default {
       server.send('logged', str).toAdmin()
 
       if (completedSurveys.length >= server.getPlayers().length) {
-        server.send('downloadReady', 'payment').toAdmin()
-        // sometimes it is still saving the last survey
-        setTimeout(() => {
-          Logger.savePaymentCSV(server.getCurrentStage().number)
-        }, 500)
+        // server.send('downloadReady', 'payment').toAdmin()
+        finishStage(server)
       }
     },
     [Events.CLIENT_RECONNECTED]: (server, clientId) => {
@@ -48,4 +50,14 @@ export default {
     console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
   },
   options: {}
+}
+
+let finishStage = (server) => {
+  // delayed as to wait for file writing to be finished
+  setTimeout(() => {
+    Logger.savePaymentCSV(server.getCurrentStage().number)
+  }, 500)
+  setTimeout(() => {
+    Logger.exportSavedAsZip(server) // pack all data and send it to the admin
+  }, 1000)
 }
