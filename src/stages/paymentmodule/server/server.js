@@ -22,6 +22,10 @@ export default {
 
       if (completedSurveys.length >= server.getPlayers().length) {
         server.send('downloadReady', 'payment').toAdmin()
+        // sometimes it is still saving the last survey
+        setTimeout(() => {
+          Logger.savePaymentCSV(server.getCurrentStage().number)
+        }, 500)
       }
     },
     [Events.CLIENT_RECONNECTED]: (server, clientId) => {

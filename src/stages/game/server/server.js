@@ -243,7 +243,8 @@ export default {
     server.send('gamenetwork', gamenetworkdata).toAdmin()
   },
   teardown: (server) => {
-    console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
+    console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage().number)
+    Logger.saveGameCSV(server.getCurrentStage().number)
     runningTimeouts.forEach(t => clearTimeout(t)) // remove any timeouts
     // TODO: clear gameloop interval?
   },
@@ -315,9 +316,10 @@ let gameloop = (server) => {
       server.send('gameover', status.join('\n')).toClients(coloniesInGame.map(colony => colony.id).filter(id => server.getPlayers().includes(id)))
 
       // go to next stage after 20 sec
-      setTimeout(() => {
+      let gameOverTimeout = setTimeout(() => {
         server.nextStage()
       }, 20000)
+      runningTimeouts.push(gameOverTimeout)
     }
 
     if (!config.practiceRun) {

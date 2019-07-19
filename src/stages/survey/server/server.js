@@ -41,6 +41,7 @@ export default {
     completedSurveys = 0 // this carries over from previous stages
   },
   teardown: (server) => {
+    Logger.saveSurveyCSV(server.getCurrentStage().number)
     // console.log('CLEANUP SERVER AFTER STAGE', server.getCurrentStage())
   },
   options: {}

@@ -108,6 +108,10 @@ let createPaymentHandler = () => {
       .then(()=> console.log('The CSV file was written successfully'));
   }
 
+  let getFilename = () => {
+    return filename
+  }
+
   let exportCSV = (callback) => {
     fs.readFile(filename, (err, buffer) => {
       if (err) {
@@ -119,12 +123,12 @@ let createPaymentHandler = () => {
     })
   }
 
-
   return {
     setPayoutAmount,
     randomizePayout,
     getPayout,
     saveParticipantInformation,
+    getFilename,
     exportCSV
   }
 }

@@ -1,6 +1,14 @@
 import {DatabaseHandler} from './DatabaseHandler'
+import {PaymentHandler} from './PaymentHandler'
+const fs = require('fs')
 
 let createLogger = () => {
+
+  let directoryCSV = './src/database/csv/'
+  if (!fs.existsSync(directoryCSV)) fs.mkdirSync(directoryCSV)
+  let experimentDir = './src/database/csv/experiment' + Date.now() + '/'
+  if (!fs.existsSync(experimentDir)) fs.mkdirSync(experimentDir)
+
   let logChat = (server, eventId, game, name, clientId, targetName, targetId, message) => {
     DatabaseHandler.saveChat(server.getCurrentStage().number, eventId, game, name, clientId, targetName, targetId, message)
   }
@@ -43,30 +51,6 @@ let createLogger = () => {
     let surveyStages = [...new Set(data.surveys.map(survey => survey.stage))]
     //console.log('number of surveys: ' + surveyStages.join())
 
-    let convertSurvey = (surveys) => {
-        // get a list of headers (questions)
-        let headers = [...new Set([].concat(...surveys.map(survey => Object.keys(survey.survey))))].sort()
-
-        // for each survey, add id, time and questions, if it is not present,
-        // it just adds ',' so the columns are presisent and multiple answers are
-        // put into quotes
-        let surveyCSV = 'stage,clientId,time,timestr,' + headers.join() + '\n' +
-          surveys.map(survey =>
-            survey['stage'] + ',' +
-            survey['id'] + ',' +
-            survey['time'] + ',' +
-            survey['timestr'] + ',' +
-            headers.map((header) =>
-              survey.survey[header]
-                ? (Array.isArray(survey.survey[header])
-                  ? '"' + survey.survey[header].join() + '"'
-                  : survey.survey[header])
-                : ''
-            ).join()
-          ).join('\n')
-
-        return surveyCSV
-    }
 
     let files = {}
     surveyStages.forEach(surveyStage => {
@@ -88,6 +72,89 @@ let createLogger = () => {
     return files
   }
 
+  let convertSurvey = (surveys) => {
+      // get a list of headers (questions)
+      let headers = [...new Set([].concat(...surveys.map(survey => Object.keys(survey.survey))))].sort()
+
+      // for each survey, add id, time and questions, if it is not present,
+      // it just adds ',' so the columns are presisent and multiple answers are
+      // put into quotes
+      let surveyCSV = 'stage,clientId,time,timestr,' + headers.join() + '\n' +
+        surveys.map(survey =>
+          survey['stage'] + ',' +
+          survey['id'] + ',' +
+          survey['time'] + ',' +
+          survey['timestr'] + ',' +
+          headers.map((header) =>
+            survey.survey[header]
+              ? (Array.isArray(survey.survey[header])
+                ? '"' + survey.survey[header].join() + '"'
+                : survey.survey[header])
+              : ''
+          ).join()
+        ).join('\n')
+
+      return surveyCSV
+  }
+
+
+  let saveSurveyCSV = (stage) => {
+    let data = exportAsJSON()
+    let csv = convertSurvey(data.surveys.filter(survey => survey.stage === stage))
+
+    // create a directory for this stage
+    let stageDir = experimentDir + 'stage' + stage + '/'
+    if (!fs.existsSync(stageDir)) fs.mkdirSync(stageDir)
+
+    // save to file
+    fs.writeFile(stageDir + 'stage' + stage + '_survey.csv', csv, (err) => {
+      if (err) throw err
+      console.log('survey-csv file saved for stage ' + stage)
+    })
+  }
+
+  let saveGameCSV = (stage) => {
+    let data = exportAsJSON()
+
+    let files = {}
+    Object.keys(data).filter(logname => logname !== 'surveys').forEach(logName => {
+      let log = data[logName].filter(log => log.stage === stage)
+      if (log.length > 0) {
+        files[logName] = Object.keys(log[0]).join() + '\n' +
+          log.map(logEntry =>
+            Object.values(logEntry)
+              .map(val => val.includes && val.includes(',') ? '"' + val + '"' : val) // surround with " if a comma is present, ei in chat
+              .join()
+          ).join('\n')
+      }
+    })
+
+    // create a directory for this stage
+    let stageDir = experimentDir + 'stage' + stage + '/'
+    if (!fs.existsSync(stageDir)) fs.mkdirSync(stageDir)
+
+    // save files
+    Object.keys(files).forEach(name => {
+      fs.writeFile(stageDir + 'stage' + stage + '_' + name + '.csv', files[name], (err) => {
+        if (err) throw err
+        console.log('game-csv files saved for stage ' + stage)
+      })
+    })
+
+  }
+
+  let savePaymentCSV = (stage) => {
+    let filename = PaymentHandler.getFilename()
+
+    let stageDir = experimentDir + 'stage' + stage + '/'
+    if (!fs.existsSync(stageDir)) fs.mkdirSync(stageDir)
+
+    fs.copyFile(filename, stageDir + 'stage' + stage + '_payment.csv', (err) => {
+      if (err) throw err;
+      console.log('payment-csv file saved for stage ' + stage);
+    })
+  }
+
   let getEvents = () => DatabaseHandler.getEvents()
 
   return {
@@ -100,6 +167,9 @@ let createLogger = () => {
     logSurvey,
     exportAsJSON,
     exportAsCSV,
+    saveSurveyCSV,
+    saveGameCSV,
+    savePaymentCSV,
     getEvents
   }
 }

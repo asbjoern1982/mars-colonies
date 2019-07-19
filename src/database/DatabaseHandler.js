@@ -12,6 +12,7 @@ let createDatabaseHandler = () => {
   let filename = directory + Date.now() + '.json'
   let adapter = new FileSync(filename)
   let db = low(adapter)
+
   db.defaults({
     chat: [],
     production: [],

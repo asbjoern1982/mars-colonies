@@ -5,8 +5,8 @@ import clientStages from '../../../clientStages'
 let createView = () => {
   let inventoryBonusLimit
   let inventoryCriticalLimit
-  let productionCountDown = 0
-  let productionCountTotal = 0
+  let productionCountDown
+  let productionCountTotal
   let productionProgressInterval
 
   let tradeRoutes
@@ -22,14 +22,21 @@ let createView = () => {
 
   let startTime
   let timeLeft
-  let chat = {
-    'all': {
-      tag: undefined,
-      text: ''
-    }
-  }
+  let chat
 
   let setup = (client, data) => {
+    showInventory = data.showInventoryInTooltip
+    showScore = data.showScoreInTooltip
+    practiceRun = data.practiceRun
+    productionCountDown = 0
+    productionCountTotal = 0
+    chat = {
+      'all': {
+        tag: undefined,
+        text: ''
+      }
+    }
+
     setupInterface(client, data)
     setupMap(client)
 
@@ -44,10 +51,6 @@ let createView = () => {
         '</audio>')
       $('audio').prop('volume', data.soundVolume)
     }
-
-    showInventory = data.showInventoryInTooltip
-    showScore = data.showScoreInTooltip
-    practiceRun = data.practiceRun
   }
 
   let setupInterface = (client, data) => {

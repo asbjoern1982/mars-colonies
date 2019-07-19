@@ -3,4 +3,5 @@ dist/
 .cache/
 src/database/logs/*
 src/database/payments/*
+src/database/csv/*
 logs/
