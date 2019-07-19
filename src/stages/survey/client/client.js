@@ -17,21 +17,14 @@ export default {
       let surveyModel = new Survey.Model(config)
 
       $('#startSurvey').on('click', () => {
-        // as we do not have access to links and scripts this workaround downloads the library
-        $.getScript('https://surveyjs.azureedge.net/1.0.25/survey.jquery.min.js')
-          .done(() => {
-            $('#survey').Survey({
-              model: surveyModel,
-              onComplete: (survey) => {
-                client.send('surveyResult', survey.data)
-                $('#survey').html(htmlThanks)
-                // client.stageFinished()
-              }
-            })
-          })
-          .fail(() => {
-            $('#survey').html('<h3>ERROR, could not retrieve surveyjs script</h3>')
-          })
+        $('#survey').Survey({
+          model: surveyModel,
+          onComplete: (survey) => {
+            client.send('surveyResult', survey.data)
+            $('#survey').html(htmlThanks)
+            // client.stageFinished()
+          }
+        })
       })
     },
     'everyoneIsReady': () => {
@@ -52,6 +45,16 @@ export default {
     }
   },
   setup: (client) => {
+    let link = document.querySelector("link[rel*='icon']") || document.createElement('link')
+    link.type = 'image/x-icon'
+    link.rel = 'shortcut icon'
+    link.href = './../../../assets/favicon.ico'
+    document.getElementsByTagName('head')[0].appendChild(link)
+
+    let script = document.createElement('script')
+    script.src="https://surveyjs.azureedge.net/1.1.0/survey.jquery.js"
+    document.getElementsByTagName('body')[0].appendChild(script)
+
     // request survey-data from the server
     client.send('ready')
   },
