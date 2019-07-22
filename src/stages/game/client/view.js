@@ -430,6 +430,15 @@ let createView = () => {
       }
     })
 
+    canvas.on('mouse:up', e => {
+      if (e.target) {
+        let colony = Model.getOtherColonies().find(colony => colony['node'] === e.target)
+        if (colony) {
+          selectColony(colony)
+        }
+      }
+    })
+
     // creating trade routes for displaying visual cues when a transfer of material has happened
     tradeRoutes = []
     let doneRoutes = []
@@ -686,6 +695,12 @@ let createView = () => {
     let res = message.replace(Model.getColony().name, '<span class="text-warning">' + Model.getColony().name + '</span>')
     eventLog.append(new Date().toLocaleTimeString() + '&gt' + res + '<br>')
     eventLog.scrollTop(eventLog[0].scrollHeight)
+  }
+
+  // when a colony is clicked on the map, select it in the trade window, maybe in the chat?
+  let selectColony = (colony) => {
+    //console.log(colony.name)
+    $('#trade-colony').val(colony.name)
   }
 
   // when the game is over, ei time is up, the client receives a 'gameover'
