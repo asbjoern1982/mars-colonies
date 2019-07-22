@@ -60,18 +60,6 @@ let createView = () => {
     startTime = Date.now()
     timeLeft = data.timeLeft // TODO this ignores lag between server, client and when this i called
 
-    let jqueryConfirmCssLink = document.querySelector("link[rel*='jquery-confirm.min.css']") || document.createElement('link')
-    jqueryConfirmCssLink.rel = 'stylesheet'
-    jqueryConfirmCssLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css'
-    document.getElementsByTagName('head')[0].appendChild(jqueryConfirmCssLink)
-
-    // https://www.sitepoint.com/dynamically-load-jquery-library-javascript/
-    let script = document.createElement('script')
-    script.type = 'text/javascript'
-    script.async = true
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js'
-    document.getElementsByTagName('head')[0].appendChild(script)
-
     $('#colony-title').html('Control Panel for: ' + Model.getColony().name)
 
     // ----------------- INVENTORY -------------------
@@ -116,32 +104,26 @@ let createView = () => {
       let material = $('#trade-material').val()
       // ignore anything that isn't a positive number
       if (amount > 0 && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
-        $('#trade-amount').val('')
+
         let sendTransfer = () => {
-          client.send('trade', {
-            colony: $('#trade-colony').val(),
-            material: material,
-            amount: amount
-          })
-          Model.getColony().inventory.find(row => row.name === material).amount -= amount
-          updateInventory()
+          if (!Model.getColony().dead && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
+            $('#trade-amount').val('')
+            client.send('trade', {
+              colony: $('#trade-colony').val(),
+              material: material,
+              amount: amount
+            })
+            Model.getColony().inventory.find(row => row.name === material).amount -= amount
+            updateInventory()
+          }
         }
         // confirm if it would bring the participant below the critical limit
         if (Model.getColony().inventory.find(row => row.name === material).amount - amount < inventoryCriticalLimit) {
-          $.confirm({
-            title: 'Your inventory will be lower than the critical limit, continue?',
-            buttons: {
-              confirm: {
-                text: 'confirm',
-                btnClass: 'btn-blue',
-                keys: ['enter'],
-                action: () => {
-                  sendTransfer()
-                }
-              },
-              cancel: () => {}
-            }
-          })
+          // close other popups
+          $('.modal').modal('hide')
+          $('#buttonTransferConfirm').mouseup(() => sendTransfer())
+          $('#confirmTransferWindow').modal('show')
+
         } else {
           sendTransfer()
         }
@@ -166,46 +148,39 @@ let createView = () => {
       if (productionCountDown === 0 && $('#production-amount').val() > 0) {
         let index = $('#production-material').val()
         let amount = $('#production-amount').val()
-        $('#production-amount').val('')
         let startProduction = () => {
-          client.send('produce', {
-            index: index,
-            amount: amount
-          })
-          productionCountDown = Model.getColony().specializations[index].production_delay
+          if (!Model.getColony().dead && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
+          $('#production-amount').val('')
+            client.send('produce', {
+              index: index,
+              amount: amount
+            })
+            productionCountDown = Model.getColony().specializations[index].production_delay
 
-          if (productionCountDown > 0) {
-            productionCountTotal = productionCountDown
-            // countdown loop
-            $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-            productionCountDown--
-            productionProgressInterval = setInterval(() => {
-              if (productionCountDown <= 0) {
-                $('#production-progress').html('production finished')
-                clearInterval(productionProgressInterval)
-              } else {
-                $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-                productionCountDown--
-              }
-            }, 1000)
-          } else {
-            $('#production-progress').html('production finished')
+            if (productionCountDown > 0) {
+              productionCountTotal = productionCountDown
+              // countdown loop
+              $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+              productionCountDown--
+              productionProgressInterval = setInterval(() => {
+                if (productionCountDown <= 0) {
+                  $('#production-progress').html('production finished')
+                  clearInterval(productionProgressInterval)
+                } else {
+                  $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+                  productionCountDown--
+                }
+              }, 1000)
+            } else {
+              $('#production-progress').html('production finished')
+            }
           }
         }
 
         if (Model.getColony().inventory.find(material => material.name === Model.getColony().specializations[index].input).amount - amount < inventoryCriticalLimit) {
-          $.confirm({
-            title: 'Your inventory will be lower than the critical limit, continue?',
-            buttons: {
-              confirm: {
-                text: 'confirm',
-                btnClass: 'btn-blue',
-                keys: ['enter'],
-                action: () => startProduction()
-              },
-              cancel: () => {}
-            }
-          })
+          $('.modal').modal('hide')
+          $('#buttonProductionConfirm').mouseup(() => startProduction())
+          $('#confirmProductionWindow').modal('show')
         } else {
           startProduction()
         }
@@ -721,6 +696,8 @@ let createView = () => {
     let text = 'Final score:<br>' + status.replace(/\n/g, '<br>').replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>')
     logEvent('game over<br>' + text)
     disableEverything()
+    $('.modal').modal('hide') // remove any shown confirm-boxes
+
 
     let everyoneIsDead = Model.getOtherColonies().every(colony => colony.dead) && Model.getColony().dead
     $('#gameoverTitle').html(everyoneIsDead ? 'Everyone is dead' : 'Gameover')

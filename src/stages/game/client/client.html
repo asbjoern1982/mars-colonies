@@ -40,6 +40,48 @@
     </div>
   </div>
 
+  <div class="modal" tabindex="-1" role="dialog" id="confirmTransferWindow">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Transfer</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="youDiedReason"></p>
+          <p>The given amount will put you under the critical limit, are you sure?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id="buttonTransferConfirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" id="confirmProductionWindow">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Production</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="youDiedReason"></p>
+          <p>The given amount will put you under the critical limit, are you sure?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id="buttonProductionConfirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row d-flex align-items-center" id="colony-title-container"><div class="container windowbg title" id="colony-title">Control Panel for: </div></div>
 
   <div class="row">
