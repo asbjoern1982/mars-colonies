@@ -1,4 +1,3 @@
-/* very basic admin client, the only addition to this class is the two download buttons */
 import createClient from 'monsterr'
 import vis from 'vis'
 import {LatencyModule} from './src/modules/LatencyModule'
@@ -9,8 +8,7 @@ import './src/admin/admin-client.css'
 
 let options = {
   canvasBackgroundColor: 'red',
-  htmlContainerHeight: 0.99,
-  // HTML is included in options for admin
+  htmlContainerHeight: 1,
   html
 }
 
@@ -156,10 +154,14 @@ $('#buttonDownloadCSV').mouseup(e => {
   admin.sendCommand('reqCSV')
 })
 
-
 $('#buttonDownloadPay').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('reqPay')
+})
+
+$('#buttonDownloadZip').mouseup(e => {
+  e.preventDefault()
+  admin.sendCommand('reqZIP')
 })
 
 $('#buttonEnable').change(() => {
