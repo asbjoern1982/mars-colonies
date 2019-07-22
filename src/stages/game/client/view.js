@@ -24,6 +24,8 @@ let createView = () => {
   let timeLeft
   let chat
 
+  let countdownInterval
+
   let setup = (client, data) => {
     showInventory = data.showInventoryInTooltip
     showScore = data.showScoreInTooltip
@@ -690,7 +692,8 @@ let createView = () => {
   // The 'status' contains what points each colony earned
   let gameover = (status) => {
     // hide other popups
-    $('#youDiedWindow').modal('hide')
+    $('.modal').modal('hide')
+    clearInterval(countdownInterval)
 
     // highlight own colonyname
     let text = 'Final score:<br>' + status.replace(/\n/g, '<br>').replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>')
@@ -708,7 +711,7 @@ let createView = () => {
     // countdown
     let seconds = 20
     $('#gameoverCountdown').text(seconds)
-    let countdownInterval = setInterval(() => {
+    countdownInterval = setInterval(() => {
       seconds--
       $('#gameoverCountdown').text(seconds)
       if (seconds <= 0) {
