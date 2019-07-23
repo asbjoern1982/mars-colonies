@@ -81,6 +81,16 @@ body, html {
   to {background-color: rgb(319, 229, 86);}
 }
 
+.nav-tabs {
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: -webkit-box;
+  display: -moz-box;
+}
+.nav-tabs>li {
+  float: none;
+}
+
 #score {
   color: white;
   background-color: rgb(30, 30, 30);

@@ -228,12 +228,13 @@ let createView = () => {
         }
       })
     } else if (data.chat === 'free') {
-      $('#chat-input-bar').append('<div class="input-group-prepend">' +
-        '<span class="input-group-text" id="input-label"></span>' +
+      $('#chat-input-bar').append(
+        '<div class="input-group-prepend">' +
+          '<span class="input-group-text" id="input-label"></span>' +
         '</div>' +
         '<input type="text" class="form-control" id="chat-input" placeholder="write a message">' +
-        '<div class="input-group-prepend-append">' +
-        '<button class="btn btn-default" id="chat-button">send</button>' +
+        '<div class="input-group-append">' +
+          '<button class="btn btn-default" id="chat-button">send</button>' +
         '</div>')
       $('#input-label').append(Model.getColony().name)
       $('#chat-input').keypress((e) => {
@@ -267,12 +268,8 @@ let createView = () => {
     if (Array.isArray(data.chat) && data.chat.length > 0 || data.chat === 'free') {
       chat.all.tag = $('#chatAllLi')
       if (data.allowDirectMessages) {
-        $('#chatTabs').append('<li class="nav-item dropdown" id="chatDropdown">' +
-          '<a class="nav-link dropdown-toggle" id="chatDropdownA" data-toggle="dropdown" href="#" data-toggle="tab" role="button">direct messages</a>'+
-          '<div class="dropdown-menu" id="chatTabsDM"></div></li>')
         $('#chatAllLi').mouseup(e => {
-          $('#chatTabsDM').find('.active').removeClass('active')
-          $('#chatDropdownA').removeClass('active')
+          $('.nav-link').removeClass('active')
           $('#chatAllLi').addClass('active')
           $('#chatAllLi').removeClass('chatTabWarning')
           let chatBox = $('#chat-log')
@@ -280,25 +277,22 @@ let createView = () => {
           chatBox.scrollTop(chatBox[0].scrollHeight)
           $('#chat-input').focus()
         })
+
         Model.getOtherColonies().forEach(colony => {
           let trimmedName = colony.name.replace(/ /g, '')
-          $('#chatTabsDM').append('<a class="dropdown-item" href="#"  role="tab" id="' + trimmedName + 'Action">' + colony.name + '</a>')
+          $('#chatTabs').append('<li class="nav-item"><a class="nav-link" href="#" data-toggle="tab" role="button" id="' + trimmedName + 'Action">' + colony.name + '</a></li>')
+
           $('#' + trimmedName + 'Action').mouseup(e => {
-            $('#chatAllLi').removeClass('active')
-            $('#chatTabsDM').find('.active').removeClass('active')
-            $('#chatDropdownA').removeClass('chatTabWarning')
+            $('.nav-link').removeClass('active')
             $('#' + trimmedName + 'Action').removeClass('chatTabWarning')
-
-            $('#chatDropdownA').addClass('active')
             $('#' + trimmedName + 'Action').addClass('active')
-            $('#chatDropdownA').html('dm to ' + colony.name)
 
-            // $('#chatContent').html(trimmedName)
             let chatBox = $('#chat-log')
             chatBox.html(chat[colony.name].text)
             chatBox.scrollTop(chatBox[0].scrollHeight)
             $('#chat-input').focus()
           })
+
           chat[colony.name] = {
             tag: $('#' + trimmedName + 'Action'),
             text: ''
