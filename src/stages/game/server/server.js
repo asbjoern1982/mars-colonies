@@ -236,7 +236,7 @@ export default {
     }
 
     let games = [...new Set(colonies.map(colony => colony.game))]
-    let log = games.map(gameNo => 'game ' + gameNo + ': [' + colonies.filter(colony => colony.game === gameNo).map(colony => '(' + colony.id + ', ' + colony.name + ')').join() + ']').join() + ''
+    let log = games.map(gameNo => 'stage ' + server.getCurrentStage().number + ' game ' + (games.length > 1 ? gameNo + ' ' : '') + 'started with' + colonies.filter(colony => colony.game === gameNo).map(colony => ' ' + colony.name + ' (' + colony.id + ')').join()).join() + ''
     Logger.logEvent(server, eventId++, log)
 
     let gamenetworkdata = games.map(gameNo => colonies.filter(colony => colony.game === gameNo).map(colony => colony.id))
