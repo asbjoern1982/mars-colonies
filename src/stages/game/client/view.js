@@ -669,7 +669,7 @@ let createView = () => {
       canvas.requestRenderAll()
     }, 2000) // how long the line changes color
 
-    logEvent(sendingColony.name + ' transfered  ' + transfer.amount + ' ' + transfer.material + ' to ' + receivingColony.name)
+    logEvent(sendingColony.name + ' transfered  ' + Math.round(transfer.amount) + ' ' + transfer.material + ' to ' + receivingColony.name)
   }
 
   let addChatMessage = (data) => {
