@@ -278,9 +278,9 @@ let createView = () => {
           $('#chat-input').focus()
         })
 
-        Model.getOtherColonies().forEach(colony => {
+        Model.getOtherColonies().sort((a, b) => a.name.localeCompare(b.name)).forEach(colony => {
           let trimmedName = colony.name.replace(/ /g, '')
-          $('#chatTabs').append('<li class="nav-item"><a class="nav-link" href="#" data-toggle="tab" role="button" id="' + trimmedName + 'Action">' + colony.name + '</a></li>')
+          $('#chatTabs').append('<li class="nav-item" id="' + trimmedName + 'Li"><a class="nav-link" href="#" data-toggle="tab" role="button" id="' + trimmedName + 'Action">' + colony.name + '</a></li>')
 
           $('#' + trimmedName + 'Action').mouseup(e => {
             $('.nav-link').removeClass('active')
@@ -311,6 +311,11 @@ let createView = () => {
       let chatBox = $('#chat-log')
       chatBox.html(chat['all'].text)
       chatBox.scrollTop(chatBox[0].scrollHeight)
+    }
+    if (data.eventLog) {
+      data.eventLog.forEach(message => {
+        logEvent(message)
+      })
     }
     // if reconnecting and someone was dead
     Model.getColony().dead = Model.getColony().inventory.some(row => row.amount <= 0)
@@ -681,6 +686,19 @@ let createView = () => {
       if (chat_key !== 'all') {
         $('#chatDropdownA').addClass('chatTabWarning')
       }
+    }
+    if (chat_key !== 'all') {
+      // rotate the new tag just behind all
+      let list = $('#chatTabs').children('li').detach().toArray()
+
+      let trimmedName = data.target.replace(/ /g, '')
+      let newList = [list[0], list.find(a => a.id === trimmedName + 'Li')]
+
+      for (let i = 1; i < list.length; i++) {
+        if (list[i].id !== trimmedName + 'Li')
+          newList.push(list[i])
+      }
+      $('#chatTabs').append(newList);
     }
   }
 
