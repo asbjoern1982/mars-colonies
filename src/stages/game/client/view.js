@@ -435,7 +435,12 @@ let createView = () => {
       if (e.target) {
         let colony = Model.getOtherColonies().find(colony => colony['node'] === e.target)
         if (colony) {
-          selectColony(colony)
+          if (e.e.ctrlKey) {
+            $('#chat-input').val($('#chat-input').val() + colony.name)
+            $('#chat-input').focus()
+          } else {
+            selectColony(colony)
+          }
         }
       }
     })
