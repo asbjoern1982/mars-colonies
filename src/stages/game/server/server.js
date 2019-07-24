@@ -15,6 +15,7 @@ let chatEvents // list of all chat messages, saved to be able to send the chat t
 
 let runningTimeouts // ref to trade and production timeouts so it is possible to stop them if the stage restarts
 let eventId = 0 // save eventId so it is possible to see connect start and stop production events in inventory log
+let transferLog
 
 let tickcount
 let score
@@ -63,6 +64,7 @@ export default {
       sendColoniesInventories(server)
       Logger.logInventory(server, eventId++, sendingColony.game, sendingColony.name, sendingColony.id,  'trade started', eventIdRef, sendingColony.inventory)
 
+      transferLog.push(new Date().toLocaleTimeString() + '&gt' + sendingColony.name + ' transfered  ' + Math.round(transferedAmount) + ' ' + transfer.material + ' to ' + receiver.name)
 
       // add amount to receivers inventory when the trade is complete
       let ref = setTimeout(() => {
@@ -213,6 +215,7 @@ export default {
 
     colonies = []
     chatEvents = []
+    transferLog = []
     runningTimeouts = []
 
     numberOfGames = Math.floor(server.getPlayers().length / config.players.length) // ignores leftover participants
@@ -284,6 +287,8 @@ let sendSetupData = (server, receiver) => {
     yourStartingInventory: config.players.find(player => player.name === receiver.name).inventory,
     colonies: simplifiedColonies
   }
+  if (transferLog.length > 0) data['transferLog'] = transferLog
+  
   if (chatEvents.length > 0) { // handle reconnect
     data.chatEvents = chatEvents.filter(event => colonies.find(col => col.id === event.clientId).game === receiver.game && (
       event.target === 'all' ||

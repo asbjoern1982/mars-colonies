@@ -312,10 +312,12 @@ let createView = () => {
       chatBox.html(chat['all'].text)
       chatBox.scrollTop(chatBox[0].scrollHeight)
     }
-    if (data.eventLog) {
-      data.eventLog.forEach(message => {
-        logEvent(message)
+    if (data.transferLog) {
+      let eventLog = $('#event-log')
+      data.transferLog.forEach(message => {
+        eventLog.append(message.replace(Model.getColony().name, '<span class="text-warning">' + Model.getColony().name + '</span>') + '<br>')
       })
+      eventLog.scrollTop(eventLog[0].scrollHeight)
     }
     // if reconnecting and someone was dead
     Model.getColony().dead = Model.getColony().inventory.some(row => row.amount <= 0)
