@@ -85,7 +85,7 @@ let createView = () => {
       let overflow = row.amount > Model.getColony().startingIventory.find(srow => srow.name === row.name).amount ? '+' : ' '
 
       $('#inventory').find('tbody').append(
-        '<tr>' +
+        '<tr id="' + row.name.replace(/ /g, '') + 'Action">' +
           '<td scope="row"><div class="text-left">' + row.name + '</div></td>' +
           '<td scope="row" class="align-middle">' +
             '<div class="progress bg-dark" style="width: 100%; padding-right:0px;">' +
@@ -98,6 +98,17 @@ let createView = () => {
           '<td scope="row" class="' + amountColor + '" id="' + tagId + '">' + row.amount + '</td>' +
         '</tr>')
 
+        $('#' + row.name.replace(/ /g, '') + 'Action').mouseup(e => {
+          if (e.ctrlKey) {
+            let str = $('#chat-input').val()
+            if (str.length > 0 && str.charAt(str.length-1) !== ' ')
+              str += ' '
+            $('#chat-input').val(str + row.name + ' ')
+            $('#chat-input').focus()
+          } else {
+            selectMaterial(row.name)
+          }
+        })
     })
 
     // -------------------- TRADE --------------------
@@ -436,7 +447,10 @@ let createView = () => {
         let colony = Model.getOtherColonies().find(colony => colony['node'] === e.target)
         if (colony) {
           if (e.e.ctrlKey) {
-            $('#chat-input').val($('#chat-input').val() + colony.name)
+            let str = $('#chat-input').val()
+            if (str.length > 0 && str.charAt(str.length-1) !== ' ')
+              str += ' '
+            $('#chat-input').val(str + colony.name + ' ')
             $('#chat-input').focus()
           } else {
             selectColony(colony)
@@ -718,8 +732,11 @@ let createView = () => {
 
   // when a colony is clicked on the map, select it in the trade window, maybe in the chat?
   let selectColony = (colony) => {
-    //console.log(colony.name)
     $('#trade-colony').val(colony.name)
+  }
+
+  let selectMaterial = (name) => {
+    $('#trade-material').val(name)
   }
 
   // when the game is over, ei time is up, the client receives a 'gameover'
