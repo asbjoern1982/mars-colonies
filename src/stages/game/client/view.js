@@ -317,7 +317,7 @@ let createView = () => {
       data.chatEvents.forEach(event => {
         let chat_key = event.target === 'all' ? 'all' : (event.sender === Model.getColony().name ? event.target : event.sender)
         let senderTag = Model.getColony().name === event.sender ? '<b class="text-warning">' : '<b>'
-        chat[chat_key].text += senderTag + event.sender + '</b>&gt; ' + event.message + '<br>'
+        chat[chat_key].text += senderTag + event.sender + '</b>&gt; ' + event.message.replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>') + '<br>'
       })
       let chatBox = $('#chat-log')
       chatBox.html(chat['all'].text)
@@ -696,8 +696,10 @@ let createView = () => {
     let chatBox = $('#chat-log')
     let chat_key = data.target === 'all' ? 'all' : (data.sender === Model.getColony().name ? data.target : data.sender)
 
+    let message = data.message.replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>')
+
     let senderTag = Model.getColony().name === data.sender ? '<b class="text-warning">' : '<b>'
-    chat[chat_key].text += senderTag + data.sender + '</b>&gt; ' + data.message + '<br>'
+    chat[chat_key].text += senderTag + data.sender + '</b>&gt; ' + message + '<br>'
 
     if (chat[chat_key].tag.hasClass('active')){
       chatBox.html(chat[chat_key].text)
