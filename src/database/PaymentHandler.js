@@ -10,6 +10,7 @@ let createPaymentHandler = () => {
   let directory = './src/database/payments/'
   if (!fs.existsSync(directory)) fs.mkdirSync(directory)
   let filename = directory + Date.now() + '.csv'
+  let selectedRound
 
   let csvWriter = createCsvWriter({
     path: filename,
@@ -23,50 +24,43 @@ let createPaymentHandler = () => {
   })
 
   let participants = []
+  let rounds = []
 
   // save what the participants have earned after a game is over
-  // @param data: {clientId, amount}
-  let setPayoutAmount = (tokens) => {
-    console.log('setPayoutAmount: ' + tokens)
+  // @param participants: {clientId, name, amount}
 
-    tokens.forEach(token => {
-      let participant = participants.find(p => p.clientId === token.clientId)
-      if (!participant) {
-        participant = {
-          clientId: token.clientId,
-          cprnumber: '',
-          firstname: '',
-          lastname: '',
-          date: datestr,
-          amounts: [token.amount]
-        }
-        participants.push(participant)
-      } else {
-        participant.amounts.push(token.amount)
-      }
-    })
+  let registerScore = (stage, practice, participants) => {
+    let round = {
+      stage: stage,
+      practice: practice,
+      participants: participants
+    }
+    rounds.push(round)
   }
 
   // to be run when the payment-system starts up to select a random game the participants will get payed for
   let randomizePayout = () => {
-    if (participants.length > 0) {
-      // pick a random game
-      let gameIndex = Math.floor(Math.random() * participants[0].amounts.length)
-      console.log('Chosen game ' + gameIndex + ' out of ' + participants[0].amounts.length + ' games')
-      // put the payout for that game in front
-      participants.forEach(p => {
-        let temp = p.amounts[0]
-        p.amounts[0] = p.amounts[gameIndex]
-        p.amounts[gameIndex] = temp
-      })
+    let n = rounds.filter(round => round.practice).length
+    selectedRound = Math.floor(Math.random() * (rounds.length - n)) + n
+  }
+
+  let getResults = () => {
+    return {
+      selectedRound: selectedRound,
+      rounds: rounds
     }
   }
 
   // get the first amount
-  let getPayout = (clientId) => {
+  /*let getPayout = (clientId) => {
     let participant = participants.find(p => p.clientId === clientId)
-    return participant ? participant.amounts[0] : 0
+    return participant ? participant.amounts[selectedRound] : 0
   }
+
+  let getRounds = (clientId) => {
+    let participant = participants.find(p => p.clientId === clientId)
+    return participant ? participant.amounts : []
+  }*/
 
   // when a participant has filled in the payment information, save it to the csv file
   let saveParticipantInformation = (clientId, clientData) => {
@@ -124,9 +118,9 @@ let createPaymentHandler = () => {
   }
 
   return {
-    setPayoutAmount,
+    registerScore,
     randomizePayout,
-    getPayout,
+    getResults,
     saveParticipantInformation,
     getFilename,
     exportCSV

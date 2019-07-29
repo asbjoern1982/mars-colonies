@@ -288,7 +288,7 @@ let sendSetupData = (server, receiver) => {
     colonies: simplifiedColonies
   }
   if (transferLog.length > 0) data['transferLog'] = transferLog
-  
+
   if (chatEvents.length > 0) { // handle reconnect
     data.chatEvents = chatEvents.filter(event => colonies.find(col => col.id === event.clientId).game === receiver.game && (
       event.target === 'all' ||
@@ -327,12 +327,17 @@ let gameloop = (server) => {
       runningTimeouts.push(gameOverTimeout)
     }
 
-    if (!config.practiceRun) {
-      PaymentHandler.setPayoutAmount(colonies.map(colony => ({
-        clientId: colony.id,
-        amount: score.calculateScore(colony, colonies.filter(col => col.game === colony.game), config.inventoryBonusLimit)
-      })))
-    }
+    //if (!config.practiceRun) {
+      PaymentHandler.registerScore(
+        server.getCurrentStage().number,
+        config.practiceRun,
+        colonies.map(colony => ({
+          clientId: colony.id,
+          name: colony.name,
+          amount: score.calculateScore(colony, colonies.filter(col => col.game === colony.game), config.inventoryBonusLimit)
+        }))
+      )
+    //}
     return
   }
   // update all colonies inventory

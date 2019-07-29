@@ -14,7 +14,8 @@ export default {
   events: {
     'ready': (server, clientId) => {
       server.log('client reported ready: ' + clientId)
-      server.send('setup', PaymentHandler.getPayout(clientId)).toClient(clientId)
+      let results = PaymentHandler.getResults()
+      server.send('setup', results).toClient(clientId)
     },
     'save': function (server, clientId, data) {
       server.log('client saved information: ' + clientId)

@@ -7,10 +7,27 @@
           <h1>Payment</h1>
         </div>
         <div class="row">
+          <div class="card col-md-12">
+            <div class="card-body">
+              <h5 class="card-title">Score</h5>
+              <table class="table table-bordered">
+                <thead>
+                  <tr id="scoreHeadRow">
+                  </tr>
+                </thead>
+                <tbody id="scoreBody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="card col-md-12" id="paymentInformationCard">
             <div class="card-body">
+              <h5 class="card-title">Personal information</h5>
               <p>
-                You will receive: <scan class="badge badge-secondary" id="paymentAmount"></scan>
+                You will receive <scan class="badge badge-secondary" id="paymentAmount"></scan>.
               </p>
               <form>
                 <div class="form-row">

@@ -16,7 +16,7 @@
   "trade_delay": 0,
   "players": [
     {
-      "name": "Oceania",
+      "name": "Oceania Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000},
@@ -30,7 +30,7 @@
       }]
     },
     {
-      "name": "Eurasia",
+      "name": "Eurasia Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000},
@@ -44,7 +44,7 @@
       }]
     },
     {
-      "name": "Eastasia",
+      "name": "Eastasia Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000},
@@ -58,7 +58,7 @@
       }]
     },
     {
-      "name": "Africa",
+      "name": "Africa Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000},
@@ -72,7 +72,7 @@
       }]
     },
     {
-      "name": "South America",
+      "name": "South America Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000},
@@ -86,7 +86,7 @@
       }]
     },
     {
-      "name": "North America",
+      "name": "North America Colony",
       "inventory": [
         {"name": "Palladium", "amount": 1000},
         {"name": "Selenium", "amount": 1000},

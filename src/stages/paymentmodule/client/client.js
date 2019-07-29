@@ -11,12 +11,59 @@ export default {
     }
   },
   events: {
-    'setup': (client, data) => {
-      $('#paymentAmount').text(data)
+    'setup': (client, results) => {
+      let amount = results.rounds[results.selectedRound].participants.find(e => e.clientId === client.getId()).amount
+      $('#paymentAmount').text(amount)
       $('#firstname').keypress(e => validateWithEnter(client, e))
       $('#lastname').keypress(e => validateWithEnter(client, e))
       $('#cprnumber').keypress(e => validateWithEnter(client, e))
       $('#submitButton').mouseup(() => validateAndSend(client))
+
+      // Scoreboard setup
+      let selected = results.selectedRound
+      let headRow = '<th scope="col">Name</th>'
+      for (let i = 0; i < results.rounds.length; i++) {
+        headRow += '<th scope="col" class="text-right'
+        headRow += i === selected ? ' bg-info text-white">' : '">'
+        headRow += results.rounds[i].practice ? '<small>practice</small><br>' : ''
+        headRow += 'Round ' + results.rounds[i].stage + '</th>'
+      }
+      $('#scoreHeadRow').html(headRow)
+
+      let participants = []
+      results.rounds.forEach(r => r.participants.forEach(participant => participants.push(participant)))
+      let colonies = [...new Set(participants.map(p => p.name))].sort()
+
+      colonies.forEach(col => {
+        let row = '<tr><th scole="row">' + col + '</th>'
+
+        for (let i = 0; i < results.rounds.length; i++) {
+          row += '<td class="text-right'
+
+          let participant = results.rounds[i].participants.find(p => p.name === col)
+          if (participant) {
+            if (participant.clientId === client.getId()) {
+              row += ' text-warning font-weight-bold'
+            } else {
+              if (results.rounds[i].practice) {
+                row += ' text-secondary'
+              }
+              if (results.rounds[i].stage === selected) {
+                row += ' text-white'
+              }
+            }
+            if (results.rounds[i].stage === selected) {
+              row += ' bg-info'
+            }
+          }
+          row += '">'
+          if (participant) {
+            row += participant.amount
+          }
+          row += '</td>'
+        }
+        $('#scoreBody').append(row + '</tr>')
+      })
     }
   },
   setup: (client) => {
@@ -25,7 +72,7 @@ export default {
     link.rel = 'shortcut icon'
     link.href = './../../../assets/favicon.ico'
     document.getElementsByTagName('head')[0].appendChild(link)
-    
+
     client.send('ready')
   },
   teardown: (client) => {},
@@ -48,10 +95,10 @@ let validateAndSend = (client) => {
   }
 
   let setValid = (tag) => {
-      tag.removeClass('is-invalid')
-      tag.parent().removeClass('is-invalid')
-      tag.addClass('is-valid')
-      tag.parent().addClass('is-valid')
+    tag.removeClass('is-invalid')
+    tag.parent().removeClass('is-invalid')
+    tag.addClass('is-valid')
+    tag.parent().addClass('is-valid')
   }
 
   // other regex for validating danish cpr numbers
