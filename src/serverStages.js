@@ -4,6 +4,7 @@ import payment from './stages/paymentmodule/server/server'
 
 import preSurvey from './stages/survey/config/presurvey.json'
 import postSurvey from './stages/survey/config/postsurvey.json'
+import miniIPIP from './configurations/miniIPIP.json'
 
 import round0 from './configurations/game-0_config.json'
 import round1 from './configurations/game-1_config.json'
@@ -19,7 +20,7 @@ let stages = [
   {stage: game, config: {config: round2, score: score}},
   {stage: game, config: {config: round3, score: score}},
   {stage: game, config: {config: round4, score: score}},
-  {stage: survey, config: postSurvey},
+  {stage: survey, config: miniIPIP},
   {stage: payment, config: undefined}
 ]
 

@@ -1,0 +1,171 @@
+{
+ "title": "Short Personality Survey",
+ "description": "Please rate all the following statements, where 1 is very inaccurate, 3 is neither accurate or inaccurate and 5 is very accurate",
+ "pages": [
+  {
+   "name": "Page 1",
+   "elements": [
+    {
+     "type": "rating",
+     "name": "question1",
+     "title": "I talk to a lot of different people at parties",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question2",
+     "title": "I like order",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question3",
+     "title": "I have difficulty understanding abstract ideas",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question4",
+     "title": "I feel others' emotions",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "",
+     "name": "question5",
+     "title": "I get upset easily",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question6",
+     "title": "I am the life of the party",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question7",
+     "title": "I get chores done right away",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question8",
+     "title": "I am not interested in abstract ideas",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question9",
+     "title": "I am not really interested in others",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question10",
+     "title": "I have frequent mood swings",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question11",
+     "title": "I keep in the background",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question12",
+     "title": "I often forget to put things back in their proper place",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question13",
+     "title": "I have a vivid imagination",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question14",
+     "title": "I am not interested in other people's problems",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question15",
+     "title": "I am relaxed most of the time",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question16",
+     "title": "I don't talk a lot",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question17",
+     "title": "I make a mess of things",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question18",
+     "title": "I do not have a good imagination",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question19",
+     "title": "I sympathize with others' feelings",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    },
+    {
+     "type": "rating",
+     "name": "question20",
+     "title": "I seldom feel blue",
+     "isRequired": true,
+     "minRateDescription": "Very Inaccurate ",
+     "maxRateDescription": " Very Accurate"
+    }
+   ]
+  }
+ ]
+}
