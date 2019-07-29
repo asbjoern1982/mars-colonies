@@ -134,7 +134,16 @@ let createView = () => {
         if (Model.getColony().inventory.find(row => row.name === material).amount - amount < inventoryCriticalLimit) {
           // close other popups
           $('.modal').modal('hide')
-          $('#buttonTransferConfirm').mouseup(() => sendTransfer())
+          $('#buttonTransferConfirm').mouseup(() => {
+            sendTransfer()
+            $('#confirmTransferWindow').modal('hide')
+          })
+          $('#confirmTransferWindow').on('keydown', e => {
+            if (e.keycode == 13 || e.which == 13) {
+              sendTransfer()
+              $('#confirmTransferWindow').modal('hide')
+            }
+          })
           $('#confirmTransferWindow').modal('show')
 
         } else {
