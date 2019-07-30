@@ -1,0 +1,42 @@
+{
+ "title": "Survey",
+ "pages": [
+  {
+   "name": "page1",
+   "elements": [
+    {
+     "type": "dropdown",
+     "name": "question1",
+     "title": "What gender are you?",
+     "choices": [
+      {
+       "value": "item1",
+       "text": "Female"
+      },
+      {
+       "value": "item2",
+       "text": "Male"
+      },
+      {
+       "value": "item3",
+       "text": "Other"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "name": "question2",
+     "title": "What age are you?",
+     "inputType": "number"
+    },
+    {
+     "type": "text",
+     "name": "question3",
+     "title": "How many were you behind your screen?",
+     "inputType": "number",
+     "placeHolder": "1"
+    }
+   ]
+  }
+ ]
+}
