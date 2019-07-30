@@ -42,6 +42,7 @@ let createPaymentHandler = () => {
   let randomizePayout = () => {
     let n = rounds.filter(round => round.practice).length
     selectedRound = Math.floor(Math.random() * (rounds.length - n)) + n
+    console.log('selected round: ' + selectedRound)
   }
 
   let getResults = () => {

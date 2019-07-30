@@ -48,7 +48,7 @@ export default {
               if (results.rounds[i].practice) {
                 row += ' text-secondary'
               }
-              if (results.rounds[i].stage === selected) {
+              if (i === selected) {
                 row += ' text-white'
               }
             }
