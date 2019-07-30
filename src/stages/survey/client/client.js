@@ -22,7 +22,6 @@ export default {
           onComplete: (survey) => {
             client.send('surveyResult', survey.data)
             $('#survey').html(htmlThanks)
-            // client.stageFinished()
           }
         })
       })

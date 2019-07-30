@@ -44,7 +44,6 @@ let events = {
     View.killColony(colonyName)
   },
   'setup': (client, data) => {
-    console.log('handeling setup event')
     Model.setup(data)
     View.setup(client, data)
 

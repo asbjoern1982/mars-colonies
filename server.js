@@ -17,6 +17,10 @@ let events = {
       Logger.logEvent(server, -1, 'everyone connected, starting first stage (' + server.getPlayers().join() + ')')
       server.start()
     }
+  },
+  'ping': (server, clientId) => {
+    // disconnect detection
+    server.send('pong').toClient(clientId)
   }
 }
 // handle commands from the admin client
