@@ -41,7 +41,8 @@ let createPaymentHandler = () => {
   // to be run when the payment-system starts up to select a random game the participants will get payed for
   let randomizePayout = () => {
     let n = rounds.filter(round => round.practice).length
-    selectedRound = Math.floor(Math.random() * (rounds.length - n)) + n
+    selectedRound = rounds[n + Math.floor(Math.random() * (rounds.length - n))].stage
+    console.log('selected round: ' + selectedRound)
   }
 
   let getResults = () => {

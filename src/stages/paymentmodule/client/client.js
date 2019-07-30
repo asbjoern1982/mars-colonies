@@ -12,7 +12,7 @@ export default {
   },
   events: {
     'setup': (client, results) => {
-      let amount = results.rounds[results.selectedRound].participants.find(e => e.clientId === client.getId()).amount
+      let amount = results.rounds.find(r => r.stage === results.selectedRound).participants.find(p => p.clientId === client.getId()).amount
       $('#paymentAmount').text(amount)
       $('#firstname').keypress(e => validateWithEnter(client, e))
       $('#lastname').keypress(e => validateWithEnter(client, e))
@@ -24,7 +24,7 @@ export default {
       let headRow = '<th scope="col">Name</th>'
       for (let i = 0; i < results.rounds.length; i++) {
         headRow += '<th scope="col" class="text-right'
-        headRow += i === selected ? ' bg-info text-white">' : '">'
+        headRow += results.rounds[i].stage === selected ? ' bg-info text-white">' : '">'
         headRow += results.rounds[i].practice ? '<small>practice</small><br>' : ''
         headRow += 'Round ' + results.rounds[i].stage + '</th>'
       }
