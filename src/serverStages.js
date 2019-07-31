@@ -30,7 +30,7 @@ import gameSteno from './configurations/steno/game-steno.json'
 import surveySteno from './configurations/steno/survey-steno.json'
 
 let stages = [
-  //{stage: lobby, config: undefined},
+  {stage: lobby, config: undefined},
   {stage: game, config: {config: gameSteno, score: score}},
   {stage: survey, config: surveySteno}
 ]

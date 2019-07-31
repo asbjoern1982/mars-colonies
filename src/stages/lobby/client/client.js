@@ -24,5 +24,5 @@ export default {
     client.send('ready')
   },
   teardown: (client) => {},
-  options: {htmlContainerHeight: 1}
+  options: {htmlContainerHeight: 0.998}
 }
