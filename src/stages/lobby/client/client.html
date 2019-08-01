@@ -51,14 +51,14 @@
             <div class="row">
               <div class="col-lg-1"></div>
               <div class="col-lg-8">
-                <table class="table table-dark" id="playerStatus">
+                <table class="table table-dark">
                   <thead>
                     <tr>
                       <td class="text-left">Player ID</td>
                       <td>Status</td>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="playerStatus">
                     <tr>
                       <td class="text-left">playerid</td>
                       <td>not ready</td>
@@ -79,14 +79,10 @@
 
           <div class="col-md-6">
             <div class="row">
-              <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
-                <label class="btn btn-secondary active btn-lg" disabled>
-                  <input type="radio" name="options" id="option1" autocomplete="off" checked disabled> Not Ready
-                </label>
-                <label class="btn btn-secondary btn-lg" disabled>
-                  <input type="radio" name="options" id="option2" autocomplete="off" disabled> Ready
-                </label>
-              </div>
+              When ready, click accept and toogle the ready-button beneath.
+            </div>
+            <div class="row">
+              <button type="button" class="btn btn-secondary btn-large" id="buttonReady" disabled>Ready</button>
             </div>
             <div class="row">
               <div class="checkbox">

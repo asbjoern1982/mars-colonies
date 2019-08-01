@@ -11,7 +11,9 @@ export default {
   },
   events: {
     'status': (client, clients) => {
-
+      //$('#playerStatus').empty()
+      console.log(clients)
+      $('#playerStatus').html(clients.map(c => '<tr><td class="text-left">' + (c.id === client.getId()?c.id + ' (you)':c.id) + '</td><td' + (c.ready?' class="bg-success"':'') + '>' + (c.ready?'ready':'not ready') + '</td></tr>').join(''))
     },
   },
   setup: (client) => {
@@ -21,8 +23,18 @@ export default {
     link.href = './../../../assets/favicon.ico'
     document.getElementsByTagName('head')[0].appendChild(link)
 
+    $('#buttonEnable').change(() => {
+      $('#buttonReady').prop('disabled', !$('#buttonEnable').prop('checked'))
+    })
+
+    $('#buttonReady').mouseup(() => {
+      $('#buttonReady').toggleClass('btn-secondary')
+      $('#buttonReady').toggleClass('btn-success')
+      client.send('status', $('#buttonReady').hasClass('btn-success'))
+    })
+
     client.send('ready')
   },
   teardown: (client) => {},
-  options: {htmlContainerHeight: 0.998}
+  options: {htmlContainerHeight: 0.997}
 }
