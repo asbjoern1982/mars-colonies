@@ -11,12 +11,9 @@ export default {
   }},
   events: {
     'ready': (client, config) => {
-      $('#surveyTitle').text(config.title)
-
       Survey.StylesManager.applyTheme('bootstrap')
       let surveyModel = new Survey.Model(config)
-
-      $('#startSurvey').on('click', () => {
+      setTimeout(() => { // it has to load the survey js first
         $('#survey').Survey({
           model: surveyModel,
           onComplete: (survey) => {
@@ -24,7 +21,7 @@ export default {
             $('#survey').html(htmlThanks)
           }
         })
-      })
+      }, 500)
     },
     'everyoneIsReady': () => {
       console.log('everyone is ready, going to next stage in 5')
