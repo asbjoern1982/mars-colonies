@@ -24,12 +24,12 @@
             <p>
               <ul>
                 <li><b class="text-danger">A</b>: Map window where you can see the other colonies, mouse over will show their situation and clicking on them will select them in the transfer-window</li>
-                <li><b class="text-danger">B</b>: Chat window where you can write to the other colonies. Everyone can see the all-chatroom and with the tabs you can write privatly to other colonies.</li>
+                <li><b class="text-danger">B</b>: Chat window where you can write to the other colonies. Everyone can see the all-chatroom and with the tabs you can write privatly to other colonies. Your name will be <b class="text-warning">highlighted</b>.</li>
                 <li><b class="text-danger">C</b>: Score window shows how many points you have right now, this will go up or down depending on your situation</li>
-                <li><b class="text-danger">D</b>: Trade window to transfer materials to other colonies</li>
-                <li><b class="text-danger">E</b>: Production window</li>
+                <li><b class="text-danger">D</b>: Trade window to transfer materials to other colonies. First field is receiving colony, second is material and the third is amount</li>
+                <li><b class="text-danger">E</b>: Production window, second field is amount and there is a productiontime of 10 seconds</li>
                 <li><b class="text-danger">F</b>: Inventory window, shows how many of each materials you have left in your colonies. Clicking a row will select that material in the transfer window.</li>
-                <li><b class="text-danger">G</b>: Log of transfers and other game events</li>
+                <li><b class="text-danger">G</b>: Log of transfers and other game events. Your name will be <b class="text-warning">highlighted</b></li>
                 <li><b class="text-danger">H</b>: Time window shows how many seconds that are left of this round</li>
               </ul>
             </p>
@@ -91,6 +91,25 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="countdownWindow">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">The game will start in</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><span id="coundownLabel"></span> ms</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

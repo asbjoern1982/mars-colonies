@@ -1,6 +1,8 @@
 import html from './client.html'
 import './client.css'
 
+let coundowntimer
+
 export default {
   html,
   commands: {
@@ -11,10 +13,26 @@ export default {
   },
   events: {
     'status': (client, clients) => {
-      //$('#playerStatus').empty()
-      console.log(clients)
-      $('#playerStatus').html(clients.map(c => '<tr><td class="text-left">' + (c.id === client.getId()?c.id + ' (you)':c.id) + '</td><td' + (c.ready?' class="bg-success"':'') + '>' + (c.ready?'ready':'not ready') + '</td></tr>').join(''))
+      $('#playerStatus').html(clients.map(c => '<tr><td class="text-left' + (c.id === client.getId() ? ' text-warning':'') + '">' + c.id + '</td><td' + (c.ready?' class="bg-success"':'') + '>' + (c.ready?'ready':'not ready') + '</td></tr>').join(''))
+
+      if (!clients.every(client => client.ready)) {
+        // hide modal
+        $('#countdownWindow').modal('hide')
+        clearInterval(coundowntimer)
+        coundowntimer = undefined
+      }
     },
+    'allReady': (client, delay) => {
+      // show modal
+      $('#countdownWindow').modal('show')
+      let timeleft = delay
+      $('#coundownLabel').text(timeleft)
+      coundowntimer = setInterval(() => {
+        timeleft -= 27
+        if (timeleft < 0) timeleft = 0
+        $('#coundownLabel').text(timeleft)
+      }, 27)
+    }
   },
   setup: (client) => {
     let link = document.querySelector("link[rel*='icon']") || document.createElement('link')
@@ -35,6 +53,10 @@ export default {
 
     client.send('ready')
   },
-  teardown: (client) => {},
-  options: {htmlContainerHeight: 0.997}
+  teardown: (client) => {
+    $('#doneWindow').modal('hide')
+    $('body').removeClass('modal-open')
+    $('.modal-backdrop').remove()
+  },
+  options: {htmlContainerHeight: 0.9}
 }

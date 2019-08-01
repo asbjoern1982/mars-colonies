@@ -20,9 +20,11 @@ export default {
       clients.find(client => client.id === clientId).ready = status
 
       if (clients.every(client => client.ready)) {
+        let delay = 5000
+        server.send('allReady', delay).toAll()
         nextStageTimeout = setTimeout(() => {
           server.nextStage()
-        }, 5000)
+        }, delay)
       } else if (nextStageTimeout){ // cancel if they change their minds
         clearTimeout(nextStageTimeout)
         nextStageTimeout = undefined
@@ -43,6 +45,7 @@ export default {
   },
   setup: (server) => {
     console.log('PREPARING SERVER FOR STAGE', server.getCurrentStage())
+    nextStageTimeout = undefined
     clients = server.getPlayers().map(id => {
       return {
         id: id,
