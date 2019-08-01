@@ -17,7 +17,7 @@ import score from './configurations/score'
 import lobby from './stages/lobby/client/client'
 
 let stages = [
-  {stage: lobby},
+//  {stage: lobby},
   {stage: game, config: score},
   {stage: survey},
 ]

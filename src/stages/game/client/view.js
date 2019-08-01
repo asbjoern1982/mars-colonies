@@ -99,7 +99,8 @@ let createView = () => {
         '</tr>')
 
         $('#' + row.name.replace(/ /g, '') + 'Action').mouseup(e => {
-          if (e.ctrlKey) {
+
+          if (e.ctrlKey || e.shiftKey) {
             let str = $('#chat-input').val()
             if (str.length > 0 && str.charAt(str.length-1) !== ' ')
               str += ' '
@@ -455,7 +456,7 @@ let createView = () => {
       if (e.target) {
         let colony = Model.getOtherColonies().find(colony => colony['node'] === e.target)
         if (colony) {
-          if (e.e.ctrlKey) {
+          if (e.e.ctrlKey || e.e.shiftKey) {
             let str = $('#chat-input').val()
             if (str.length > 0 && str.charAt(str.length-1) !== ' ')
               str += ' '
