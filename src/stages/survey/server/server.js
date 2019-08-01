@@ -52,6 +52,12 @@ let endStage = (server) => {
   // send message to clients and set a timeout
   server.send('everyoneIsReady').toAll()
   setTimeout(() => {
-    server.nextStage()
+    let moreStages = true // enable continious running of experiment
+    if (moreStages) {
+      server.nextStage()
+    } else {
+      setTimeout(() => server.start(), 1000)
+      server.reset()
+    }
   }, 5000)
 }

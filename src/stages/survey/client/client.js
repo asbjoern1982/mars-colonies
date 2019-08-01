@@ -21,7 +21,16 @@ export default {
             $('#survey').html(htmlThanks)
           }
         })
-      }, 500)
+      }, 1000)
+      $('#startSurvey').mouseup(() => {
+        $('#survey').Survey({
+          model: surveyModel,
+          onComplete: (survey) => {
+            client.send('surveyResult', survey.data)
+            $('#survey').html(htmlThanks)
+          }
+        })
+      })
     },
     'everyoneIsReady': () => {
       console.log('everyone is ready, going to next stage in 5')

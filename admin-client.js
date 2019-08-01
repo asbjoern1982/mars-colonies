@@ -144,6 +144,11 @@ $('#buttonEnd').mouseup(e => {
   admin.sendCommand('endGame')
 })
 
+$('#buttonReset').mouseup(e => {
+  e.preventDefault()
+  admin.sendCommand('reset')
+})
+
 $('#buttonDownloadJSON').mouseup(e => {
   e.preventDefault()
   admin.sendCommand('reqJSON')
@@ -168,6 +173,7 @@ $('#buttonEnable').change(() => {
   $('#buttonStart').prop('disabled', !$('#buttonEnable').prop('checked'))
   $('#buttonNext').prop('disabled', !$('#buttonEnable').prop('checked'))
   $('#buttonEnd').prop('disabled', !$('#buttonEnable').prop('checked'))
+  $('#buttonReset').prop('disabled', !$('#buttonEnable').prop('checked'))
 });
 
 admin.sendCommand('adminReady')
