@@ -50,7 +50,6 @@
           </button>
         </div>
         <div class="modal-body">
-          <p id="youDiedReason"></p>
           <p>The given amount will put you under the critical limit, are you sure?</p>
         </div>
         <div class="modal-footer">
@@ -71,7 +70,6 @@
           </button>
         </div>
         <div class="modal-body">
-          <p id="youDiedReason"></p>
           <p>The given amount will put you under the critical limit, are you sure?</p>
         </div>
         <div class="modal-footer">
@@ -82,7 +80,7 @@
     </div>
   </div>
 
-  <div class="row d-flex align-items-center" id="colony-title-container"><div class="container windowbg title" id="colony-title">Control Panel for: </div></div>
+  <div class="row d-flex align-items-center" id="colony-title-container"><div class="container windowbg title" id="colony-title">Control Panel for: <span id="colony-name"></span></div></div>
 
   <div class="row">
 
@@ -187,7 +185,7 @@
         <div class="progress bg-dark" style="width: 100%;">
           <div class="progress-bar" id="time-left-bar" role="progressbar" style="width: 0%; margin: 0px;"></div>
         </div>
-        <div class="text-right" id="time-left">0 seconds</div>
+        <div class="text-right" id="time-left"><span id="time-left-text">0</span> seconds left</div>
       </div>
     </div>
   </div>

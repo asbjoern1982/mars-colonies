@@ -62,7 +62,7 @@ let createView = () => {
     startTime = Date.now()
     timeLeft = data.timeLeft // TODO this ignores lag between server, client and when this i called
 
-    $('#colony-title').html('Control Panel for: ' + Model.getColony().name)
+    $('#colony-name').text(Model.getColony().name)
 
     // ----------------- INVENTORY -------------------
     Model.getColony().inventory.forEach(row => {
@@ -672,7 +672,7 @@ let createView = () => {
   let updateTimeLeft = () => {
     let secondsLeft = timeLeft - Math.floor((Date.now() - startTime) / 1000)
     if (secondsLeft < 0) secondsLeft = 0
-    $('#time-left').html(secondsLeft + ' seconds left')
+    $('#time-left-text').text(secondsLeft)
 
     let procent = Math.floor(100 * ((Date.now() - startTime) / 1000) / timeLeft)
     $('#time-left-bar').css('width', procent + '%')
@@ -681,7 +681,7 @@ let createView = () => {
   let updateScore = () => {
     let currentScore = score.calculateScore(Model.getColony(), Model.getOtherColonies(), inventoryBonusLimit)
     if (practiceRun) currentScore += ' (Practice Run)'
-    $('#score').html(currentScore)
+    $('#score').text(currentScore)
   }
 
   let trade = (transfer) => {
