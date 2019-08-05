@@ -3,7 +3,7 @@ import survey from './stages/survey/client/client'
 import payment from './stages/paymentmodule/client/client'
 import score from './configurations/score'
 
-/*let stages = [
+let stages = [
   {stage: survey},
   {stage: game, config: score},
   {stage: game, config: score},
@@ -12,15 +12,15 @@ import score from './configurations/score'
   {stage: game, config: score},
   {stage: survey},
   {stage: payment}
-]*/
+]
 
 import lobby from './stages/lobby/client/client'
 
-let stages = [
+/*let stages = [
   {stage: lobby},
   {stage: game, config: score},
   {stage: survey},
-]
+]*/
 
 let getConfig = (stage) => {
   return stages.filter(s => stage)

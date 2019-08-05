@@ -1,4 +1,4 @@
-import html from './clientDA.html'
+import html from './clientEN.html'
 import './client.css'
 
 let coundowntimer
