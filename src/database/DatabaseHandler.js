@@ -153,6 +153,24 @@ let createDatabaseHandler = () => {
     return output
   }
 
+  let reset = () => {
+    directory = './src/database/logs/'
+
+    filename = directory + Date.now() + '.json'
+    adapter = new FileSync(filename)
+    db = low(adapter)
+
+    db.defaults({
+      chat: [],
+      production: [],
+      trade: [],
+      inventory: [],
+      mouseover: [],
+      events: [],
+      surveys: []
+    }).write()
+  }
+
   return {
     saveChat,
     saveProduction,
@@ -162,7 +180,8 @@ let createDatabaseHandler = () => {
     saveEvent,
     saveSurvey,
     getEvents,
-    getData
+    getData,
+    reset
   }
 }
 

@@ -187,6 +187,16 @@ let createLogger = () => {
 
   let getEvents = () => DatabaseHandler.getEvents()
 
+  let reset = () => {
+    DatabaseHandler.reset()
+
+    experimentTime = Date.now()
+
+    directoryCSV = './src/database/csv/'
+    experimentDir = './src/database/csv/experiment' + experimentTime + '/'
+    if (!fs.existsSync(experimentDir)) fs.mkdirSync(experimentDir)
+  }
+
   return {
     logChat,
     logProduction,
@@ -201,7 +211,8 @@ let createLogger = () => {
     saveGameCSV,
     savePaymentCSV,
     exportSavedAsZip,
-    getEvents
+    getEvents,
+    reset
   }
 }
 

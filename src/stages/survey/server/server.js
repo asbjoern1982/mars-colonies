@@ -52,10 +52,13 @@ let endStage = (server) => {
   // send message to clients and set a timeout
   server.send('everyoneIsReady').toAll()
   setTimeout(() => {
-    let moreStages = true // enable continious running of experiment
+    let moreStages = false // enable continious running of experiment
     if (moreStages) {
       server.nextStage()
     } else {
+      console.log('resetting server')
+      Logger.logEvent(server, -1, 'server resetting')
+      Logger.reset()
       setTimeout(() => server.start(), 1000)
       server.reset()
     }

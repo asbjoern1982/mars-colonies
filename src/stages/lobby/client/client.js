@@ -1,4 +1,4 @@
-import html from './client.html'
+import html from './clientDA.html'
 import './client.css'
 
 let coundowntimer
@@ -58,5 +58,5 @@ export default {
     $('body').removeClass('modal-open')
     $('.modal-backdrop').remove()
   },
-  options: {htmlContainerHeight: 0.9}
+  options: {htmlContainerHeight: 1}
 }

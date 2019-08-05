@@ -1,4 +1,4 @@
-import html from './clientEN.html'
+import html from './clientDA.html'
 import './client.css'
 import {View} from './view.js'
 import {Model} from './model.js'
