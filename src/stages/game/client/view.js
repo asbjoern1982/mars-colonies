@@ -181,21 +181,26 @@ let createView = () => {
             productionCountDown = Model.getColony().specializations[index].production_delay
 
             if (productionCountDown > 0) {
+              let interval = 250
               productionCountTotal = productionCountDown
               // countdown loop
-              $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-              productionCountDown--
+              $('#production-progress').css('width', (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '%')
+              //$('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+              productionCountDown -= interval / 1000
               productionProgressInterval = setInterval(() => {
                 if (productionCountDown <= 0) {
-                  $('#production-progress').html('production finished')
+                  $('#production-progress').css('width', '0%')
+                  //$('#production-progress').html('production finished')
                   clearInterval(productionProgressInterval)
                 } else {
-                  $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
-                  productionCountDown--
+                  $('#production-progress').css('width', (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '%')
+                  // $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+                  productionCountDown -= interval / 1000
                 }
-              }, 1000)
+              }, interval)
             } else {
-              $('#production-progress').html('production finished')
+              $('#production-progress').css('width', '0%')
+              //$('#production-progress').html('production finished')
             }
           }
         }

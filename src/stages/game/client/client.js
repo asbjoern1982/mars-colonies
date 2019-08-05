@@ -1,4 +1,4 @@
-import html from './clientDA.html'
+import html from './clientEN.html'
 import './client.css'
 import {View} from './view.js'
 import {Model} from './model.js'
@@ -74,7 +74,7 @@ export default {
     clearInterval(gameloopRef)
   },
   options: {
-    htmlContainerHeight: 0.999,
+    htmlContainerHeight: 1,
     hideChat: true
   }
 }
