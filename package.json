@@ -19,6 +19,8 @@
   "dependencies": {
     "archiver": "^3.0.0",
     "chart.js": "^2.7.3",
+    "csv-writer": "1.5.0",
+    "dateformat": "3.0.3",
     "lowdb": "^1.0.0",
     "monsterr": "^0.2.3",
     "survey-jquery": "^1.0.63",
