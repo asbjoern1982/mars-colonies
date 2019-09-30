@@ -13,6 +13,7 @@ export default {
     'ready': (client, config) => {
       Survey.StylesManager.applyTheme('bootstrap')
       let surveyModel = new Survey.Model(config)
+      surveyModel.locale = 'da'
       setTimeout(() => { // it has to load the survey js first
         $('#survey').Survey({
           model: surveyModel,
@@ -57,7 +58,7 @@ export default {
     document.getElementsByTagName('head')[0].appendChild(link)
 
     let script = document.createElement('script')
-    script.src="https://surveyjs.azureedge.net/1.1.0/survey.jquery.js"
+    script.src = 'https://surveyjs.azureedge.net/1.1.0/survey.jquery.js'
     document.getElementsByTagName('body')[0].appendChild(script)
 
     // request survey-data from the server
@@ -65,8 +66,8 @@ export default {
   },
   teardown: (client) => {
     $('#doneWindow').modal('hide')
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open')
+    $('.modal-backdrop').remove()
   },
   options: {htmlContainerHeight: 1}
 }

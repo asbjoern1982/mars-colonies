@@ -3,31 +3,33 @@
     <div class="col-md-1"></div>
     <div class="card col-md-10">
       <div class="card-header">
-        <h5>Brugerflade</h5>
+        <h3>Velkommen til Mars</h3>
       </div>
       <div class="card-body">
         <div class="row">
-          <picture class="col-md-6">
-            <img src="./../../../../assets/overviewLetters.png" class="img-fluid rounded" alt="Overview">
-          </picture>
+          <div class="col-xl-6">
+            <p>
+              I er astronauter, der har valgt at bo på Mars for altid. I bor i flere små kolonier. Der kommer ikke vand, luft og mad fra Jorden, så det er i nødt til at producere selv.
+            </p>
+            <p>
+              I hver koloni har i en portion af vand, luft og mad, men i kan bytte mellem kolonierne. Hver koloni har specialiseret sig i én af de livsnødvendige kilder: Vand, luft og mad, men hver gang du producerer, mister du noget af én af dine andre ressourcer. For at overleve skal i bytte med hinanden.
+            </p>
+            <picture>
+              <img src="./../../../../assets/overviewLetters.png" class="img-fluid rounded" alt="Overview">
+            </picture>
+          </div>
 
-          <div class="col-md-6">
+          <div class="col-xl-6">
             <p>
-              In 25 years a number of organisations have each their own colony on mars. The projects are still in their infancy and are reliant on their parent organisations for materials to survive.
-            </p>
-            <p>
-              Some time later world war 3 breaks out and the colonies are left to fend for themselves. They each have a speciliazation where they can convert one element into another with a gain, but only one, so they have to cooporate by trading to survive.
-            </p>
-            <p>
-              <ul>
-                <li><b class="text-danger">A</b>: Map window where you can see the other colonies, mouse over will show their situation and clicking on them will select them in the transfer-window</li>
-                <li><b class="text-danger">B</b>: Chat window where you can write to the other colonies. Everyone can see the all-chatroom and with the tabs you can write privatly to other colonies. Your name will be <b class="text-warning">highlighted</b>.</li>
-                <li><b class="text-danger">C</b>: Score window shows how many points you have right now, this will go up or down depending on your situation</li>
-                <li><b class="text-danger">D</b>: Trade window to transfer materials to other colonies. First field is receiving colony, second is material and the third is amount</li>
-                <li><b class="text-danger">E</b>: Production window, second field is amount and there is a productiontime of 10 seconds</li>
-                <li><b class="text-danger">F</b>: Inventory window, shows how many of each materials you have left in your colonies. Clicking a row will select that material in the transfer window.</li>
-                <li><b class="text-danger">G</b>: Log of transfers and other game events. Your name will be <b class="text-warning">highlighted</b></li>
-                <li><b class="text-danger">H</b>: Time window shows how many seconds that are left of this round</li>
+              <ul class="list-group">
+                <li class="list-group-item"><b class="text-danger">A</b>: <b>Kort</b> over de andre kolonier. Hvis du flytter musen over en anden koloni, kan du se deres situation. Hvis du klikker på dem, vælger du dem automatisk som modtager af din overførsel.</li>
+                <li class="list-group-item"><b class="text-danger">B</b>: <b>Chat</b> med de andre kolonier. Alle kan se alt i ’alle’-chatten. I fanerne kan du skrive privat til de andre. Dit navn er <b class="text-warning">fremhævet</b>.</li>
+                <li class="list-group-item"><b class="text-danger">C</b>: <b>Score</b> viser hvor mange point, du har lige nu.</li>
+                <li class="list-group-item"><b class="text-danger">D</b>: <b>Overførsel</b>-funktionen kan du bruge til at sende ressourcer til de andre kolonier. Først vælger du hvem, der skal modtage, så vælger du, hvad de skal modtage og til sidst vælger du, hvor meget de skal modtage.</li>
+                <li class="list-group-item"><b class="text-danger">E</b>: <b>Produktion</b> hvor du kan se, hvad du kan producere. Du vælger selv, hvor meget du vil bruge af din anden ressource for at producere. Det tager 10 sekunder at producere.</li>
+                <li class="list-group-item"><b class="text-danger">F</b>: <b>Lagerbeholdning</b>en viser hvor meget af hver ressource, du har tilbage i din koloni. Hvis du klikker på en ressource, bliver den automatisk valgt og gjort klar til overførsel til en anden koloni.</li>
+                <li class="list-group-item"><b class="text-danger">G</b>: <b>Logbog</b>en holder styr på alle overførsler og andre ting, der sker i spillet. Dit navn er <b class="text-warning">fremhævet</b>.</li>
+                <li class="list-group-item"><b class="text-danger">H</b>: <b>Tiden</b> viser, hvor mange sekunder, der er tilbage af denne runde.</li>
               </ul>
             </p>
           </div>
@@ -51,7 +53,7 @@
                 <table class="table table-dark">
                   <thead>
                     <tr>
-                      <td class="text-left">Player ID</td>
+                      <td class="text-left">Netværksnavn</td>
                       <td>Status</td>
                     </tr>
                   </thead>
@@ -76,14 +78,14 @@
 
           <div class="col-md-6">
             <div class="row">
-              Når du er klar, marker aksepter og klik på klar knappen.
+              Når du er klar, klik accepter og klik på klar knappen.
             </div>
             <div class="row">
               <button type="button" class="btn btn-secondary btn-large" id="buttonReady" disabled>Klar</button>
             </div>
             <div class="row">
               <div class="checkbox">
-                <label><input type="checkbox" id="buttonEnable"> aksepter at anonym data opsamlet under spillet vil blive brugt til videnskab</label>
+                <label><input type="checkbox" id="buttonEnable"> accepter at anonym data opsamlet under spillet vil blive brugt til videnskab</label>
               </div>
             </div>
           </div>
@@ -97,7 +99,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">The game will start in</h5>
+        <h5 class="modal-title">Spillet vil starte om </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

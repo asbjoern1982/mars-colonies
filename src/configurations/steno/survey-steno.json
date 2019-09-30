@@ -6,32 +6,32 @@
    "elements": [
     {
      "type": "dropdown",
-     "name": "question1",
+     "name": "gender",
      "title": "Hvad er dit køn?",
      "choices": [
       {
-       "value": "item1",
-       "text": "Female"
+       "value": "f",
+       "text": "Kvinde"
       },
       {
-       "value": "item2",
-       "text": "Male"
+       "value": "m",
+       "text": "Mand"
       },
       {
-       "value": "item3",
-       "text": "Other"
+       "value": "o",
+       "text": "Andet"
       }
      ]
     },
     {
      "type": "text",
-     "name": "question2",
+     "name": "age",
      "title": "Hvor gammel er du?",
      "inputType": "number"
     },
     {
      "type": "text",
-     "name": "question3",
+     "name": "numberBehindScreen",
      "title": "Hvor mange hjalp dig med at spille?",
      "inputType": "number",
      "placeHolder": "1"
