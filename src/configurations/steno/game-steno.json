@@ -1,8 +1,8 @@
 {
   "materials": [
-    {"name": "Palladium", "depletion_rate": 1.111111111},
-    {"name": "Selenium", "depletion_rate": 1.111111111},
-    {"name": "Tungsten", "depletion_rate": 1.111111111}
+    {"name": "Luft", "depletion_rate": 1.111111111},
+    {"name": "Vand", "depletion_rate": 1.111111111},
+    {"name": "Mad", "depletion_rate": 1.111111111}
   ],
   "practiceRun": false,
   "soundVolume": 0,
@@ -16,43 +16,43 @@
   "trade_delay": 0,
   "players": [
     {
-      "name": "Oceania Colony",
+      "name": "Marineris",
       "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
+        {"name": "Luft", "amount": 1000},
+        {"name": "Vand", "amount": 1000},
+        {"name": "Mad", "amount": 1000}
       ],
       "specializations": [{
-        "input": "Palladium",
-        "output": "Selenium",
+        "input": "Luft",
+        "output": "Vand",
         "gain": 4,
       	"production_delay": 10
       }]
     },
     {
-      "name": "Eurasia Colony",
+      "name": "Utopia",
       "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
+        {"name": "Luft", "amount": 1000},
+        {"name": "Vand", "amount": 1000},
+        {"name": "Mad", "amount": 1000}
       ],
       "specializations": [{
-        "input": "Selenium",
-        "output": "Tungsten",
+        "input": "Vand",
+        "output": "Mad",
         "gain": 4,
 	      "production_delay": 10
       }]
     },
     {
-      "name": "Eastasia Colony",
+      "name": "Acardia",
       "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
+        {"name": "Luft", "amount": 1000},
+        {"name": "Vand", "amount": 1000},
+        {"name": "Mad", "amount": 1000}
       ],
       "specializations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
+        "input": "Mad",
+        "output": "Luft",
         "gain": 4,
 	      "production_delay": 10
       }]

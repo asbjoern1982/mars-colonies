@@ -1,5 +1,5 @@
 {
- "title": "Survey",
+ "title": "Spørgeskema",
  "pages": [
   {
    "name": "page1",
@@ -7,7 +7,7 @@
     {
      "type": "dropdown",
      "name": "question1",
-     "title": "What gender are you?",
+     "title": "Hvad er dit køn?",
      "choices": [
       {
        "value": "item1",
@@ -26,13 +26,13 @@
     {
      "type": "text",
      "name": "question2",
-     "title": "What age are you?",
+     "title": "Hvor gammel er du?",
      "inputType": "number"
     },
     {
      "type": "text",
      "name": "question3",
-     "title": "How many were you behind your screen?",
+     "title": "Hvor mange hjalp dig med at spille?",
      "inputType": "number",
      "placeHolder": "1"
     }
