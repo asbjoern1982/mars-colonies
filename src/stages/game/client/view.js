@@ -170,7 +170,7 @@ let createView = () => {
         let index = $('#production-material').val()
         let amount = $('#production-amount').val()
         let startProduction = () => {
-          if (!Model.getColony().dead && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
+          if (!Model.getColony().dead) {
             $('#production-amount').val('')
             client.send('produce', {
               index: index,
