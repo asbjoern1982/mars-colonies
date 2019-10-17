@@ -58,7 +58,7 @@ let endStage = (server) => {
     } else {
       console.log('resetting server')
       Logger.logEvent(server, -1, 'server resetting')
-      Logger.reset()
+      setTimeout(() => Logger.reset(), 250)
       setTimeout(() => server.start(), 1000)
       server.reset()
     }

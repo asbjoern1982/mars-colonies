@@ -32,7 +32,7 @@
     {
      "type": "text",
      "name": "numberBehindScreen",
-     "title": "Hvor mange hjalp dig med at spille?",
+     "title": "Hvor mange var I om at spille ved din skærm?",
      "inputType": "number",
      "placeHolder": "1"
     }
