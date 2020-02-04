@@ -39,8 +39,8 @@
     {
      "type": "boolean",
      "name": "firstTimePlaying",
-     "title": "Har du spillet før?",
-     "defaultValue": "false",
+     "title": "Er det første gang du spiller?",
+     "defaultValue": "true",
      "labelTrue": "Ja",
      "labelFalse": "Nej"
     }
