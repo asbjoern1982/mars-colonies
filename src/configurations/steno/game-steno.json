@@ -1,8 +1,8 @@
 {
   "materials": [
-    {"name": "Luft", "depletion_rate": 1.111111111},
-    {"name": "Vand", "depletion_rate": 1.111111111},
-    {"name": "Mad", "depletion_rate": 1.111111111}
+    {"name": "Luft", "depletion_rate": 1.7},
+    {"name": "Vand", "depletion_rate": 1.7},
+    {"name": "Mad", "depletion_rate": 1.7}
   ],
   "practiceRun": false,
   "soundVolume": 0,
@@ -25,7 +25,7 @@
       "specializations": [{
         "input": "Luft",
         "output": "Vand",
-        "gain": 4,
+        "gain": 2,
       	"production_delay": 10
       }]
     },
@@ -39,7 +39,7 @@
       "specializations": [{
         "input": "Vand",
         "output": "Mad",
-        "gain": 4,
+        "gain": 2,
 	      "production_delay": 10
       }]
     },
@@ -53,7 +53,7 @@
       "specializations": [{
         "input": "Mad",
         "output": "Luft",
-        "gain": 4,
+        "gain": 2,
 	      "production_delay": 10
       }]
     }
