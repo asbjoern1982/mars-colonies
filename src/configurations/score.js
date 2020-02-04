@@ -10,7 +10,7 @@ export default {
     if (colony.inventory.every(row => row.amount > 1000)) {
       return "superoverlever (" + score + ")"
     }
-    if (colony.inventory.any(row => row.amount < 50)) {
+    if (colony.inventory.some(row => row.amount < 50)) {
       return "næsten død (" + score + ")"
     }
     return "overlever (" + score + ")"
