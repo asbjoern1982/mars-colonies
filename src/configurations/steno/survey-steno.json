@@ -11,11 +11,11 @@
      "choices": [
       {
        "value": "f",
-       "text": "Kvinde"
+       "text": "Dreng"
       },
       {
        "value": "m",
-       "text": "Mand"
+       "text": "Pige"
       },
       {
        "value": "o",
@@ -32,9 +32,17 @@
     {
      "type": "text",
      "name": "numberBehindScreen",
-     "title": "Hvor mange var I om at spille ved din skærm?",
+     "title": "Hvor mange er I foran denne computer?",
      "inputType": "number",
      "placeHolder": "1"
+    },
+    {
+     "type": "boolean",
+     "name": "firstTimePlaying",
+     "title": "Har du spillet før?",
+     "defaultValue": "false",
+     "labelTrue": "Ja",
+     "labelFalse": "Nej"
     }
    ]
   }
