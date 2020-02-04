@@ -17,6 +17,10 @@
   "players": [
     {
       "name": "Elysium",
+      "coordinates": {
+        "x": 1200,
+        "y": 1000
+      },
       "inventory": [
         {"name": "Luft", "amount": 1000},
         {"name": "Vand", "amount": 1000},
@@ -31,6 +35,10 @@
     },
     {
       "name": "Utopia",
+      "coordinates": {
+        "x": 800,
+        "y": 150
+      },
       "inventory": [
         {"name": "Luft", "amount": 1000},
         {"name": "Vand", "amount": 1000},
@@ -45,6 +53,10 @@
     },
     {
       "name": "Isidis",
+      "coordinates": {
+        "x": 300,
+        "y": 1200
+      },
       "inventory": [
         {"name": "Luft", "amount": 1000},
         {"name": "Vand", "amount": 1000},

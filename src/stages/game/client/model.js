@@ -9,6 +9,7 @@ let createModel = () => {
     colony.specializations = data.yourSpecializations
     colony.startingIventory = data.yourStartingInventory
     colony.inventory = data.colonies.find(colony => colony.name === data.yourName).inventory
+    colony.coordinates = data.yourCoordinates
     otherColonies = data.colonies.filter(colony => colony.name !== data.yourName)
   }
 

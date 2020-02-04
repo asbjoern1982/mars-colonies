@@ -259,7 +259,8 @@ let sendSetupData = (server, receiver) => {
   let simplifiedColonies = []
   colonies.filter(colony => colony.game === receiver.game).forEach(colony => {
     let simplifiedColony = {
-      name: colony.name
+      name: colony.name,
+      coordinates: colony.coordinates
     }
     // if (config.tooltip.includes('inventories')) {
     simplifiedColony.inventory = colony.inventory
@@ -285,7 +286,8 @@ let sendSetupData = (server, receiver) => {
     yourName: receiver.name,
     yourSpecializations: receiver.specializations,
     yourStartingInventory: config.players.find(player => player.name === receiver.name).inventory,
-    colonies: simplifiedColonies
+    colonies: simplifiedColonies,
+    yourCoordinates: config.players.find(player => player.name === receiver.name).coordinates
   }
   if (transferLog.length > 0) data['transferLog'] = transferLog
 

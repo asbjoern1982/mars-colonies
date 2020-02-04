@@ -366,7 +366,7 @@ let createView = () => {
     let centerNode = new fabric.Circle({
       left: centerX,
       top: centerY,
-      fill: 'grey',
+      fill: 'lightgrey',
       radius: 10,
       originX: 'center',
       originY: 'center',
@@ -374,6 +374,20 @@ let createView = () => {
       stroke: 'black',
       strokeWidth: 1
     })
+
+    // FIXME hack for steno
+    centerNode.left = canvas.width * Model.getColony().coordinates.x / 1625
+    centerNode.top = canvas.height * Model.getColony().coordinates.y / 1765
+    let centerName = new fabric.Text(Model.getColony().name, {
+      left: centerNode.left + 15,
+      top: centerNode.top - 21,
+      fontSize: 16,
+      shadow: 'rgba(0,0,0,0.3) 0px 0px 5px',
+      selectable: false,
+      fill: 'white'
+    })
+    canvas.add(centerName)
+
     canvas.add(centerNode)
     Model.getColony()['node'] = centerNode
 
@@ -397,9 +411,14 @@ let createView = () => {
         strokeWidth: 1
       })
       let colony = Model.getOtherColonies()[i]
+
+      // FIXME hack for steno
+      node.left = canvas.width * colony.coordinates.x / 1625
+      node.top = canvas.height * colony.coordinates.y / 1765
+
       colony['node'] = node
 
-      let aAngle = Math.PI * 2 * Math.random()
+      /*let aAngle = Math.PI * 2 * Math.random()
       let aX = Math.sin(aAngle) * 10 + x
       let aY = Math.cos(aAngle) * 10 + y
       let anode = new fabric.Circle({
@@ -413,7 +432,7 @@ let createView = () => {
         stroke: 'black',
         strokeWidth: 1
       })
-      canvas.add(anode)
+      canvas.add(anode)*/
       canvas.add(node)
 
       let xOffset = (x - centerX) / 6
@@ -422,14 +441,16 @@ let createView = () => {
       let name = new fabric.Text(colony.name, {
         left: x + xOffset,
         top: y + yOffset,
-        originX: xOffset >= 0 ? 'left' : 'right',
-        originY: yOffset >= 0 ? 'top' : 'bottom',
+        //originX: xOffset >= 0 ? 'left' : 'right',
+        //originY: yOffset >= 0 ? 'top' : 'bottom',
         fontSize: 16,
         shadow: 'rgba(0,0,0,0.3) 0px 0px 5px',
         // fontWeight: 'bold',
         selectable: false,
-        fill: 'white'
+        fill: 'lightgrey'
       })
+      name.left = node.left + 15
+      name.top = node.top - 21
       canvas.add(name)
     }
 
@@ -504,15 +525,20 @@ let createView = () => {
         // would go through this colonies node in the center, so a curved
         // line is used
         if (startColony.name !== endColony.name && !isConnected) {
-          let path = 'M ' + start.x + ' ' + start.y + ' Q 0 ' + end.x + ' ' + end.y
+          let path = 'M ' + start.x + ' ' + start.y + ' L 0 ' + end.x + ' ' + end.y
           let tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
+
+
+          let line = [end.x, end.y, start.x, start.y]
+          tradeRoute = new fabric.Line(line, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
+
 
           tradeRoute.startColony = startColony
           tradeRoute.endColony = endColony
           doneRoutes.push({sX: start.x, sY: start.y, eX: end.x, eY: end.y})
 
-          tradeRoute.path[0][1] = start.x
-          tradeRoute.path[0][2] = start.y
+          //tradeRoute.path[0][1] = start.x
+          //tradeRoute.path[0][2] = start.y
 
           let center = { // centerpoint of line
             x: Math.min(start.x, end.x) + Math.abs(start.x - end.x) / 2,
@@ -536,11 +562,11 @@ let createView = () => {
           }
           let len = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2))
           let mult = Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)) / 4
-          tradeRoute.path[1][1] = center.x + vector.x * mult / len // normalize and magnify
-          tradeRoute.path[1][2] = center.y + vector.y * mult / len // normalize and magnify
+          //tradeRoute.path[1][1] = center.x + vector.x * mult / len // normalize and magnify
+          //tradeRoute.path[1][2] = center.y + vector.y * mult / len // normalize and magnify
 
-          tradeRoute.path[1][3] = end.x
-          tradeRoute.path[1][4] = end.y
+          //tradeRoute.path[1][3] = end.x
+          //tradeRoute.path[1][4] = end.y
 
           tradeRoute.selectable = false
           canvas.add(tradeRoute)
@@ -603,7 +629,7 @@ let createView = () => {
     } else if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit)) {
       Model.getColony().node.set('fill', 'red')
     } else {
-      Model.getColony().node.set('fill', 'grey')
+      Model.getColony().node.set('fill', 'lightgrey')
     }
     if (Model.getOtherColonies()[0].inventory) {
       Model.getOtherColonies().forEach(colony => {
