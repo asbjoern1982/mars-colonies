@@ -16,7 +16,7 @@
   "trade_delay": 0,
   "players": [
     {
-      "name": "Marineris",
+      "name": "Elysium",
       "inventory": [
         {"name": "Luft", "amount": 1000},
         {"name": "Vand", "amount": 1000},
@@ -44,7 +44,7 @@
       }]
     },
     {
-      "name": "Acardia",
+      "name": "Isidis",
       "inventory": [
         {"name": "Luft", "amount": 1000},
         {"name": "Vand", "amount": 1000},
