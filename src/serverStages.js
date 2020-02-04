@@ -13,17 +13,6 @@ import round3 from './configurations/game-3_config.json'
 import round4 from './configurations/game-4_config.json'
 import score from './configurations/score'
 
-/*let stages = [
-  {stage: survey, config: preSurvey},
-  {stage: game, config: {config: round0, score: score}},
-  {stage: game, config: {config: round1, score: score}},
-  {stage: game, config: {config: round2, score: score}},
-  {stage: game, config: {config: round3, score: score}},
-  {stage: game, config: {config: round4, score: score}},
-  {stage: survey, config: miniIPIP},
-  {stage: payment, config: undefined}
-]*/
-
 // steno
 import lobby from './stages/lobby/server/server'
 import gameSteno from './configurations/steno/game-steno.json'
@@ -31,8 +20,8 @@ import surveySteno from './configurations/steno/survey-steno.json'
 
 let stages = [
   {stage: lobby, config: undefined},
+  {stage: survey, config: surveySteno},
   {stage: game, config: {config: gameSteno, score: score}},
-  {stage: survey, config: surveySteno}
 ]
 
 export default {

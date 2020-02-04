@@ -37,11 +37,11 @@ export default {
       console.log('everyone is ready, going to next stage in 5')
       // countdown
       let seconds = 5
-      $('#countdownSurvey').html('Everyone is finished, the next stage will start in ' + seconds + ' seconds')
+      $('#countdownSurvey').html('Alle er færdige, spillet starter om ' + seconds + ' sekunder')
       $('#doneCountdown').text(seconds)
       let countdownInterval = setInterval(() => {
         seconds--
-        $('#countdownSurvey').html('Everyone is finished, the next stage will start in ' + seconds + ' seconds')
+        $('#countdownSurvey').html('Alle er færdige, spillet starter om ' + seconds + ' sekunder')
         if (seconds <= 0) {
           clearInterval(countdownInterval)
         }

@@ -322,7 +322,16 @@ let gameloop = (server) => {
 
       // go to next stage after 20 sec
       let gameOverTimeout = setTimeout(() => {
-        server.nextStage()
+        let moreStages = false // enable continious running of experiment
+        if (moreStages) {
+          server.nextStage()
+        } else {
+          console.log('resetting server')
+          Logger.logEvent(server, -1, 'server resetting')
+          setTimeout(() => Logger.reset(), 250)
+          setTimeout(() => server.start(), 1000)
+          server.reset()
+        }
       }, 20000)
       runningTimeouts.push(gameOverTimeout)
     }
