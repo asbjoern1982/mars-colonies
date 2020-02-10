@@ -376,8 +376,10 @@ let createView = () => {
     })
 
     // FIXME hack for steno
-    centerNode.left = canvas.width * Model.getColony().coordinates.x / 1625
-    centerNode.top = canvas.height * Model.getColony().coordinates.y / 1765
+    if (Model.getColony().coordinates) {
+      centerNode.left = canvas.width * Model.getColony().coordinates.x / 1625
+      centerNode.top = canvas.height * Model.getColony().coordinates.y / 1765
+    }
     let centerName = new fabric.Text(Model.getColony().name, {
       left: centerNode.left + 15,
       top: centerNode.top - 21,
@@ -413,8 +415,10 @@ let createView = () => {
       let colony = Model.getOtherColonies()[i]
 
       // FIXME hack for steno
-      node.left = canvas.width * colony.coordinates.x / 1625
-      node.top = canvas.height * colony.coordinates.y / 1765
+      if (colony.coordinates) {
+        node.left = canvas.width * colony.coordinates.x / 1625
+        node.top = canvas.height * colony.coordinates.y / 1765
+      }
 
       colony['node'] = node
 
