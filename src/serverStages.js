@@ -19,6 +19,17 @@ import gameSteno from './configurations/steno/game-steno.json'
 import surveySteno from './configurations/steno/survey-steno.json'
 import scoreSteno from './configurations/steno/score'
 
+/*let stages = [
+  {stage: survey, config: preSurvey},
+  {stage: game, config: {config: round0, score: score}},
+  {stage: game, config: {config: round1, score: score}},
+  {stage: game, config: {config: round2, score: score}},
+  {stage: game, config: {config: round3, score: score}},
+  {stage: game, config: {config: round4, score: score}},
+  {stage: survey, config: miniIPIP},
+  {stage: payment, config: undefined}
+]*/
+
 let stages = [
   {stage: lobby, config: undefined},
   {stage: survey, config: surveySteno},
