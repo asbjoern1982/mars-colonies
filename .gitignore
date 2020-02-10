@@ -6,3 +6,4 @@ src/database/payments/*
 src/database/csv/*
 logs/
 assets/zips/*
+package-lock.json
