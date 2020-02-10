@@ -1,40 +1,48 @@
 {
- "title": "Survey",
+ "title": "Spørgeskema",
  "pages": [
   {
    "name": "page1",
    "elements": [
     {
      "type": "dropdown",
-     "name": "question1",
-     "title": "What gender are you?",
+     "name": "gender",
+     "title": "Hvad er dit køn?",
      "choices": [
       {
-       "value": "item1",
-       "text": "Female"
+       "value": "f",
+       "text": "Dreng"
       },
       {
-       "value": "item2",
-       "text": "Male"
+       "value": "m",
+       "text": "Pige"
       },
       {
-       "value": "item3",
-       "text": "Other"
+       "value": "o",
+       "text": "Andet"
       }
      ]
     },
     {
      "type": "text",
-     "name": "question2",
-     "title": "What age are you?",
+     "name": "age",
+     "title": "Hvor gammel er du?",
      "inputType": "number"
     },
     {
      "type": "text",
-     "name": "question3",
-     "title": "How many were you behind your screen?",
+     "name": "numberBehindScreen",
+     "title": "Hvor mange er I foran denne computer?",
      "inputType": "number",
      "placeHolder": "1"
+    },
+    {
+     "type": "boolean",
+     "name": "firstTimePlaying",
+     "title": "Er det første gang du spiller?",
+     "defaultValue": "true",
+     "labelTrue": "Ja",
+     "labelFalse": "Nej"
     }
    ]
   }

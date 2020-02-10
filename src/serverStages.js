@@ -13,7 +13,13 @@ import round3 from './configurations/game-3_config.json'
 import round4 from './configurations/game-4_config.json'
 import score from './configurations/score'
 
-let stages = [
+// steno
+import lobby from './stages/lobby/server/server'
+import gameSteno from './configurations/steno/game-steno.json'
+import surveySteno from './configurations/steno/survey-steno.json'
+import scoreSteno from './configurations/steno/score'
+
+let stages6Person = [
   {stage: survey, config: preSurvey},
   {stage: game, config: {config: round0, score: score}},
   {stage: game, config: {config: round1, score: score}},
@@ -24,20 +30,23 @@ let stages = [
   {stage: payment, config: undefined}
 ]
 
-// steno
-import lobby from './stages/lobby/server/server'
-import gameSteno from './configurations/steno/game-steno.json'
-import surveySteno from './configurations/steno/survey-steno.json'
-
-/*let stages = [
+let stagesSteno = [
   {stage: lobby, config: undefined},
-  {stage: game, config: {config: gameSteno, score: score}},
-  {stage: survey, config: surveySteno}
-]*/
+  {stage: survey, config: surveySteno},
+  {stage: game, config: {config: gameSteno, score: scoreSteno}},
+]
+
+// set witch set of stages to run, remember to
+//  - set it both in clientStages.js and serverStages.js
+//  - set the last stage to reset the game/server/server.js with setting "moreStages = false"
+//  - set wich language-html to use in client.js
+let stages = stages6Person
+// the server needs to know how many clients it should wait for before starting the game.
+let participants = 6
 
 export default {
   stages: stages.map(s => s.stage),
-  participants: 6,
+  participants: participants,
   configs: stages.map(s => {
     if (s.config) return s.config
     else return undefined

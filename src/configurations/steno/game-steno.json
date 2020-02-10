@@ -1,8 +1,8 @@
 {
   "materials": [
-    {"name": "Palladium", "depletion_rate": 1.111111111},
-    {"name": "Selenium", "depletion_rate": 1.111111111},
-    {"name": "Tungsten", "depletion_rate": 1.111111111}
+    {"name": "Luft", "depletion_rate": 1.7},
+    {"name": "Vand", "depletion_rate": 1.7},
+    {"name": "Mad", "depletion_rate": 1.7}
   ],
   "practiceRun": false,
   "soundVolume": 0,
@@ -16,44 +16,56 @@
   "trade_delay": 0,
   "players": [
     {
-      "name": "Oceania Colony",
+      "name": "Elysium",
+      "coordinates": {
+        "x": 1200,
+        "y": 1000
+      },
       "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
+        {"name": "Luft", "amount": 1000},
+        {"name": "Vand", "amount": 1000},
+        {"name": "Mad", "amount": 1000}
       ],
       "specializations": [{
-        "input": "Palladium",
-        "output": "Selenium",
-        "gain": 4,
+        "input": "Luft",
+        "output": "Vand",
+        "gain": 2,
       	"production_delay": 10
       }]
     },
     {
-      "name": "Eurasia Colony",
+      "name": "Utopia",
+      "coordinates": {
+        "x": 800,
+        "y": 150
+      },
       "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
+        {"name": "Luft", "amount": 1000},
+        {"name": "Vand", "amount": 1000},
+        {"name": "Mad", "amount": 1000}
       ],
       "specializations": [{
-        "input": "Selenium",
-        "output": "Tungsten",
-        "gain": 4,
+        "input": "Vand",
+        "output": "Mad",
+        "gain": 2,
 	      "production_delay": 10
       }]
     },
     {
-      "name": "Eastasia Colony",
+      "name": "Isidis",
+      "coordinates": {
+        "x": 300,
+        "y": 1200
+      },
       "inventory": [
-        {"name": "Palladium", "amount": 1000},
-        {"name": "Selenium", "amount": 1000},
-        {"name": "Tungsten", "amount": 1000}
+        {"name": "Luft", "amount": 1000},
+        {"name": "Vand", "amount": 1000},
+        {"name": "Mad", "amount": 1000}
       ],
       "specializations": [{
-        "input": "Tungsten",
-        "output": "Palladium",
-        "gain": 4,
+        "input": "Mad",
+        "output": "Luft",
+        "gain": 2,
 	      "production_delay": 10
       }]
     }

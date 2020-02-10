@@ -1,10 +1,9 @@
-import html from './clientDA.html'
+import html from './clientEN.html'
 import './client.css'
 import {View} from './view.js'
 import {Model} from './model.js'
 
 let gameloopRef
-let expectedEndTime
 
 let commands = {
   finish (client) {
@@ -69,8 +68,8 @@ export default {
   teardown (client) {
     console.log('closing stage')
     $('#gameoverWindow').modal('hide')
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open')
+    $('.modal-backdrop').remove()
     clearInterval(gameloopRef)
   },
   options: {

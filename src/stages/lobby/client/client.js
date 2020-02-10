@@ -13,7 +13,7 @@ export default {
   },
   events: {
     'status': (client, clients) => {
-      $('#playerStatus').html(clients.map(c => '<tr><td class="text-left' + (c.id === client.getId() ? ' text-warning':'') + '">' + c.id + '</td><td' + (c.ready?' class="bg-success"':'') + '>' + (c.ready?'ready':'not ready') + '</td></tr>').join(''))
+      $('#playerStatus').html(clients.map(c => '<tr><td class="text-left' + (c.id === client.getId() ? ' text-warning' : '') + '">' + c.id + '</td><td' + (c.ready ? ' class="bg-success"' : '') + '>' + (c.ready ? 'klar' : 'ikke klar') + '</td></tr>').join(''))
 
       if (!clients.every(client => client.ready)) {
         // hide modal

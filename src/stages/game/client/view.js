@@ -89,27 +89,27 @@ let createView = () => {
           '<td scope="row"><div class="text-left">' + row.name + '</div></td>' +
           '<td scope="row" class="align-middle">' +
             '<div class="progress bg-dark" style="width: 100%; padding-right:0px;">' +
-              '<div class="progress-bar bg-danger"  id="' + tagId +'cp" role="progressbar" style="width: ' + criticalPoint + '%; margin: 0px;"></div>' +
-              '<div class="progress-bar bg-warning"  id="' + tagId +'wp" role="progressbar" style="width: ' + warningPoint + '%; margin: 0px;"></div>' +
-              '<div class="progress-bar bg-success"  id="' + tagId +'bp" role="progressbar" style="width: ' + bonusPoint + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-danger"  id="' + tagId + 'cp" role="progressbar" style="width: ' + criticalPoint + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-warning"  id="' + tagId + 'wp" role="progressbar" style="width: ' + warningPoint + '%; margin: 0px;"></div>' +
+              '<div class="progress-bar bg-success"  id="' + tagId + 'bp" role="progressbar" style="width: ' + bonusPoint + '%; margin: 0px;"></div>' +
             '</div>' +
           '</td>' +
           '<td class="text-success text-left" id="' + tagId + 'overflow" style="padding-left:0px;">' + overflow + '</td>' +
           '<td scope="row" class="' + amountColor + '" id="' + tagId + '">' + row.amount + '</td>' +
         '</tr>')
 
-        $('#' + row.name.replace(/ /g, '') + 'Action').mouseup(e => {
-
-          if (e.ctrlKey || e.shiftKey) {
-            let str = $('#chat-input').val()
-            if (str.length > 0 && str.charAt(str.length-1) !== ' ')
-              str += ' '
-            $('#chat-input').val(str + row.name + ' ')
-            $('#chat-input').focus()
-          } else {
-            selectMaterial(row.name)
+      $('#' + row.name.replace(/ /g, '') + 'Action').mouseup(e => {
+        if (e.ctrlKey || e.shiftKey) {
+          let str = $('#chat-input').val()
+          if (str.length > 0 && str.charAt(str.length - 1) !== ' ') {
+            str += '  '
           }
-        })
+          $('#chat-input').val(str + row.name + ' ')
+          $('#chat-input').focus()
+        } else {
+          selectMaterial(row.name)
+        }
+      })
     })
 
     // -------------------- TRADE --------------------
@@ -118,7 +118,6 @@ let createView = () => {
       let material = $('#trade-material').val()
       // ignore anything that isn't a positive number
       if (amount > 0 && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
-
         let sendTransfer = () => {
           if (!Model.getColony().dead && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
             $('#trade-amount').val('')
@@ -140,13 +139,12 @@ let createView = () => {
             $('#confirmTransferWindow').modal('hide')
           })
           $('#confirmTransferWindow').on('keydown', e => {
-            if (e.keycode == 13 || e.which == 13) {
+            if (e.keycode === 13 || e.which === 13) {
               sendTransfer()
               $('#confirmTransferWindow').modal('hide')
             }
           })
           $('#confirmTransferWindow').modal('show')
-
         } else {
           sendTransfer()
         }
@@ -172,8 +170,8 @@ let createView = () => {
         let index = $('#production-material').val()
         let amount = $('#production-amount').val()
         let startProduction = () => {
-          if (!Model.getColony().dead && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
-          $('#production-amount').val('')
+          if (!Model.getColony().dead) {
+            $('#production-amount').val('')
             client.send('produce', {
               index: index,
               amount: amount
@@ -185,12 +183,12 @@ let createView = () => {
               productionCountTotal = productionCountDown
               // countdown loop
               $('#production-progress').css('width', (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '%')
-              //$('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
+              // $('#production-progress').html('production ' + (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '% done')
               productionCountDown -= interval / 1000
               productionProgressInterval = setInterval(() => {
                 if (productionCountDown <= 0) {
                   $('#production-progress').css('width', '0%')
-                  //$('#production-progress').html('production finished')
+                  // $('#production-progress').html('production finished')
                   clearInterval(productionProgressInterval)
                 } else {
                   $('#production-progress').css('width', (productionCountTotal - productionCountDown) / productionCountTotal * 100 + '%')
@@ -200,7 +198,7 @@ let createView = () => {
               }, interval)
             } else {
               $('#production-progress').css('width', '0%')
-              //$('#production-progress').html('production finished')
+              // $('#production-progress').html('production finished')
             }
           }
         }
@@ -225,7 +223,7 @@ let createView = () => {
     })
     for (let i = 0; i < Model.getColony().specializations.length; i++) {
       let specialization = Model.getColony().specializations[i]
-      let option = specialization.input + ' to ' + specialization.output + ' (' + specialization.gain * 100 + '%, ' + specialization.production_delay + ')'
+      let option = specialization.input + ' til ' + specialization.output + ' (' + specialization.gain * 100 + '%, ' + specialization.production_delay + ')'
       $('#production-material').append('<option value="' + i + '">' + option + '</option>')
     }
     $('#production-material').change(e => $('#production-amount').focus())
@@ -258,7 +256,7 @@ let createView = () => {
         '<div class="input-group-prepend">' +
           '<span class="input-group-text" id="input-label"></span>' +
         '</div>' +
-        '<input type="text" class="form-control" id="chat-input" placeholder="write a message">' +
+        '<input type="text" class="form-control" id="chat-input" placeholder="skriv en besked">' +
         '<div class="input-group-append">' +
           '<button class="btn btn-default" id="chat-button">send</button>' +
         '</div>')
@@ -291,7 +289,7 @@ let createView = () => {
     }
 
     // direct message system
-    if (Array.isArray(data.chat) && data.chat.length > 0 || data.chat === 'free') {
+    if ((Array.isArray(data.chat) && data.chat.length > 0) || data.chat === 'free') {
       chat.all.tag = $('#chatAllLi')
       if (data.allowDirectMessages) {
         $('#chatAllLi').mouseup(e => {
@@ -330,9 +328,9 @@ let createView = () => {
     // if reconnecting, load previous chat messages
     if (data.chatEvents) {
       data.chatEvents.forEach(event => {
-        let chat_key = event.target === 'all' ? 'all' : (event.sender === Model.getColony().name ? event.target : event.sender)
+        let chatKey = event.target === 'all' ? 'all' : (event.sender === Model.getColony().name ? event.target : event.sender)
         let senderTag = Model.getColony().name === event.sender ? '<b class="text-warning">' : '<b>'
-        chat[chat_key].text += senderTag + event.sender + '</b>&gt; ' + event.message.replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>') + '<br>'
+        chat[chatKey].text += senderTag + event.sender + '</b>&gt; ' + event.message.replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>') + '<br>'
       })
       let chatBox = $('#chat-log')
       chatBox.html(chat['all'].text)
@@ -347,7 +345,7 @@ let createView = () => {
     }
     // if reconnecting and someone was dead
     Model.getColony().dead = Model.getColony().inventory.some(row => row.amount <= 0)
-    Model.getOtherColonies().forEach(colony => colony.dead = colony.inventory.some(row => row.amount <= 0))
+    Model.getOtherColonies().forEach(colony => { colony.dead = colony.inventory.some(row => row.amount <= 0) })
   }
 
   // setting up the map
@@ -368,7 +366,7 @@ let createView = () => {
     let centerNode = new fabric.Circle({
       left: centerX,
       top: centerY,
-      fill: 'grey',
+      fill: 'lightgrey',
       radius: 10,
       originX: 'center',
       originY: 'center',
@@ -376,6 +374,22 @@ let createView = () => {
       stroke: 'black',
       strokeWidth: 1
     })
+
+    // FIXME hack for steno
+    if (Model.getColony().coordinates) {
+      centerNode.left = canvas.width * Model.getColony().coordinates.x / 1625
+      centerNode.top = canvas.height * Model.getColony().coordinates.y / 1765
+    }
+    let centerName = new fabric.Text(Model.getColony().name, {
+      left: centerNode.left + 15,
+      top: centerNode.top - 21,
+      fontSize: 16,
+      shadow: 'rgba(0,0,0,0.3) 0px 0px 5px',
+      selectable: false,
+      fill: 'white'
+    })
+    canvas.add(centerName)
+
     canvas.add(centerNode)
     Model.getColony()['node'] = centerNode
 
@@ -399,23 +413,32 @@ let createView = () => {
         strokeWidth: 1
       })
       let colony = Model.getOtherColonies()[i]
+
+      // FIXME hack for steno
+      if (colony.coordinates) {
+        node.left = canvas.width * colony.coordinates.x / 1625
+        node.top = canvas.height * colony.coordinates.y / 1765
+      }
+
       colony['node'] = node
 
-      let aAngle = Math.PI * 2 * Math.random()
-      let aX = Math.sin(aAngle) * 10 + x
-      let aY = Math.cos(aAngle) * 10 + y
-      let anode = new fabric.Circle({
-        left: aX,
-        top: aY,
-        fill: 'rgb(100,100,100)',
-        radius: 5,
-        originX: 'center',
-        originY: 'center',
-        selectable: false,
-        stroke: 'black',
-        strokeWidth: 1
-      })
-      canvas.add(anode)
+      if (!colony.coordinates) {
+        let aAngle = Math.PI * 2 * Math.random()
+        let aX = Math.sin(aAngle) * 10 + x
+        let aY = Math.cos(aAngle) * 10 + y
+        let anode = new fabric.Circle({
+          left: aX,
+          top: aY,
+          fill: 'rgb(100,100,100)',
+          radius: 5,
+          originX: 'center',
+          originY: 'center',
+          selectable: false,
+          stroke: 'black',
+          strokeWidth: 1
+        })
+        canvas.add(anode)
+      }
       canvas.add(node)
 
       let xOffset = (x - centerX) / 6
@@ -430,8 +453,12 @@ let createView = () => {
         shadow: 'rgba(0,0,0,0.3) 0px 0px 5px',
         // fontWeight: 'bold',
         selectable: false,
-        fill: 'white'
+        fill: 'lightgrey'
       })
+      if (colony.coordinates) {
+        name.left = node.left + 15
+        name.top = node.top - 21
+      }
       canvas.add(name)
     }
 
@@ -463,8 +490,9 @@ let createView = () => {
         if (colony) {
           if (e.e.ctrlKey || e.e.shiftKey) {
             let str = $('#chat-input').val()
-            if (str.length > 0 && str.charAt(str.length-1) !== ' ')
+            if (str.length > 0 && str.charAt(str.length - 1) !== ' ') {
               str += ' '
+            }
             $('#chat-input').val(str + colony.name + ' ')
             $('#chat-input').focus()
           } else {
@@ -505,15 +533,23 @@ let createView = () => {
         // would go through this colonies node in the center, so a curved
         // line is used
         if (startColony.name !== endColony.name && !isConnected) {
-          let path = 'M ' + start.x + ' ' + start.y + ' Q 0 ' + end.x + ' ' + end.y
-          let tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
+          let tradeRoute
+          if (startColony.coordinates) {
+            let line = [end.x, end.y, start.x, start.y]
+            tradeRoute = new fabric.Line(line, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
+          } else {
+            let path = 'M ' + start.x + ' ' + start.y + ' Q 0 ' + end.x + ' ' + end.y
+            tradeRoute = new fabric.Path(path, { fill: '', stroke: 'black', strokeWidth: 2, selectable: false, objectCaching: false })
+          }
 
           tradeRoute.startColony = startColony
           tradeRoute.endColony = endColony
           doneRoutes.push({sX: start.x, sY: start.y, eX: end.x, eY: end.y})
 
-          tradeRoute.path[0][1] = start.x
-          tradeRoute.path[0][2] = start.y
+          if (!startColony.coordinates) {
+            tradeRoute.path[0][1] = start.x
+            tradeRoute.path[0][2] = start.y
+          }
 
           let center = { // centerpoint of line
             x: Math.min(start.x, end.x) + Math.abs(start.x - end.x) / 2,
@@ -537,11 +573,14 @@ let createView = () => {
           }
           let len = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2))
           let mult = Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)) / 4
-          tradeRoute.path[1][1] = center.x + vector.x * mult / len // normalize and magnify
-          tradeRoute.path[1][2] = center.y + vector.y * mult / len // normalize and magnify
 
-          tradeRoute.path[1][3] = end.x
-          tradeRoute.path[1][4] = end.y
+
+          if (!startColony.coordinates) {
+            tradeRoute.path[1][1] = center.x + vector.x * mult / len // normalize and magnify
+            tradeRoute.path[1][2] = center.y + vector.y * mult / len // normalize and magnify
+            tradeRoute.path[1][3] = end.x
+            tradeRoute.path[1][4] = end.y
+          }
 
           tradeRoute.selectable = false
           canvas.add(tradeRoute)
@@ -590,11 +629,11 @@ let createView = () => {
       // if there is more than starting amount, add a + to indicate that the progress-bar is overflowing
       let overflow = row.amount > Model.getColony().startingIventory.find(srow => srow.name === row.name).amount ? '+' : ' '
 
-      $(tagId +'bp').css('width', bonusPoint + '%')
-      $(tagId +'wp').css('width', warningPoint + '%')
-      $(tagId +'cp').css('width', criticalPoint + '%')
+      $(tagId + 'bp').css('width', bonusPoint + '%')
+      $(tagId + 'wp').css('width', warningPoint + '%')
+      $(tagId + 'cp').css('width', criticalPoint + '%')
 
-      $(tagId +'overflow').html(overflow)
+      $(tagId + 'overflow').html(overflow)
     })
     checkInventoryAlarm()
 
@@ -604,7 +643,7 @@ let createView = () => {
     } else if (Model.getColony().inventory.some(row => row.amount < inventoryCriticalLimit)) {
       Model.getColony().node.set('fill', 'red')
     } else {
-      Model.getColony().node.set('fill', 'grey')
+      Model.getColony().node.set('fill', 'lightgrey')
     }
     if (Model.getOtherColonies()[0].inventory) {
       Model.getOtherColonies().forEach(colony => {
@@ -656,9 +695,9 @@ let createView = () => {
       strokeWidth: 1
     })
     // only display information if it is pressen on the colony
-    let text = // colony.name +
-      (showInventory ? 'Inventory:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + Math.round(row.amount)).join('\n') + '\n': '') +
-      (colony.specializations ? 'Specializations:\n' + colony.specializations.map(row => '- ' + row.input + ' to ' + row.output).join('\n') + '\n' : '') +
+    let text = // colony.name + :
+      (showInventory ? 'Lagerbeholdning:\n' + colony.inventory.map(row => '- ' + row.name + ': ' + Math.round(row.amount)).join('\n') + '\n' : '') +
+      (colony.specializations ? 'Produktion:\n' + colony.specializations.map(row => '- ' + row.input + ' til ' + row.output).join('\n') + '\n' : '') +
       (showScore ? 'Score:\n' + score.calculateScore(colony, Model.getOtherColonies(), inventoryBonusLimit) : '')
     let tooltipText = new fabric.Text(text, {
       left: left + 3,
@@ -704,28 +743,28 @@ let createView = () => {
       canvas.requestRenderAll()
     }, 2000) // how long the line changes color
 
-    logEvent(sendingColony.name + ' transfered  ' + Math.round(transfer.amount) + ' ' + transfer.material + ' to ' + receivingColony.name)
+    logEvent(sendingColony.name + ' overførte  ' + Math.round(transfer.amount) + ' ' + transfer.material + ' til ' + receivingColony.name)
   }
 
   let addChatMessage = (data) => {
     let chatBox = $('#chat-log')
-    let chat_key = data.target === 'all' ? 'all' : (data.sender === Model.getColony().name ? data.target : data.sender)
+    let chatKey = data.target === 'all' ? 'all' : (data.sender === Model.getColony().name ? data.target : data.sender)
 
     let message = data.message.replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>')
 
     let senderTag = Model.getColony().name === data.sender ? '<b class="text-warning">' : '<b>'
-    chat[chat_key].text += senderTag + data.sender + '</b>&gt; ' + message + '<br>'
+    chat[chatKey].text += senderTag + data.sender + '</b>&gt; ' + message + '<br>'
 
-    if (chat[chat_key].tag.hasClass('active')){
-      chatBox.html(chat[chat_key].text)
+    if (chat[chatKey].tag.hasClass('active')) {
+      chatBox.html(chat[chatKey].text)
       chatBox.scrollTop(chatBox[0].scrollHeight)
     } else {
-      chat[chat_key].tag.addClass('chatTabWarning')
-      if (chat_key !== 'all') {
+      chat[chatKey].tag.addClass('chatTabWarning')
+      if (chatKey !== 'all') {
         $('#chatDropdownA').addClass('chatTabWarning')
       }
     }
-    if (chat_key !== 'all') {
+    if (chatKey !== 'all') {
       // rotate the new tag just behind all
       let list = $('#chatTabs').children('li').detach().toArray()
 
@@ -733,10 +772,11 @@ let createView = () => {
       let newList = [list[0], list.find(a => a.id === trimmedName + 'Li')]
 
       for (let i = 1; i < list.length; i++) {
-        if (list[i].id !== trimmedName + 'Li')
+        if (list[i].id !== trimmedName + 'Li') {
           newList.push(list[i])
+        }
       }
-      $('#chatTabs').append(newList);
+      $('#chatTabs').append(newList)
     }
   }
 
@@ -764,11 +804,10 @@ let createView = () => {
     clearInterval(countdownInterval)
 
     // highlight own colonyname
-    let text = 'Final score:<br>' + status.replace(/\n/g, '<br>').replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>')
+    let text = 'Endelige score:<br>' + status.replace(/\n/g, '<br>').replace(Model.getColony().name, '<b class="text-warning">' + Model.getColony().name + '</b>')
     logEvent('game over<br>' + text)
     disableEverything()
     $('.modal').modal('hide') // remove any shown confirm-boxes
-
 
     let everyoneIsDead = Model.getOtherColonies().every(colony => colony.dead) && Model.getColony().dead
     $('#gameoverTitle').html(everyoneIsDead ? 'Everyone is dead' : 'Gameover')
@@ -800,7 +839,7 @@ let createView = () => {
     }
     node.set('fill', 'black')
     canvas.requestRenderAll()
-    logEvent(colonyName + ' have died')
+    logEvent(colonyName + ' døde')
   }
 
   // when this colony is dead or the game is over, disable all buttons and
