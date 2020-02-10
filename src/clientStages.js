@@ -5,11 +5,12 @@ import score from './configurations/score'
 
 // steno
 import lobby from './stages/lobby/client/client'
+import scoreSteno from './configurations/steno/score'
 
 let stages = [
   {stage: lobby},
   {stage: survey},
-  {stage: game, config: score},
+  {stage: game, config: scoreSteno},
 ]
 
 let getConfig = (stage) => {

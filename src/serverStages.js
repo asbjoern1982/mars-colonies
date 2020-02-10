@@ -17,11 +17,12 @@ import score from './configurations/score'
 import lobby from './stages/lobby/server/server'
 import gameSteno from './configurations/steno/game-steno.json'
 import surveySteno from './configurations/steno/survey-steno.json'
+import scoreSteno from './configurations/steno/score'
 
 let stages = [
   {stage: lobby, config: undefined},
   {stage: survey, config: surveySteno},
-  {stage: game, config: {config: gameSteno, score: score}},
+  {stage: game, config: {config: gameSteno, score: scoreSteno}},
 ]
 
 export default {
