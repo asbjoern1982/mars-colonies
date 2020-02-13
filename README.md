@@ -28,9 +28,7 @@ npm run server
 ```
 
 # configuring the game
-`numberOfParticipants` in the `src/stages/game/config/config.js` tells the game how many participants to wait for before stating the first stage, it should be a number that can be divided by the number of colonies in each game
-
-see [README.config.md](./src/stages/game/config/README.config.md)
+To customize the game see [README.config.md](./README.config.md)
 
 # credit for sounds and images
 - sounds: [NASA Audio and Ringtones](https://www.nasa.gov/connect/sounds/index.html)
