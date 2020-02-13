@@ -7,6 +7,10 @@ import score from './configurations/score'
 import lobby from './stages/lobby/client/client'
 import scoreSteno from './configurations/steno/score'
 
+let stagesForTesting = [
+  {stage: game, config: score},
+]
+
 let stages6Person = [
   {stage: survey},
   {stage: game, config: score},
@@ -25,7 +29,7 @@ let stagesSteno = [
 ]
 
 // set witch set of stages to run, see serverStages.js for more instructions
-let stages = stages6Person
+let stages = stagesForTesting
 
 let getConfig = (stage) => {
   return stages.filter(s => stage)

@@ -120,7 +120,8 @@ let createView = () => {
       if (amount > 0 && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
         let sendTransfer = () => {
           if (!Model.getColony().dead && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
-            $('#trade-amount').val('')
+            if (!data.productionAmounts) 
+              $('#trade-amount').val('')
             client.send('trade', {
               colony: $('#trade-colony').val(),
               material: material,
@@ -163,6 +164,14 @@ let createView = () => {
     Model.getMaterials().forEach(material => $('#trade-material').append('<option>' + material.name + '</option>'))
     $('#trade-colony').change(e => $('#trade-amount').focus())
     $('#trade-material').change(e => $('#trade-amount').focus())
+
+    //  add dropdown from data.sendAmounts
+    if (data.productionAmounts) {
+      let tradeDropdownHTML = '<select class="form-control" id="trade-amount">'
+      tradeDropdownHTML += data.productionAmounts.map(amount => '<option>' + amount + '</option>').join('')
+      tradeDropdownHTML += '</select>'
+      $('#trade-amount').replaceWith(tradeDropdownHTML)
+    }
 
     // -------------------- PRODUCTION --------------------
     let productionAction = () => {

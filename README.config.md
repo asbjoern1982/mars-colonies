@@ -27,6 +27,6 @@ The configuration of each round set in the `serverStages.js` file is configured 
 | allowDirectMessages | boolean that allows or removes the direct message system between colonies |
 | tooltip | an array with what information should be visible in the tooltip when a participant hovers the mouse over an other colony on the map, can either be empty, "inventories", "score" and/or "specializations" |
 | trade_delay | if their should be a delay when trading materials to other colonies |
-| tradeButtons | optional, an array of amounts that the participant can chose to produce, if absent a textfield and start button will be used |
-| sendButtons | optional, an array of amounts that the participant can chose to send, if absent a textfield and start button will be used |
+| productionAmounts | optional, an array of amounts that the participant can chose to produce, if absent a textfield and start button will be used |
+| sendAmounts | optional, an array of amounts that the participant can chose to send, if absent a textfield and start button will be used |
 | players | a list of colonies, their name, starting inventory and specializations, if there are more than 15 colonies, then more colors should be added to the client.js <ul><li> name: is the name of a colony, should be unique for a game</li><li> inventory: should have every material in "materials" and the amount this colony is starting out with </li><li> specializations: a list of specializations, the ability to transform one material into an other with a gain </li><li> coordinates: optional, if set, the give colony is placed on that spot on the map, if not set, the other colonies will be placed on a circle around one self</li></ul> |
