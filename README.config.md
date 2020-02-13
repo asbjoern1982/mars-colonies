@@ -6,10 +6,10 @@ In [src/serverStages.js](./src/serverStages.js) the server is configured
 `stages`, a list of stages that the game is going through, a lobby before, couple of surveys and a number of games with different configurations. It has to be mirrored in [src/clientStages.js](./src/clientStages.js) with a slightly different syntax.
 
 ## Score
-How the points are calculated it configured in [src/configurations/score.js](.src/configurations/score.js)
+How the points are calculated it configured in [src/configurations/score.js](./src/configurations/score.js)
 
 ## Survey
-It takes json created with https://surveyjs.io/create-survey, it should be saved in [src/configurations/](.src/configurations/) and setup as a stage in [src/serverStages.js](./src/serverStages.js).
+It takes json created with [Survey Creator](https://surveyjs.io/create-survey), it should be saved in [src/configurations/](./src/configurations/) and setup as a stage in [src/serverStages.js](./src/serverStages.js).
 
 ## Configuration of the games
 The configuration of each round set in the `serverStages.js` file is configured with a json file.
