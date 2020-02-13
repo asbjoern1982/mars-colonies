@@ -16,7 +16,7 @@ The configuration of each round set in the `serverStages.js` file is configured 
 
 | Key | Description |
 | --- | --- |
-| materials | a list with materials with a name and a depletion_rate that determents how fast the materials ... depletes |
+| materials | a list with materials with a `name` and a `depletion_rate` that determents how fast the materials ... depletes in seconds |
 | practiceRun | boolean with if true will ignore the round in point calculations |
 | soundVolume | is the volume of the background music and notifications, from 0 to 1, 0 removes sound completely |
 | shuffleParticipants | boolean that the tells to server to shuffle participants and colonys before a round |
@@ -29,4 +29,4 @@ The configuration of each round set in the `serverStages.js` file is configured 
 | trade_delay | if their should be a delay when trading materials to other colonies |
 | tradeButtons | optional, an array of amounts that the participant can chose to produce, if absent a textfield and start button will be used |
 | sendButtons | optional, an array of amounts that the participant can chose to send, if absent a textfield and start button will be used |
-| players | a list of colonies, their name, starting inventory and specializations, if there are more than 15 colonies, then more colors should be added to the client.js<br> - name: is the name of a colony, should be unique for a game<br> - inventory: should have every material in "materials" and the amount this colony is starting out with<br> - specializations: a list of specializations, the ability to transform one material into an other with a gain<br> - coordinates: optional, if set, the give colony is placed on that spot on the map, if not set, the other colonies will be placed on a circle around one self |
+| players | a list of colonies, their name, starting inventory and specializations, if there are more than 15 colonies, then more colors should be added to the client.js <ul><li> name: is the name of a colony, should be unique for a game</li><li> inventory: should have every material in "materials" and the amount this colony is starting out with </li><li> specializations: a list of specializations, the ability to transform one material into an other with a gain </li><li> coordinates: optional, if set, the give colony is placed on that spot on the map, if not set, the other colonies will be placed on a circle around one self</li></ul> |
