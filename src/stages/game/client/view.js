@@ -120,7 +120,7 @@ let createView = () => {
       if (amount > 0 && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
         let sendTransfer = () => {
           if (!Model.getColony().dead && !Model.getOtherColonies().find(f => f.name === $('#trade-colony').val()).dead) {
-            if (!data.productionAmounts) 
+            if (!data.productionAmounts)
               $('#trade-amount').val('')
             client.send('trade', {
               colony: $('#trade-colony').val(),
@@ -165,10 +165,10 @@ let createView = () => {
     $('#trade-colony').change(e => $('#trade-amount').focus())
     $('#trade-material').change(e => $('#trade-amount').focus())
 
-    //  add dropdown from data.sendAmounts
-    if (data.productionAmounts) {
+    //  add dropdown from data.tradeAmounts
+    if (data.tradeAmounts) {
       let tradeDropdownHTML = '<select class="form-control" id="trade-amount">'
-      tradeDropdownHTML += data.productionAmounts.map(amount => '<option>' + amount + '</option>').join('')
+      tradeDropdownHTML += data.tradeAmounts.map(amount => '<option>' + amount + '</option>').join('')
       tradeDropdownHTML += '</select>'
       $('#trade-amount').replaceWith(tradeDropdownHTML)
     }
@@ -180,7 +180,9 @@ let createView = () => {
         let amount = $('#production-amount').val()
         let startProduction = () => {
           if (!Model.getColony().dead) {
-            $('#production-amount').val('')
+            if (!data.productionAmounts) {
+              $('#production-amount').val('')
+            }
             client.send('produce', {
               index: index,
               amount: amount
@@ -230,6 +232,15 @@ let createView = () => {
         productionAction()
       }
     })
+
+    //  add dropdown from data.productionAmounts
+    if (data.productionAmounts) {
+      let productionDropdownHTML = '<select class="form-control" id="production-amount">'
+      productionDropdownHTML += data.productionAmounts.map(amount => '<option>' + amount + '</option>').join('')
+      productionDropdownHTML += '</select>'
+      $('#production-amount').replaceWith(productionDropdownHTML)
+    }
+
     for (let i = 0; i < Model.getColony().specializations.length; i++) {
       let specialization = Model.getColony().specializations[i]
       let option = specialization.input + ' til ' + specialization.output + ' (' + specialization.gain * 100 + '%, ' + specialization.production_delay + ')'

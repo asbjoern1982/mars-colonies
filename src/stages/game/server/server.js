@@ -289,7 +289,7 @@ let sendSetupData = (server, receiver) => {
     colonies: simplifiedColonies,
     yourCoordinates: config.players.find(player => player.name === receiver.name).coordinates,
     productionAmounts: config.productionAmounts,
-    sendAmounts: config.sendAmounts
+    tradeAmounts: config.tradeAmounts
   }
   if (transferLog.length > 0) data['transferLog'] = transferLog
 
