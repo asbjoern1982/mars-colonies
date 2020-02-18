@@ -20,7 +20,7 @@ import surveySteno from './configurations/steno/survey-steno.json'
 import scoreSteno from './configurations/steno/score'
 
 let stagesForTesting = [
-  {stage: game, config: {config: round0, score: score}},
+  {stage: game, config: {config: round1, score: score}},
 ]
 
 let stages6Person = [
