@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Stage",
+  "description": "A stage in Mars Colonies",
+  "type": "object",
+  "properties": {
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "depletion_rate": {"type": "number"}
+        },
+        "required": ["name", "depletion_rate"]
+      }
+    },
+    "practiceRun": {"type": "boolean"},
+    "soundVolume": {"type": "number"},
+    "shuffleParticipants": {"type": "boolean"},
+    "roundLengthInSeconds":  {"type": "number"},
+    "inventoryBonusLimit": {"type": "number"},
+    "inventoryCriticalLimit": {"type": "number"},
+    "chat": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        {
+          "type": "string",
+          "pattern": "free|none"
+        }
+      ]
+    },
+    "allowDirectMessages": {"type": "boolean"},
+    "tooltip": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "inventories|specializations|score"
+      }
+    },
+    "trade_delay": {"type": "number"},
+    "productionAmounts": {"type": "array", "items": {"type": "number"}},
+    "tradeAmounts": {"type": "array", "items": {"type": "number"}},
+    "players": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "inventory": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {"type": "string"},
+                "amount": {"type": "number"}
+              },
+              "required": ["name", "amount"]
+            }
+          },
+          "specializations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "input": {"type": "string"},
+                "output": {"type": "string"},
+                "gain": {"type": "number"},
+                "production_delay": {"type": "number"}
+              },
+              "required": ["input", "output", "gain", "production_delay"]
+            }
+          }
+        },
+        "required": ["name", "inventory", "specializations"]
+      }
+    }
+  },
+
+  "required": ["materials",
+    "practiceRun",
+    "soundVolume",
+    "shuffleParticipants",
+    "roundLengthInSeconds",
+    "inventoryBonusLimit",
+    "inventoryCriticalLimit",
+    "chat",
+    "allowDirectMessages",
+    "tooltip",
+    "trade_delay",
+    "players"
+  ]
+}

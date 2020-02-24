@@ -1,3 +1,6 @@
+import Ajv from 'ajv'
+import schema from './configurations/game.schema.json'
+
 import game from './stages/game/server/server'
 import survey from './stages/survey/server/server'
 import payment from './stages/paymentmodule/server/server'
@@ -44,9 +47,23 @@ let stagesSteno = [
 //  - set it both in clientStages.js and serverStages.js
 //  - set the last stage to reset the game/server/server.js with setting "moreStages = false"
 //  - set wich language-html to use in client.js
-let stages = stagesForTesting
+let stages = stages6Person
 // the server needs to know how many clients it should wait for before starting the game.
 let participants = 6
+
+// validate configuration gamefiles
+let validator = new Ajv().compile(schema)
+let errors = false
+stages.forEach(stage => {
+  if (stage.config && stage.config.config && !validator(stage.config.config)) {
+    console.log(validator.errors)
+    errors = true
+  }
+})
+if (errors) {
+  console.log('ERROR: configuration files are not valid')
+  process.exit(1)
+}
 
 export default {
   stages: stages.map(s => s.stage),

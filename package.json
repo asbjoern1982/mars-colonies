@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ajv": "^6.12.0",
     "archiver": "^3.0.0",
     "chart.js": "^2.7.3",
     "csv-writer": "1.5.0",

@@ -4,7 +4,7 @@
     {"name": "Selenium", "depletion_rate": 1.111111111},
     {"name": "Tungsten", "depletion_rate": 1.111111111}
   ],
-  "practiceRun": false,
+  "practiceRun": true,
   "soundVolume": 0,
   "shuffleParticipants": true,
   "roundLengthInSeconds":  600,

@@ -14,8 +14,6 @@
   "allowDirectMessages": true,
   "tooltip": ["inventories", "specializations"],
   "trade_delay": 0,
-  "productionAmounts": [200, 500, 800],
-  "tradeAmounts": [205, 505, 805],
   "players": [
     {
       "name": "Oceania Colony",
