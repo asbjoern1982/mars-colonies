@@ -18,7 +18,7 @@ npm run bots
 ```
 or
 ```
-npm node dist/server.js bots
+node dist/server.js bots
 ```
 
 ## Run on port 8080
@@ -26,6 +26,9 @@ To run the game on port 8080 run
 ```
 npm run server
 ```
+
+## Docker
+The game has a [docker file](./Dockerfile), so it is possible to run it on a computer with just docker installed.
 
 # configuring the game
 To customize the game see [README.config.md](./README.config.md)
