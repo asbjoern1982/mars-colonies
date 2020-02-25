@@ -10,6 +10,8 @@ socket.on('disconnect', () => {
 socket.on('error', err => console.log(err))
 socket.on('event', handleEvent)
 
+let lobbyStatusSent = false
+
 let materials
 let myName
 let colonies
@@ -19,6 +21,7 @@ let inputStartAmount
 let outputStartAmount
 
 let producing = false
+let producingTimeout
 let gameloop = () => {
   // update inventories
   colonies.forEach(colony => {
@@ -37,7 +40,7 @@ let gameloop = () => {
   if (!producing && inputCurrentAmount > inputTarget) {
     // first lock production so we only tell the server to produce when possible
     producing = true
-    setTimeout(() => producing = false, 11000) // NOTE: the bot asumes a 10 production second delay and no transfer-delay
+    producingTimeout = setTimeout(() => producing = false, 11000) // NOTE: the bot asumes a 10 production second delay and no transfer-delay
 
     // produce everything down to inputTarget
     let amount = Math.round(inputCurrentAmount - inputTarget)
@@ -67,16 +70,16 @@ let gameloop = () => {
       let colonyOutputCurrentAmountMissing = outputStartAmount - colony.inventory.find(line => line.name === output).amount
       let amount = Math.round(available * colonyOutputCurrentAmountMissing / totalMissing)
 
-      socket.emit('event', { type: 'trade', payload: {
-        colony: colony.name,
-        material: output,
-        amount: amount
-      }})
+      if (amount > 0) {
+        socket.emit('event', { type: 'trade', payload: {
+          colony: colony.name,
+          material: output,
+          amount: amount
+        }})
+      }
     })
   }
 }
-
-let lobbyStatusSent = false
 
 function handleEvent (event) {
   if (event.type === '@monsterr/START_STAGE') {
@@ -113,6 +116,11 @@ function handleEvent (event) {
       lobbyStatusSent = true
       socket.emit('event', { type: 'status', payload: true })
     }
+  } else if (event.type === 'gameover' || event.type === '@monsterr/END_STAGE') {
+    clearInterval(gameloop)
+    clearTimeout(producingTimeout)
+    producing = false
+    lobbyStatusSent = false
   } else {
     console.log('event not handled: "' + event.type + '" with [' + event.payload + ']')
   }
