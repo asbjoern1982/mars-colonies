@@ -76,6 +76,8 @@ let gameloop = () => {
   }
 }
 
+let lobbyStatusSent = false
+
 function handleEvent (event) {
   if (event.type === '@monsterr/START_STAGE') {
     // tell the server that we are a robot and are ready as we are succesfully connected
@@ -102,6 +104,15 @@ function handleEvent (event) {
     colonies.forEach(colony => {
       colony.inventory = event.payload.find(line => line.name === colony.name).inventory
     })
+  } else if (event.type === 'ready') {
+    if (event.payload.pages) { // this is a survey
+      socket.emit('event', { type: 'surveyResult', payload: '' })
+    }
+  } else if (event.type === 'status') { // this is a lobby, report ready
+    if (!lobbyStatusSent) {
+      lobbyStatusSent = true
+      socket.emit('event', { type: 'status', payload: true })
+    }
   } else {
     console.log('event not handled: "' + event.type + '" with [' + event.payload + ']')
   }
