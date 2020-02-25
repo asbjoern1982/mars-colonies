@@ -30,3 +30,7 @@ The configuration of each round set in the `serverStages.js` file is configured 
 | productionAmounts | optional, an array of amounts that the participant can chose to produce, if absent a textfield and start button will be used |
 | tradeAmounts | optional, an array of amounts that the participant can chose to send, if absent a textfield and start button will be used |
 | players | a list of colonies, their name, starting inventory and specializations, if there are more than 15 colonies, then more colors should be added to the client.js <ul><li> name: is the name of a colony, should be unique for a game</li><li> inventory: should have every material in "materials" and the amount this colony is starting out with </li><li> specializations: a list of specializations, the ability to transform one material into an other with a gain </li><li> coordinates: optional, if set, the give colony is placed on that spot on the map, if not set, the other colonies will be placed on a circle around one self</li></ul> |
+[see schema](./src/configurations/game.schema.json)
+
+## Language
+To add a new language the language should be changed in the different configurationfiles with text that is shown, like survey.json, game-configuration and the unit in score.js. Besides that a html should be added for the client.js in each stage. See [clientDA.html](./src/stages/game/client/clientDA.html) and [clientEN.html](./src/stages/game/client/clientEN.html).
