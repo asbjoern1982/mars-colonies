@@ -47,9 +47,9 @@ let stagesSteno = [
 //  - set it both in clientStages.js and serverStages.js
 //  - set the last stage to reset the game/server/server.js with setting "moreStages = false"
 //  - set wich language-html to use in client.js
-let stages = stages6Person
+let stages = stagesSteno
 // the server needs to know how many clients it should wait for before starting the game.
-let participants = 6
+let participants = 3
 
 // validate configuration gamefiles
 let validator = new Ajv().compile(schema)

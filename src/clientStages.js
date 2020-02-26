@@ -29,7 +29,7 @@ let stagesSteno = [
 ]
 
 // set witch set of stages to run, see serverStages.js for more instructions
-let stages = stages6Person
+let stages = stagesSteno
 
 let getConfig = (stage) => {
   return stages.filter(s => stage)
