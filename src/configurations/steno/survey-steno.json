@@ -10,11 +10,11 @@
      "title": "Hvad er dit køn?",
      "choices": [
       {
-       "value": "f",
+       "value": "m",
        "text": "Dreng"
       },
       {
-       "value": "m",
+       "value": "f",
        "text": "Pige"
       },
       {
