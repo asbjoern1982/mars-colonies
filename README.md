@@ -28,7 +28,15 @@ npm run server
 ```
 
 ## Docker
-The game has a [docker file](./Dockerfile), so it is possible to run it on a computer with just docker installed.
+The game has a [docker file](./Dockerfile), so it is possible to run it on a computer with just docker installed. To get started, make sure docker is installed on the server and git clone the project to the server (or similar like copying it from a usb-drive).
+Create an image:
+```
+docker image build -t mars
+```
+And run the image as a container:
+```
+docker container run --publish 3000:3000 --detach --name mars1 mars
+```
 
 # configuring the game
 To customize the game see [README.config.md](./README.config.md)
