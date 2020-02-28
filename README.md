@@ -37,6 +37,10 @@ And run the image as a container:
 ```
 docker container run --publish 3000:3000 --detach --name mars1 mars
 ```
+Getting data out can be done in a number of different ways, but it is easy to just copy it out:
+```
+docker cp mars1:/usr/src/app/src/database/csv ./csv_logs
+```
 
 # configuring the game
 To customize the game see [README.config.md](./README.config.md)
